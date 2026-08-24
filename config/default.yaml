@@ -4,7 +4,21 @@
 video:
   target_fps: 30            # resample; SAM2 memory assumes temporal continuity
   max_width: 1280           # downscale for compute; masks upscaled at render
-  chunk_frames: 240         # SAM2 propagation window (~8s @30fps) -> natural re-anchor points
+  chunk_frames: 240         # SAM2 propagation window cap (~8s @30fps)
+
+# --- Broadcast structure ------------------------------------------------
+# This footage is CUT footage, not a locked-off camera. SAM2's memory assumes
+# temporal continuity, so a propagation window must never straddle a cut.
+shots:
+  z_threshold: 150          # MAD-normalised dissimilarity. Calibrated on both
+                            # matches: real cuts land at z=270-2900, while camera
+                            # and athlete motion tops out around z=40. Sampling
+                            # 6 kept cuts and 6 rejected ones confirmed no false
+                            # negatives and no false positives at this value.
+                            # z=10 mistook every pan for a cut (381 in 840s).
+  min_shot_frames: 10       # dissolves trip several frames; keep only the start
+  flat_max: 0.55            # frame fraction with no local texture -> graphics plate
+  track_kinds: [match, mat] # shot kinds worth spending GPU on
 
 detect:
   model: yolo11x-pose.pt    # pose gives keypoints: crucial for grappling geometry

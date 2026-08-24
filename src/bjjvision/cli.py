@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 
+import numpy as np
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -82,6 +83,76 @@ def frames(slug: str, data_dir: Path = typer.Option(ROOT / "data")):
 
 
 @app.command()
+def scout(slug: str, config: Path = typer.Option(DEFAULT_CFG),
+          data_dir: Path = typer.Option(ROOT / "data"),
+          z: float = typer.Option(None, help="override cut sensitivity")):
+    """Map the broadcast structure on CPU, before renting any GPU.
+
+    Broadcast BJJ is cut footage, not a locked-off camera. Knowing how often it
+    cuts, and how much of the runtime is close-ups, podium and transition plates,
+    decides the propagation window size and how many frames are worth paying to
+    process at all.
+    """
+    import json as _json
+    import cv2
+    from .pipeline import load_config
+    from .roles import MatModel
+    from .shots import build_shots, classify_shots, detect_cuts, summarise, windows
+
+    cfg = load_config(config)
+    video = data_dir / "interim" / f"{slug}_norm.mp4"
+    if not video.exists():
+        raise typer.BadParameter(f"{video} not found - run `fetch` first")
+
+    console.print(f"[cyan]scanning[/] {video.name}")
+    sh_cfg = cfg.get("shots", {})
+    cuts, diffs, fps = detect_cuts(video, z_threshold=z or sh_cfg.get("z_threshold", 150),
+                                   min_shot_frames=sh_cfg.get("min_shot_frames", 10))
+    n = len(diffs)
+    shots = build_shots(n, cuts)
+
+    cap = cv2.VideoCapture(str(video))
+    probe = []
+    for i in np.linspace(0, n - 1, cfg["roles"]["mat_estimate_frames"], dtype=int):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, int(i))
+        ok, fr = cap.read()
+        if ok:
+            probe.append(fr)
+    cap.release()
+    mat = MatModel().fit(probe)
+
+    shots = classify_shots(video, shots, detector=None, mat_model=mat,
+                           flat_max=sh_cfg.get("flat_max", 0.55))
+    summary = summarise(shots, fps)
+    wins = windows(shots, cfg["video"]["chunk_frames"],
+                   kinds=tuple(sh_cfg.get("track_kinds", ["match", "mat"])))
+    trackable = sum(e - s for s, e, _ in wins)
+
+    t = Table(title=f"{slug}: broadcast structure", show_header=True)
+    t.add_column("kind"); t.add_column("shots", justify="right")
+    t.add_column("seconds", justify="right"); t.add_column("share", justify="right")
+    for k, v in sorted(summary["by_kind"].items(), key=lambda kv: -kv[1]["frames"]):
+        t.add_row(k, str(v["shots"]), f"{v['seconds']:.0f}", f"{v['frames']/n:.0%}")
+    console.print(t)
+    console.print(f"  cuts: [bold]{len(cuts)}[/]   median shot: "
+                  f"[bold]{summary['median_shot_s']:.1f}s[/]   "
+                  f"shortest: {summary['shortest_shot_s']:.1f}s   "
+                  f"longest: {summary['longest_shot_s']:.1f}s")
+    console.print(f"  propagation windows: [bold]{len(wins)}[/]  covering "
+                  f"[bold]{trackable}[/] frames ({trackable/n:.0%} of runtime, "
+                  f"{trackable/fps/60:.1f} min)")
+
+    out = data_dir / "interim" / f"{slug}_shots.json"
+    out.write_text(_json.dumps({
+        "fps": fps, "n_frames": n, "cuts": cuts, "summary": summary,
+        "shots": [{"start": s.start, "end": s.end, "kind": s.kind,
+                   "mat_frac": round(s.mat_frac_median, 3),
+                   "flat_frac": round(s.flat_frac_median, 3)} for s in shots],
+    }, indent=2))
+    console.print(f"  -> {out}")
+
+
+@app.command()
 def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
         data_dir: Path = typer.Option(ROOT / "data"),
         device: str = typer.Option("cuda"),
@@ -102,6 +173,14 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
 
     out_dir = data_dir / "out" / slug
     pipe = Pipeline(cfg, frames_dir, out_dir, fps, device)
+
+    console.rule("[bold]broadcast structure")
+    shots_json = data_dir / "interim" / f"{slug}_shots.json"
+    video = data_dir / "interim" / f"{slug}_norm.mp4"
+    if not shots_json.exists():
+        console.print("[yellow]no scout output; detecting cuts now "
+                      "(run `bjj scout` beforehand to see this on CPU first)")
+    console.print_json(data=pipe.load_shots(video, shots_json if shots_json.exists() else None))
 
     console.rule("[bold]calibration")
     cal = pipe.calibrate()

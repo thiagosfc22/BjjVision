@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Thin wrapper: uv's editable .pth proved unreliable in this venv, so the source
+# path is set explicitly. Works identically on the laptop and the GPU host.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[ -d "$HERE/.venv" ] && source "$HERE/.venv/bin/activate"
+export PYTHONPATH="$HERE/src${PYTHONPATH:+:$PYTHONPATH}"
+exec python -m bjjvision.cli "$@"

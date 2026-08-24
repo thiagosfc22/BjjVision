@@ -37,5 +37,9 @@ bjjvision = "bjjvision.cli:app"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# SAM2 ships only from git, so the gpu extra carries a direct reference.
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/bjjvision"]

@@ -22,6 +22,8 @@ from .identity import Health, IdentityManager, RecalEvent
 from .llm_supervisor import LlmSupervisor
 from .render import RenderState, ReportRenderer, TimelineEvent, VideoWriter
 from .roles import MatModel, PersonObs, RoleAssigner
+from .shots import (Shot, build_shots, classify_shots, detect_cuts,
+                    summarise, windows)
 
 
 def load_config(path: str | Path) -> dict:
@@ -59,6 +61,34 @@ class Pipeline:
         self.crowd_rejected = 0
         self.last_narration: dict = {}
         self._last_narrate_t = -1e9
+        self.shots: list[Shot] = []
+        self.shot_summary: dict = {}
+        self.passthrough_frames = 0
+
+    def load_shots(self, video_path: Path, shots_json: Path | None = None) -> dict:
+        """Segment the broadcast before tracking anything.
+
+        Skipped at your peril: SAM2 propagating across a hard cut produces a
+        confident mask of the wrong thing, and the colour audit then has to clean
+        up an error that never needed to exist.
+        """
+        sc = self.cfg.get("shots", {})
+        if shots_json and shots_json.exists():
+            data = json.loads(shots_json.read_text())
+            self.shots = [Shot(start=s["start"], end=s["end"], kind=s["kind"],
+                               mat_frac_median=s.get("mat_frac", 0.0),
+                               flat_frac_median=s.get("flat_frac", 0.0))
+                          for s in data["shots"]]
+            self.shot_summary = data.get("summary", {})
+        else:
+            cuts, diffs, _ = detect_cuts(video_path,
+                                         z_threshold=sc.get("z_threshold", 150),
+                                         min_shot_frames=sc.get("min_shot_frames", 10))
+            self.shots = classify_shots(video_path, build_shots(len(diffs), cuts),
+                                        detector=self.detector, mat_model=self.mat,
+                                        flat_max=sc.get("flat_max", 0.55))
+            self.shot_summary = summarise(self.shots, self.fps)
+        return self.shot_summary
 
     def frame(self, i: int) -> np.ndarray | None:
         if not (0 <= i < self.n_frames):
@@ -164,36 +194,62 @@ class Pipeline:
         written = 0
         prev_masks: dict[str, np.ndarray] = {}
 
+        # Windows are bounded by shots, never by an arbitrary frame count: SAM2's
+        # memory assumes continuity, and a window that spans a cut propagates a
+        # mask onto an unrelated camera angle while reporting high confidence.
+        if self.shots:
+            wins = [(a, min(b, total), f)
+                    for a, b, f in windows(self.shots, chunk,
+                                           tuple(cfg.get("shots", {}).get(
+                                               "track_kinds", ["match", "mat"])))
+                    if a < total]
+        else:
+            wins = [(a, min(a + chunk, total), a == 0) for a in range(0, total, chunk)]
+
         try:
-            chunk_start = 0
-            while chunk_start < total:
+            out_cursor = 0
+            for win_start, win_end, new_shot in wins:
+                if win_end <= win_start:
+                    continue
+                # frames between windows are untracked (close-up, podium, graphics):
+                # emit them so the output stays in sync with the source, and say so
+                out_cursor = self._passthrough(writer, renderer, out_cursor, win_start,
+                                               labels, swatches, st_base=dict(
+                                                   duration_s=self.duration,
+                                                   separability=self.separability))
+                if new_shot:
+                    prev_masks = {}          # a cut invalidates the previous masks
+
                 # ---- re-seed this window from the colour prototypes ---------
                 self.segmenter.reset()
                 seeded = False
                 if prev_masks:
-                    fr = self.frame(chunk_start)
+                    fr = self.frame(win_start)
                     pts = self.identity.reanchor_prompts(fr, prev_masks,
                                                          cfg["segment"]["prompt_points_per_obj"])
                     if len(pts) == 2:
-                        self.segmenter.prompt_points(chunk_start, pts, mutual_negatives=True)
+                        self.segmenter.prompt_points(win_start, pts, mutual_negatives=True)
                         seeded = True
                 if not seeded:
-                    fr = self.frame(chunk_start)
+                    fr = self.frame(win_start)
                     persons = self.detector.detect(fr, persist=True)
                     self.roles.update(persons)
                     dec = self.roles.assign(fr, persons, self.mat.mask(fr),
                                             (self.identity.protos["A"], self.identity.protos["B"]),
                                             self._colors_of(fr, persons))
                     if dec.fighters is None:
-                        chunk_start += chunk
+                        out_cursor = self._passthrough(writer, renderer, out_cursor, win_end,
+                                                       labels, swatches, st_base=dict(
+                                                           duration_s=self.duration,
+                                                           separability=self.separability))
                         continue
                     sel = {p.track_id: p for p in persons if p.track_id in dec.fighters}
                     boxes = self._assign_boxes_by_color(fr, list(sel.values()))
-                    self.segmenter.prompt_boxes(chunk_start, boxes)
+                    self.segmenter.prompt_boxes(win_start, boxes)
 
                 # ---- propagate, auditing every frame ------------------------
-                cursor = chunk_start
-                budget = min(chunk, total - chunk_start)
+                cursor = win_start
+                budget = win_end - win_start
                 while budget > 0:
                     restart_at = None
                     for f_idx, masks, scores in self.segmenter.propagate(cursor, budget):
@@ -273,7 +329,11 @@ class Pipeline:
                     budget -= (restart_at - cursor + 1)
                     cursor = restart_at
 
-                chunk_start += chunk
+                out_cursor = max(out_cursor, win_end)
+            out_cursor = self._passthrough(writer, renderer, out_cursor, total,
+                                           labels, swatches, st_base=dict(
+                                               duration_s=self.duration,
+                                               separability=self.separability))
         finally:
             writer.close()
 
@@ -281,6 +341,34 @@ class Pipeline:
         return self._finalise(out_video, time.time() - t_start, written)
 
     # ------------------------------------------------------------------
+    def _passthrough(self, writer, renderer, start: int, end: int,
+                     labels: dict, swatches: dict, st_base: dict) -> int:
+        """Emit untracked frames unchanged, labelled as untracked.
+
+        Close-ups, podium shots and transition plates do not contain two
+        trackable athletes. Running the tracker there would manufacture a second
+        competitor out of a cameraman's shoulder; dropping the frames would
+        desynchronise the output from the source. So they are passed through and
+        the panel says plainly that nothing is being tracked.
+        """
+        kind_of = {}
+        for sh in self.shots:
+            for i in (sh.start, sh.end - 1):
+                kind_of[i] = sh.kind
+        for i in range(start, end):
+            fr = self.frame(i)
+            if fr is None:
+                continue
+            shot_kind = next((sh.kind for sh in self.shots if sh.start <= i < sh.end), "untracked")
+            st = RenderState(t_s=i / self.fps, confidence=0.0, state="not tracking",
+                             labels=labels, swatches=swatches,
+                             position="-", commentary=f"no two-athlete view ({shot_kind})",
+                             recal_count=len(self.identity.events),
+                             escalation_count=self.supervisor.stats.calls, **st_base)
+            writer.write(renderer.compose(fr, {}, st))
+            self.passthrough_frames += 1
+        return end
+
     def _colors_of(self, frame: np.ndarray, persons: list[PersonObs]) -> dict:
         ap = self.cfg["appearance"]
         out = {}

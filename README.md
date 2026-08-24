@@ -42,6 +42,60 @@ splits it back into two without re-running the segmenter.
 | Referee distance to both gi prototypes | 0.98 / 0.75 (rejected above 0.35) |
 | Prototype bank vs. a poisoned exemplar | rejected, bank did not grow |
 
+## Measured on the actual footage
+
+Both matches are IBJJF broadcast, 720p30. Colours sampled from verified torso
+crops; gi assignment read off the broadcast scoreboard (the colour block beside
+each score is the competitor's gi).
+
+| Comparison | Galvão–Xande | Buchecha–Lo |
+|---|---|---|
+| white gi vs blue gi (identity) | 0.84–0.87 | 0.96 |
+| blue gi vs **blue mat** | 0.996 | 0.986 |
+| white gi vs blue mat | 1.000 | 0.905 |
+| black-suited official vs blue gi | 0.930 | — |
+| black-suited official vs white gi | 0.882 | — |
+
+The blue-gi-on-blue-mat case looked like the obvious way for this to fail, and it
+does not — but for a reason worth stating, because it was luck-adjacent. The navy
+gi measures `L=33, b=93`; the mat measures `L=138, b=94`. The *chroma is
+effectively identical* — both are blue — and the entire separation lives in
+lightness. A hue- or saturation-based colour model, which is the more common
+choice, would have collapsed these two into one class and bled every mask into
+the floor. Keeping L in the histogram is what makes this work.
+
+## Broadcast structure: this is cut footage
+
+The single biggest correction to the original design. These are multi-camera
+broadcasts, not a locked-off mat camera:
+
+| | Galvão–Xande | Buchecha–Lo |
+|---|---|---|
+| runtime | 12:57 | 14:00 |
+| shot cuts | 24 | 63 |
+| median shot | 15.1 s | 11.7 s |
+| trackable (two athletes on mat) | 94% | 89% |
+
+SAM2's memory attention assumes temporal continuity. Propagated across a hard cut
+it maps the previous mask onto an unrelated camera angle and reports high
+confidence while doing it. So propagation windows are bounded by *shots*, and a
+cut forces a full re-detect rather than a colour re-seed.
+
+This is where colour-as-anchor earns its keep: a cut destroys the tracker's state
+but leaves the prototypes untouched, so the fresh detections are re-bound to A and
+B immediately. Non-trackable shots — close-ups, podium, chroma transition plates —
+are detected, passed through unmodified, and labelled as untracked rather than
+being fed to a two-athlete tracker that would invent a second competitor.
+
+**Threshold calibration.** Cut sensitivity is `z > 150` on MAD-normalised frame
+dissimilarity. The first attempt used `z > 10` on the reasoning that a false
+positive costs one cheap re-anchor while a false negative costs a corrupted
+window. That reasoning has a limit it did not state: `z=10` found 381 cuts in
+840 s — a reset every 2 s, which discards the benefit of propagation entirely.
+The real separation is wide: genuine cuts measure z = 270–2900, camera and athlete
+motion tops out near z = 40. Validated by sampling six kept cuts (all real) and
+six rejected ones (all false positives).
+
 ## Athlete vs referee vs crowd
 
 Three filters with deliberately non-overlapping failure modes:
