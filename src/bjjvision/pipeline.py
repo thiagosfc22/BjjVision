@@ -406,7 +406,7 @@ class Pipeline:
                         prev_masks = masks
 
                         if progress and written % 30 == 0:
-                            print(f"  {written}/{total} frames  "
+                            print(f"  {written}/{total - lo} frames  "
                                   f"conf={fh.score:.2f}  state={fh.state.value}  "
                                   f"{st.fps_proc:.1f} fps", flush=True)
                         if restart_at is not None:
