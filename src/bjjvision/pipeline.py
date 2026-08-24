@@ -195,6 +195,8 @@ class Pipeline:
 
         del seg                       # release before the tracking predictor loads
         self.segmenter = Sam2Segmenter(self.cfg, self.frames_dir, self.device)
+        # calibration may have run on a different stretch of the match entirely
+        self.detector.reset_tracker()
 
         if len(samples) < 3:
             raise RuntimeError(
@@ -239,6 +241,7 @@ class Pipeline:
         self.rows: list[dict] = []
         t_start = time.time()
         written = 0
+        emitted_max = -1          # highest absolute frame already written
         prev_masks: dict[str, np.ndarray] = {}
 
         # Windows are bounded by shots, never by an arbitrary frame count: SAM2's
@@ -267,6 +270,7 @@ class Pipeline:
                                                    separability=self.separability))
                 if new_shot:
                     prev_masks = {}          # a cut invalidates the previous masks
+                    self.detector.reset_tracker()   # and invalidates track identities
 
                 # ---- re-seed this window from the colour prototypes ---------
                 self.segmenter.reset()
@@ -309,6 +313,13 @@ class Pipeline:
                         # same frame.
                         if f_idx >= win_end:
                             break
+                        # A hard re-anchor restarts propagation AT the offending
+                        # frame, so that frame arrives a second time. Nine such
+                        # events produced nine duplicate rows carrying two
+                        # different segmentations of the same instant -- silent
+                        # corruption in the table that is the deliverable.
+                        if f_idx <= emitted_max:
+                            continue
                         fr = self.frame(f_idx)
                         if fr is None:
                             continue
@@ -391,9 +402,10 @@ class Pipeline:
                             fps_proc=written / max(time.time() - t_start, 1e-6))
                         writer.write(renderer.compose(fr, masks, st))
                         written += 1
+                        emitted_max = f_idx
                         prev_masks = masks
 
-                        if progress and written % 60 == 0:
+                        if progress and written % 30 == 0:
                             print(f"  {written}/{total} frames  "
                                   f"conf={fh.score:.2f}  state={fh.state.value}  "
                                   f"{st.fps_proc:.1f} fps", flush=True)
@@ -405,6 +417,9 @@ class Pipeline:
                     budget -= (restart_at - cursor + 1)
                     cursor = restart_at
 
+                if emitted_max < win_start and progress:
+                    print(f"  [skip] window {win_start}-{win_end} produced no frames "
+                          f"(seeded={seeded})", flush=True)
                 out_cursor = max(out_cursor, win_end)
             out_cursor = self._passthrough(writer, renderer, out_cursor, total,
                                            labels, swatches, st_base=dict(

@@ -24,6 +24,22 @@ class PersonDetector:
         self.max_persons = d["max_persons"]
         self.device = device
 
+    def reset_tracker(self) -> None:
+        """Drop accumulated track state.
+
+        ByteTrack associates new detections against the tracks it already holds,
+        which is right inside a shot and wrong across a discontinuity. Carrying
+        state from the calibration window into a tracking window five minutes
+        later collapsed 12 detections down to 2 at the first frame, because the
+        rest matched nothing and were suppressed -- which then read as "fewer
+        than two athletes on the mat" and silently dropped a whole window.
+        Call this whenever the frame sequence jumps.
+        """
+        pred = getattr(self.model, "predictor", None)
+        for t in (getattr(pred, "trackers", None) or []):
+            if hasattr(t, "reset"):
+                t.reset()
+
     def detect(self, frame_bgr: np.ndarray, persist: bool = True) -> list[PersonObs]:
         res = self.model.track(
             frame_bgr, persist=persist, conf=self.conf, iou=self.iou,

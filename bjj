@@ -5,4 +5,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [ -d "$HERE/.venv" ] && source "$HERE/.venv/bin/activate"
 export PYTHONPATH="$HERE/src${PYTHONPATH:+:$PYTHONPATH}"
+# unbuffered: piping the CLI into grep otherwise swallows progress
+# lines until the process exits, which reads as a hung run
+export PYTHONUNBUFFERED=1
 exec python -m bjjvision.cli "$@"
