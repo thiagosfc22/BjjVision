@@ -55,10 +55,11 @@ def torso_mask(mask: np.ndarray, band: tuple[float, float]) -> np.ndarray:
     Sampling the whole silhouette drags in skin, hair, and mat showing through
     the limbs; the torso band is nearly all gi, which is what we want to measure.
     """
-    ys, xs = np.nonzero(mask)
-    if ys.size == 0:
+    mu8 = mask.view(np.uint8) if mask.dtype == np.bool_ else mask.astype(np.uint8)
+    _, y0, _, bh = cv2.boundingRect(mu8)     # ~1.5 ms cheaper than np.nonzero
+    if bh == 0:
         return mask
-    y0, y1 = ys.min(), ys.max()
+    y1 = y0 + bh - 1
     h = max(y1 - y0, 1)
     lo = int(y0 + band[0] * h)
     hi = int(y0 + band[1] * h)
@@ -67,10 +68,17 @@ def torso_mask(mask: np.ndarray, band: tuple[float, float]) -> np.ndarray:
     return out if out.sum() >= 0.15 * mask.sum() else mask
 
 
+def lab_of(frame_bgr: np.ndarray) -> np.ndarray:
+    """BGR -> CIELAB. Costs ~4 ms at 720p, and the hot path used to pay it six
+    times per frame, so callers in a loop should compute it once and pass it in."""
+    return cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2Lab)
+
+
 def build_color_model(frame_bgr: np.ndarray, mask: np.ndarray,
                       bins: tuple[int, int, int] = (8, 12, 12),
                       band: tuple[float, float] | None = (0.15, 0.60),
-                      min_pixels: int = 400) -> ColorModel | None:
+                      min_pixels: int = 400,
+                      lab: np.ndarray | None = None) -> ColorModel | None:
     """Masked CIELAB histogram for one person in one frame."""
     m = mask.astype(bool)
     if band is not None:
@@ -79,7 +87,7 @@ def build_color_model(frame_bgr: np.ndarray, mask: np.ndarray,
     if n < min_pixels:
         return None
 
-    lab_img = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2Lab)
+    lab_img = lab_of(frame_bgr) if lab is None else lab
     px = lab_img[m]                                     # (N,3) uint8
     flat = _lab_indices(px, bins)
     hist = np.bincount(flat, minlength=int(np.prod(bins))).astype(np.float32)
@@ -169,36 +177,39 @@ class PixelClassifier:
         self.lut /= self.lut.sum(axis=0, keepdims=True)     # -> P(class | bin)
         self.n_classes = self.lut.shape[0]
 
-    def posterior(self, frame_bgr: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    def posterior(self, frame_bgr: np.ndarray, mask: np.ndarray,
+                  lab: np.ndarray | None = None) -> np.ndarray:
         """(N, n_classes) posterior for every pixel inside `mask`."""
         m = mask.astype(bool)
         if not m.any():
             return np.zeros((0, self.n_classes), dtype=np.float32)
-        px = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2Lab)[m]
+        px = (lab_of(frame_bgr) if lab is None else lab)[m]
         flat = _lab_indices(px, self.bins)
         return self.lut[:, flat].T.astype(np.float32)
 
-    def purity(self, frame_bgr: np.ndarray, mask: np.ndarray, fighter_idx: int) -> float:
+    def purity(self, frame_bgr: np.ndarray, mask: np.ndarray, fighter_idx: int,
+               lab: np.ndarray | None = None) -> float:
         """Fraction of the mask's pixels that vote for the fighter it claims to be.
 
         This is the primary health signal. A clean mask sits near 0.85-0.95; a mask
         that has bled into the opponent collapses toward 0.5 long before the mask
         *shape* looks obviously wrong -- which is why it catches swaps early.
         """
-        post = self.posterior(frame_bgr, mask)
+        post = self.posterior(frame_bgr, mask, lab)
         if post.shape[0] == 0:
             return 0.0
         return float((np.argmax(post, axis=1) == fighter_idx).mean())
 
     def split(self, frame_bgr: np.ndarray, mask: np.ndarray,
-              min_component_frac: float = 0.12) -> tuple[np.ndarray, np.ndarray]:
+              min_component_frac: float = 0.12,
+              lab: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
         """Repair a contaminated mask by re-assigning its pixels to A and B.
 
         Morphological opening + largest-component keeps the result anatomically
         plausible instead of a speckled per-pixel scatter.
         """
         m = mask.astype(bool)
-        post = self.posterior(frame_bgr, m)
+        post = self.posterior(frame_bgr, m, lab)
         if post.shape[0] == 0:
             z = np.zeros_like(m)
             return z, z
@@ -216,7 +227,8 @@ class PixelClassifier:
 
     def sample_prompt_points(self, frame_bgr: np.ndarray, mask: np.ndarray,
                              fighter_idx: int, k: int = 6,
-                             rng: np.random.Generator | None = None) -> np.ndarray:
+                             rng: np.random.Generator | None = None,
+                             lab: np.ndarray | None = None) -> np.ndarray:
         """Pick SAM2 prompt points from *colour-confident* pixels.
 
         Prompting at a box centre is how you re-seed the same error: in a tangle
@@ -229,7 +241,7 @@ class PixelClassifier:
         ys, xs = np.nonzero(m)
         if ys.size == 0:
             return np.empty((0, 2), dtype=np.float32)
-        post = self.posterior(frame_bgr, m)
+        post = self.posterior(frame_bgr, m, lab)
         conf = post[:, fighter_idx]
         good = conf > max(0.55, float(np.quantile(conf, 0.60)))
         if good.sum() < k:

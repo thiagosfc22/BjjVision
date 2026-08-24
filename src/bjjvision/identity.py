@@ -31,7 +31,7 @@ from enum import Enum
 import numpy as np
 
 from .appearance import (ColorModel, FighterPrototype, PixelClassifier,
-                         build_color_model)
+                         build_color_model, lab_of)
 
 
 class Health(Enum):
@@ -141,6 +141,7 @@ class IdentityManager:
             return fh
 
         idx_of = {"A": 0, "B": 1}
+        lab = lab_of(frame_bgr)          # once per frame, not once per lookup
         for fid, mask in masks.items():
             if mask is None or not mask.any():
                 fh.purity[fid] = 0.0
@@ -148,8 +149,8 @@ class IdentityManager:
                 fh.triggers.append(f"{fid}:empty_mask")
                 continue
 
-            fh.purity[fid] = self.classifier.purity(frame_bgr, mask, idx_of[fid])
-            cm = build_color_model(frame_bgr, mask, self.bins, self.band, self.min_px)
+            fh.purity[fid] = self.classifier.purity(frame_bgr, mask, idx_of[fid], lab)
+            cm = build_color_model(frame_bgr, mask, self.bins, self.band, self.min_px, lab)
             fh.proto_dist[fid] = self.protos[fid].distance(cm) if cm else 1.0
 
             area = float(mask.sum())
@@ -203,7 +204,8 @@ class IdentityManager:
 
     # -- repair -------------------------------------------------------------
     def soft_repair(self, frame_bgr: np.ndarray,
-                    masks: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+                    masks: dict[str, np.ndarray],
+                    lab: np.ndarray | None = None) -> dict[str, np.ndarray]:
         """Re-partition the union of both masks by colour posterior.
 
         No segmenter call: we already know the pixels belong to *someone*, we are
@@ -216,13 +218,14 @@ class IdentityManager:
         union = ma.astype(bool) | mb.astype(bool)
         if not union.any():
             return masks
-        a_new, b_new = self.classifier.split(frame_bgr, union)
+        a_new, b_new = self.classifier.split(frame_bgr, union, lab=lab)
         if not a_new.any() or not b_new.any():
             return masks                 # refuse to hand back a degenerate split
         return {"A": a_new, "B": b_new}
 
     def reanchor_prompts(self, frame_bgr: np.ndarray,
-                         masks: dict[str, np.ndarray], k: int = 6) -> dict[str, np.ndarray]:
+                         masks: dict[str, np.ndarray], k: int = 6,
+                         lab: np.ndarray | None = None) -> dict[str, np.ndarray]:
         """Colour-confident point prompts for a SAM2 re-seed.
 
         Deliberately NOT box centres: in a tangle the centre of A's box often lands
@@ -230,15 +233,17 @@ class IdentityManager:
         """
         if not self.ready:
             return {}
+        lab = lab_of(frame_bgr) if lab is None else lab
         out: dict[str, np.ndarray] = {}
         union = np.zeros(frame_bgr.shape[:2], bool)
         for m in masks.values():
             if m is not None:
                 union |= m.astype(bool)
-        a_px, b_px = self.classifier.split(frame_bgr, union)
+        a_px, b_px = self.classifier.split(frame_bgr, union, lab=lab)
         for fid, src, idx in (("A", a_px, 0), ("B", b_px, 1)):
             if src.any():
-                out[fid] = self.classifier.sample_prompt_points(frame_bgr, src, idx, k, self.rng)
+                out[fid] = self.classifier.sample_prompt_points(
+                    frame_bgr, src, idx, k, self.rng, lab)
         return out
 
     # -- prototype maintenance ---------------------------------------------
@@ -253,12 +258,13 @@ class IdentityManager:
         """
         if fh.state is not Health.HEALTHY or fh.score < self.proto_update_conf:
             return
+        lab = lab_of(frame_bgr)
         for fid, mask in masks.items():
             if mask is None or not mask.any():
                 continue
             if fh.purity.get(fid, 0) < 0.85:
                 continue
-            cm = build_color_model(frame_bgr, mask, self.bins, self.band, self.min_px)
+            cm = build_color_model(frame_bgr, mask, self.bins, self.band, self.min_px, lab)
             if cm is not None:
                 self.protos[fid].add(cm)
         self._rebuild_classifier()
