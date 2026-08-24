@@ -371,8 +371,13 @@ class Pipeline:
                         ff.purity = dict(fh.purity)
                         ff.proto_dist = dict(fh.proto_dist)
                         ff.proto_margin = dict(fh.proto_margin)
-                        ff.shot_kind = next((sh.kind for sh in self.shots
-                                             if sh.start <= f_idx < sh.end), "")
+                        # shot_id as well as kind: without the index there is no
+                        # way to attribute a failure to a shot or to a cut, and
+                        # the column sat at its -1 default for a whole match.
+                        sh_i = next((i for i, sh in enumerate(self.shots)
+                                     if sh.start <= f_idx < sh.end), -1)
+                        ff.shot_id = sh_i
+                        ff.shot_kind = self.shots[sh_i].kind if sh_i >= 0 else ""
                         self.rows.append(ff.to_row(vw, vh))
                         self.masks_out.add(f_idx, masks)
 

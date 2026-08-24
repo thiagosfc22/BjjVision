@@ -21,8 +21,12 @@ fails=0
 for i in $(seq 1 720); do            # 720 x 30s = 6h ceiling
   state=$("${SSH[@]}" "$HOST" '
     cd "$HOME/BjjVision" 2>/dev/null || { echo UNREACHABLE; exit 0; }
-    if pgrep -f "bjjvision.cli run" >/dev/null; then echo RUNNING
-    elif grep -q "=== done" run.log 2>/dev/null; then echo DONE
+    # Marker first, and never trust pgrep alone here: this very check is passed
+    # to a remote shell whose own command line contains "bjjvision.cli run", so
+    # a plain pgrep -f matches itself and reports RUNNING forever. The bracket
+    # in bjjvision[.]cli stops the pattern from matching its own literal text.
+    if grep -q "=== done" run.log 2>/dev/null; then echo DONE
+    elif pgrep -f "bjjvision[.]cli run" >/dev/null; then echo RUNNING
     else echo STOPPED; fi' 2>/dev/null | grep -Eo "RUNNING|DONE|STOPPED|UNREACHABLE" | head -1)
 
   case "${state:-}" in
