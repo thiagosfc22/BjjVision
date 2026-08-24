@@ -1,0 +1,41 @@
+[project]
+name = "bjjvision"
+version = "0.1.0"
+description = "Mask-anchored fighter identification & re-identification for BJJ match video"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python-headless>=4.10",
+    "pyyaml>=6.0",
+    "tqdm>=4.66",
+    "rich>=13.7",
+    "typer>=0.12",
+    "pillow>=10.3",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+]
+
+[project.optional-dependencies]
+# Local (macOS / arm64): ingest, inspection, delivery. No CUDA.
+local = [
+    "yt-dlp>=2024.8.6",
+]
+# GPU host (VAST.AI): the heavy pipeline.
+gpu = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "ultralytics>=8.3",
+    "sam2 @ git+https://github.com/facebookresearch/sam2.git",
+    "anthropic>=0.34",
+    "lap>=0.4",
+]
+
+[project.scripts]
+bjjvision = "bjjvision.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bjjvision"]

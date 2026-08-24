@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+data/raw/*
+data/interim/*
+data/out/*
+!data/**/.gitkeep
+checkpoints/
+*.pt
+*.mp4
+*.mkv
+*.webm
+.DS_Store
+runs/

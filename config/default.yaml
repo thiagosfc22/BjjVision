@@ -1,0 +1,74 @@
+# BjjVision — pipeline configuration
+# Every threshold here is a knob the LLM supervisor is allowed to tune between passes.
+
+video:
+  target_fps: 30            # resample; SAM2 memory assumes temporal continuity
+  max_width: 1280           # downscale for compute; masks upscaled at render
+  chunk_frames: 240         # SAM2 propagation window (~8s @30fps) -> natural re-anchor points
+
+detect:
+  model: yolo11x-pose.pt    # pose gives keypoints: crucial for grappling geometry
+  conf: 0.25
+  iou: 0.60
+  min_box_area_frac: 0.004  # anything smaller is crowd/background
+  max_persons: 12
+
+segment:
+  sam2_cfg: configs/sam2.1/sam2.1_hiera_l.yaml
+  sam2_ckpt: checkpoints/sam2.1_hiera_large.pt
+  offload_video_to_cpu: true
+  offload_state_to_cpu: false
+  prompt_points_per_obj: 6  # sampled from color-consistent pixels, not box centers
+
+# --- Identity: colour is the anchor -------------------------------------
+appearance:
+  color_space: lab          # CIELAB: white-vs-blue/black gi separates hard on b* and L*
+  hist_bins: [8, 12, 12]    # L, a, b
+  torso_only: true          # sample the gi, not skin/hair/mat
+  torso_band: [0.15, 0.60]  # vertical slice of the mask bbox used as "torso"
+  min_mask_pixels: 400
+  prototype_bank: 24        # rolling high-confidence exemplars per fighter
+  prototype_update_conf: 0.80  # only pure, confident frames enter the bank (anti-drift)
+
+reid:
+  embed_model: osnet_x1_0   # deep appearance, computed on MASKED crops (bg zeroed)
+  weight_color: 0.65        # colour dominates: it is a physical invariant of the match
+  weight_embed: 0.25
+  weight_motion: 0.10
+
+# --- Role assignment: who is actually fighting ---------------------------
+roles:
+  mat_estimate_frames: 90        # frames sampled to learn the mat colour/polygon
+  referee_color_margin: 0.35     # dist-to-both-prototypes above this => not a fighter
+  contact_window_s: 3.0          # pair with max sustained contact = the two athletes
+  contact_iou_min: 0.02
+  crowd_y_reject_frac: 0.35      # persons whose feet sit above this line are stands
+  require_inside_mat: true
+
+# --- Recalibration: the self-healing loop --------------------------------
+recalibrate:
+  purity_min: 0.62          # fraction of mask pixels agreeing with its own prototype
+  proto_dist_max: 0.45      # normalised distance to own prototype
+  mask_iou_max: 0.15        # two fighter masks overlapping more than this = bleed
+  area_jump_max: 2.2        # frame-to-frame mask area ratio
+  sam2_score_min: 0.55
+  cooldown_frames: 8
+  max_consecutive: 5        # after N failed re-anchors, escalate to LLM supervisor
+
+# --- LLM supervisor: the PhD in the loop ---------------------------------
+llm:
+  enabled: true
+  model: claude-opus-5
+  adjudicate_every_s: 10.0  # routine check-in even when healthy
+  escalate_on_recal: true   # every hard recalibration goes to the VLM
+  contact_sheet_cols: 3
+  max_calls_per_minute: 12
+  narrate: true             # position / event commentary for the on-screen report
+  tune_between_passes: true # supervisor may rewrite thresholds for the next pass
+
+render:
+  hud: true
+  mask_alpha: 0.45
+  timeline: true
+  show_health: true         # purity, proto-dist, recal events — the diagnostics panel
+  out_crf: 18
