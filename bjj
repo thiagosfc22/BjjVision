@@ -3,9 +3,30 @@
 # path is set explicitly. Works identically on the laptop and the GPU host.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-[ -d "$HERE/.venv" ] && source "$HERE/.venv/bin/activate"
+
+# Resolve the interpreter instead of trusting `python` on PATH. On the laptop
+# that is the repo venv; on the VAST PyTorch image the environment lives at
+# /venv/main and is never activated, and `python` does not exist at all -- so a
+# bare `exec python` dies there with "command not found".
+if [ -n "${BJJ_PYTHON:-}" ] && [ -x "${BJJ_PYTHON}" ]; then
+  PY="$BJJ_PYTHON"
+elif [ -x "$HERE/.venv/bin/python" ]; then
+  PY="$HERE/.venv/bin/python"
+elif [ -n "${VIRTUAL_ENV:-}" ] && [ -x "$VIRTUAL_ENV/bin/python" ]; then
+  PY="$VIRTUAL_ENV/bin/python"
+elif [ -x /venv/main/bin/python ]; then
+  PY="/venv/main/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+  PY="$(command -v python3)"
+else
+  echo "bjj: no python interpreter found" >&2
+  exit 1
+fi
+# Calling the venv interpreter directly is equivalent to activating it, except
+# for PATH -- and ingest shells out to yt-dlp/ffmpeg by name, so PATH matters.
+export PATH="$(dirname "$PY"):$PATH"
 export PYTHONPATH="$HERE/src${PYTHONPATH:+:$PYTHONPATH}"
 # unbuffered: piping the CLI into grep otherwise swallows progress
 # lines until the process exits, which reads as a hung run
 export PYTHONUNBUFFERED=1
-exec python -m bjjvision.cli "$@"
+exec "$PY" -m bjjvision.cli "$@"
