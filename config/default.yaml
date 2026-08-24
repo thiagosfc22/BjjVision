@@ -62,7 +62,13 @@ roles:
 # --- Recalibration: the self-healing loop --------------------------------
 recalibrate:
   purity_min: 0.62          # fraction of mask pixels agreeing with its own prototype
-  proto_dist_max: 0.45      # normalised distance to own prototype
+  proto_margin_min: 0.15    # mask must sit this much closer to its own prototype
+                            # than to the opponent's. A margin, not an absolute
+                            # distance: arena lighting swings a white gi across
+                            # L 145-190, which destroys histogram overlap while
+                            # identity stays obvious. Absolute distance fired on
+                            # 100% of real frames for the light gi at purity 0.98.
+  proto_dist_max: 0.95      # loose sanity bound only; catches colour collapse
   mask_iou_max: 0.15        # two fighter masks overlapping more than this = bleed
   area_jump_max: 2.2        # frame-to-frame mask area ratio
   sam2_score_min: 0.55

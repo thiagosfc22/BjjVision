@@ -51,7 +51,13 @@ roles:
 
 recalibrate:
   purity_min: 0.62
-  proto_dist_max: 0.45
+  proto_margin_min: 0.15    # mask must sit this much closer to its own prototype
+                            # than to the opponent's. A margin, not an absolute
+                            # distance: arena lighting swings a white gi across
+                            # L 145-190, which destroys histogram overlap while
+                            # identity stays obvious. Absolute distance fired on
+                            # 100% of real frames for the light gi at purity 0.98.
+  proto_dist_max: 0.95      # loose sanity bound only; catches colour collapse
   mask_iou_max: 0.15
   area_jump_max: 2.2
   sam2_score_min: 0.55

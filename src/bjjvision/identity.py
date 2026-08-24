@@ -10,8 +10,14 @@ that they fail at different times:
 
   purity      -- fraction of a mask's pixels voting for its own gi. Degrades
                  FIRST, while the mask still looks anatomically fine. Earliest warning.
-  proto_dist  -- distance from the mask's colour signature to the prototype.
-                 Catches slow drift that purity's hard argmax can mask.
+  proto_margin-- how much CLOSER the mask sits to its own prototype than to the
+                 opponent's. Deliberately a margin and not an absolute distance:
+                 a white gi under arena lighting spans L 145-190 between lit and
+                 shadowed, which wrecks histogram overlap while the identity stays
+                 obvious. Measured on real footage, absolute distance fired on
+                 100% of frames for the light gi while its purity was 0.98 -- the
+                 metric was wrong, not the tracking. A margin is scale-free: when
+                 lighting inflates both distances together, it holds.
   cross_iou   -- overlap between the two fighter masks. Fires on outright bleed.
   area_jump   -- frame-to-frame mask area ratio. Fires on collapse or explosion.
   sam2_score  -- the segmenter's own confidence. Honest but late, and it does not
@@ -47,6 +53,7 @@ class FrameHealth:
     frame_idx: int
     purity: dict[str, float] = field(default_factory=dict)
     proto_dist: dict[str, float] = field(default_factory=dict)
+    proto_margin: dict[str, float] = field(default_factory=dict)
     area_jump: dict[str, float] = field(default_factory=dict)
     sam2_score: dict[str, float] = field(default_factory=dict)
     cross_iou: float = 0.0
@@ -60,8 +67,10 @@ class FrameHealth:
         if not self.purity:
             return 0.0
         pur = float(np.mean(list(self.purity.values())))
-        dist = float(np.mean(list(self.proto_dist.values()))) if self.proto_dist else 0.5
-        return float(np.clip(0.62 * pur + 0.26 * (1.0 - dist) + 0.12 * (1.0 - self.cross_iou), 0, 1))
+        # 0.5 of margin is a comfortably identifiable mask; scale to that
+        marg = float(np.mean(list(self.proto_margin.values()))) if self.proto_margin else 0.0
+        marg = float(np.clip(marg / 0.5, 0.0, 1.0))
+        return float(np.clip(0.62 * pur + 0.26 * marg + 0.12 * (1.0 - self.cross_iou), 0, 1))
 
 
 @dataclass
@@ -82,7 +91,9 @@ class IdentityManager:
         ap = cfg["appearance"]
         self.cfg = cfg
         self.purity_min = rc["purity_min"]
-        self.proto_dist_max = rc["proto_dist_max"]
+        self.proto_margin_min = rc.get("proto_margin_min", 0.15)
+        # loose absolute bound: catches total colour collapse, not lighting drift
+        self.proto_dist_max = rc.get("proto_dist_max", 0.95)
         self.mask_iou_max = rc["mask_iou_max"]
         self.area_jump_max = rc["area_jump_max"]
         self.sam2_score_min = rc["sam2_score_min"]
@@ -151,7 +162,15 @@ class IdentityManager:
 
             fh.purity[fid] = self.classifier.purity(frame_bgr, mask, idx_of[fid], lab)
             cm = build_color_model(frame_bgr, mask, self.bins, self.band, self.min_px, lab)
-            fh.proto_dist[fid] = self.protos[fid].distance(cm) if cm else 1.0
+            other = "B" if fid == "A" else "A"
+            if cm:
+                d_own = self.protos[fid].distance(cm)
+                d_other = self.protos[other].distance(cm)
+                fh.proto_dist[fid] = d_own
+                fh.proto_margin[fid] = d_other - d_own
+            else:
+                fh.proto_dist[fid] = 1.0
+                fh.proto_margin[fid] = -1.0
 
             area = float(mask.sum())
             prev = self._prev_area.get(fid)
@@ -163,6 +182,8 @@ class IdentityManager:
 
             if fh.purity[fid] < self.purity_min:
                 fh.triggers.append(f"{fid}:purity={fh.purity[fid]:.2f}")
+            if fh.proto_margin[fid] < self.proto_margin_min:
+                fh.triggers.append(f"{fid}:margin={fh.proto_margin[fid]:+.2f}")
             if fh.proto_dist[fid] > self.proto_dist_max:
                 fh.triggers.append(f"{fid}:proto_dist={fh.proto_dist[fid]:.2f}")
             if fh.area_jump[fid] > self.area_jump_max:

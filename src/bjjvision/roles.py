@@ -217,7 +217,14 @@ class RoleAssigner:
         dec = RoleDecision()
 
         # --- cheap geometric rejection first: crowd -------------------------
+        # The mat test is applied LAST and is not a veto. Three filters exist so
+        # their failure modes do not coincide; letting any one of them reject
+        # unilaterally throws that away. Measured case: at a tighter camera framing
+        # the mat covered 31% of the frame instead of 46%, its convex hull shrank,
+        # and the largest body on screen was discarded for having a foot just
+        # outside it -- leaving one candidate and no fight to track.
         on_mat: list[PersonObs] = []
+        off_mat: list[PersonObs] = []
         for p in persons:
             if p.area / frame_area < self.min_area_frac:
                 dec.crowd.add(p.track_id); dec.reasons[p.track_id] = "too small (stands)"
@@ -227,9 +234,23 @@ class RoleAssigner:
                 dec.crowd.add(p.track_id); dec.reasons[p.track_id] = "feet above mat horizon"
                 continue
             if self.require_mat and mat_mask is not None and not MatModel().contains(mat_mask, p):
-                dec.crowd.add(p.track_id); dec.reasons[p.track_id] = "outside mat polygon"
+                off_mat.append(p)
                 continue
             on_mat.append(p)
+
+        # A frame with a match in it has two athletes in it. If the mat test left
+        # fewer than two candidates it is the test that is wrong, not the frame,
+        # so re-admit the largest bodies it discarded rather than tracking nothing.
+        if len(on_mat) < 2 and off_mat:
+            off_mat.sort(key=lambda p: p.area, reverse=True)
+            for p in off_mat[: 2 - len(on_mat)]:
+                on_mat.append(p)
+                dec.reasons[p.track_id] = "re-admitted: mat test left too few candidates"
+
+        for p in off_mat:
+            if p not in on_mat:
+                dec.crowd.add(p.track_id)
+                dec.reasons.setdefault(p.track_id, "outside mat polygon")
 
         if len(on_mat) < 2:
             return dec

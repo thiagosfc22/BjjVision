@@ -271,6 +271,14 @@ class Pipeline:
                 while budget > 0:
                     restart_at = None
                     for f_idx, masks, scores in self.segmenter.propagate(cursor, budget):
+                        # propagate_in_video(start, max_frame_num_to_track=N) yields
+                        # the start frame plus N more, so each window overruns its
+                        # end by one and collides with the next window's first
+                        # frame. In a table that IS the deliverable that lands as a
+                        # duplicate row holding two different segmentations of the
+                        # same frame.
+                        if f_idx >= win_end:
+                            break
                         fr = self.frame(f_idx)
                         if fr is None:
                             continue
@@ -321,6 +329,7 @@ class Pipeline:
                         ff.track_state = fh.state.value
                         ff.purity = dict(fh.purity)
                         ff.proto_dist = dict(fh.proto_dist)
+                        ff.proto_margin = dict(fh.proto_margin)
                         ff.shot_kind = next((sh.kind for sh in self.shots
                                              if sh.start <= f_idx < sh.end), "")
                         self.rows.append(ff.to_row(vw, vh))
@@ -339,6 +348,7 @@ class Pipeline:
                         st = RenderState(
                             t_s=t_s, duration_s=self.duration, confidence=fh.score,
                             purity=fh.purity, proto_dist=fh.proto_dist,
+                            proto_margin=fh.proto_margin,
                             cross_iou=fh.cross_iou, state=fh.state.value,
                             triggers=fh.triggers, labels=labels, swatches=swatches,
                             position=self.last_narration.get("position", ""),

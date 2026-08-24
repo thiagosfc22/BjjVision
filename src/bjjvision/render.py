@@ -55,6 +55,7 @@ class RenderState:
     confidence: float = 0.0
     purity: dict = field(default_factory=dict)
     proto_dist: dict = field(default_factory=dict)
+    proto_margin: dict = field(default_factory=dict)
     cross_iou: float = 0.0
     state: str = "healthy"
     triggers: list = field(default_factory=list)
@@ -143,10 +144,11 @@ class ReportRenderer:
             _text(p, "gi match", (24, y), 0.4, DIM)
             _bar(p, 110, y - 9, 200, 11, pur, _grade(pur, 0.78, 0.62))
             _text(p, f"{pur:.0%}", (320, y), 0.42, _grade(pur, 0.78, 0.62)); y += 22
-            pd = 1.0 - st.proto_dist.get(fid, 1.0)
-            _text(p, "prototype", (24, y), 0.4, DIM)
-            _bar(p, 110, y - 9, 200, 11, pd, _grade(pd, 0.70, 0.55))
-            _text(p, f"{pd:.0%}", (320, y), 0.42, _grade(pd, 0.70, 0.55)); y += 30
+            mg = st.proto_margin.get(fid, 0.0)
+            shown = float(np.clip(mg / 0.5, 0.0, 1.0))
+            _text(p, "id margin", (24, y), 0.4, DIM)
+            _bar(p, 110, y - 9, 200, 11, shown, _grade(shown, 0.60, 0.30))
+            _text(p, f"{mg:+.2f}", (320, y), 0.42, _grade(shown, 0.60, 0.30)); y += 30
 
         cv2.line(p, (18, y - 8), (PANEL_W - 18, y - 8), (55, 55, 62), 1); y += 18
         _text(p, "TRACK CONFIDENCE", (18, y), 0.42, DIM, 1); y += 16
