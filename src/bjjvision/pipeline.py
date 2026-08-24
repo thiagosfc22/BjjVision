@@ -102,34 +102,52 @@ class Pipeline:
         return cv2.imread(str(self.frame_paths[j]))
 
     # ------------------------------------------------------------------
-    def calibrate(self, search_frames: int = 300, n_samples: int = 12) -> dict:
-        """Learn the mat, pick the two athletes, and lock in both gi prototypes.
+    def calibrate(self, search_frames: int = 300, n_samples: int = 12,
+                  calib_dir: Path | None = None) -> dict:
+        """Learn the mat and both gi prototypes.
 
-        Everything downstream inherits the quality of this step, so it samples
-        widely and only keeps frames where the two masks are cleanly disjoint.
+        `calib_dir` lets calibration read a DIFFERENT stretch of the match than
+        the one being tracked. Gi colour is invariant for the whole bout, so there
+        is no reason to require that the clip you want to process also happens to
+        contain a moment where the athletes stand apart. Point this at the opening
+        exchange and apply the resulting prototypes to any window.
+
+        A separate directory rather than a second range in the same one: SAM2
+        indexes a frame directory by sorted position, so a directory holding two
+        disjoint ranges breaks the position-to-frame mapping. Two contiguous
+        directories keep that mapping linear.
         """
         from .detect import PersonDetector
+        from .roles import _box_iou
         from .segment import Sam2Segmenter
 
         self.detector = PersonDetector(self.cfg, self.device)
-        self.segmenter = Sam2Segmenter(self.cfg, self.frames_dir, self.device)
 
-        # Probe within the frames that actually exist. With a windowed extraction
-        # the directory starts partway into the match, so a range beginning at 0
-        # would return None for every probe.
-        lo = self.frame_offset
-        hi = lo + min(search_frames, len(self.frame_paths))
-        probe_idx = np.linspace(lo, hi - 1,
+        src_dir = calib_dir or self.frames_dir
+        paths = sorted(src_dir.glob("*.jpg"))
+        if not paths:
+            raise RuntimeError(f"no frames found in {src_dir}")
+        c_off = int(paths[0].stem)
+
+        def c_frame(i: int):
+            k = i - c_off
+            return cv2.imread(str(paths[k])) if 0 <= k < len(paths) else None
+
+        seg = Sam2Segmenter(self.cfg, src_dir, self.device)
+
+        hi = c_off + min(search_frames, len(paths))
+        probe_idx = np.linspace(c_off, hi - 1,
                                 min(self.cfg["roles"]["mat_estimate_frames"] // 2,
-                                    max(hi - lo, 1)),
+                                    max(hi - c_off, 1)),
                                 dtype=int).tolist()
-        probe_frames = [f for f in (self.frame(i) for i in probe_idx) if f is not None]
+        probe_frames = [f for f in (c_frame(i) for i in probe_idx) if f is not None]
         self.mat.fit(probe_frames)
 
-        # find a frame where two on-mat people are clearly present and separated
+        # prefer a frame where the two are furthest apart: prototypes built from
+        # interlocked bodies inherit whatever the occlusion hid
         best = None
         for i in probe_idx:
-            fr = self.frame(i)
+            fr = c_frame(i)
             if fr is None:
                 continue
             persons = self.detector.detect(fr, persist=True)
@@ -137,45 +155,57 @@ class Pipeline:
             dec = self.roles.assign(fr, persons, self.mat.mask(fr), None, None)
             if dec.fighters is None:
                 continue
-            pa, pb = [p for p in persons if p.track_id in dec.fighters][:2] if len(
-                [p for p in persons if p.track_id in dec.fighters]) >= 2 else (None, None)
-            if pa is None:
+            sel = [p for p in persons if p.track_id in dec.fighters]
+            if len(sel) < 2:
                 continue
-            from .roles import _box_iou
-            sep = 1.0 - _box_iou(pa.box, pb.box)     # prefer them standing apart
+            pa, pb = sel[0], sel[1]
+            sep = 1.0 - _box_iou(pa.box, pb.box)
             score = sep * (pa.area + pb.area)
             if best is None or score > best[0]:
                 best = (score, i, pa, pb)
 
         if best is None:
-            raise RuntimeError("calibration failed: never saw two people on the mat")
+            raise RuntimeError(f"calibration failed: never saw two people on the mat "
+                               f"in {src_dir.name}")
 
         _, seed_idx, pa, pb = best
-        seed_frame = self.frame(seed_idx)
-        self.segmenter.reset()
-        self.segmenter.prompt_boxes(seed_idx, {"A": pa.box, "B": pb.box})
+        seg.reset()
+        seg.prompt_boxes(seed_idx, {"A": pa.box, "B": pb.box})
 
         samples: list[tuple[np.ndarray, dict]] = []
-        for f_idx, masks, _ in self.segmenter.propagate(seed_idx, n_samples * 3):
-            fr = self.frame(f_idx)
+        rejected = 0
+        for f_idx, masks, _ in seg.propagate(seed_idx, n_samples * 3):
+            fr = c_frame(f_idx)
             if fr is None or len(masks) < 2:
                 continue
             ma, mb = masks.get("A"), masks.get("B")
             if ma is None or mb is None or not ma.any() or not mb.any():
                 continue
-            inter = float((ma & mb).sum()) / max(float((ma | mb).sum()), 1.0)
-            if inter > 0.05:                 # only clean, disjoint frames calibrate
+            # SAM2 assigns each pixel to one object, so mask overlap is almost
+            # always zero and is a weak test of whether the BODIES are separated.
+            # Bounding-box overlap is the honest measure of that.
+            ax, ay, aw, ah = cv2.boundingRect(ma.view(np.uint8))
+            bx, by, bw, bh = cv2.boundingRect(mb.view(np.uint8))
+            if _box_iou((ax, ay, ax + aw, ay + ah), (bx, by, bx + bw, by + bh)) > 0.35:
+                rejected += 1
                 continue
             samples.append((fr, {"A": ma, "B": mb}))
             if len(samples) >= n_samples:
                 break
 
+        del seg                       # release before the tracking predictor loads
+        self.segmenter = Sam2Segmenter(self.cfg, self.frames_dir, self.device)
+
         if len(samples) < 3:
-            raise RuntimeError(f"calibration failed: only {len(samples)} clean frames")
+            raise RuntimeError(
+                f"calibration failed: only {len(samples)} frames with the athletes "
+                f"separated ({rejected} rejected as interlocked). Pass --calib-frames "
+                f"pointing at a stretch where they are standing apart.")
 
         self.separability = self.identity.calibrate(samples)
         sw = {k: v.model.swatch_bgr for k, v in self.identity.protos.items()}
-        report = {"seed_frame": int(seed_idx), "clean_samples": len(samples),
+        report = {"calib_source": src_dir.name, "seed_frame": int(seed_idx),
+                  "clean_samples": len(samples), "interlocked_rejected": rejected,
                   "separability": round(self.separability, 3), "gi_swatches_bgr": sw}
 
         if self.separability < 0.35:

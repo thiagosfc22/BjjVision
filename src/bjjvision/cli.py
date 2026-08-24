@@ -73,7 +73,10 @@ def fetch(url: str, name: str = typer.Option(None, "--name", "-n"),
 @app.command()
 def frames(slug: str, data_dir: Path = typer.Option(ROOT / "data"),
            window: str = typer.Option(None, "--frames",
-                                      help="extract only START:END (saves disk)")):
+                                      help="extract only START:END (saves disk)"),
+           calib: str = typer.Option(None, "--calib-frames",
+                                     help="ALSO extract START:END into a separate "
+                                          "calibration directory")):
     """Explode a normalised match into the JPEG directory SAM2 expects.
 
     Pass --frames to extract only the window you intend to process. A full match
@@ -101,6 +104,21 @@ def frames(slug: str, data_dir: Path = typer.Option(ROOT / "data"),
     console.print(f"[green]{n}[/] frames ({size:.2f} GB) -> {out}")
     if rng:
         console.print(f"  window {rng[0]}-{rng[1]}; filenames keep original indices")
+
+    if calib:
+        try:
+            ca, cb = calib.split(":")
+            crng = (int(ca), int(cb))
+        except ValueError:
+            raise typer.BadParameter("--calib-frames expects START:END")
+        # A separate directory, not a second range in the same one: SAM2 maps a
+        # frame directory to indices by sorted position, and two disjoint ranges
+        # in one directory break that mapping.
+        cout = data_dir / "interim" / f"{slug}_calib"
+        cn = extract_frames(video, cout, frame_range=crng, fps=fps)
+        csize = sum(f.stat().st_size for f in cout.glob("*.jpg")) / 1e9
+        console.print(f"[green]{cn}[/] calibration frames ({csize:.2f} GB) -> {cout}")
+        console.print(f"  window {crng[0]}-{crng[1]}")
 
 
 @app.command()
@@ -180,6 +198,9 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
         max_frames: int = typer.Option(None, help="cap for smoke tests"),
         frames: str = typer.Option(None, "--frames",
                                    help="process only START:END, e.g. 5400:7200"),
+        calib_dir: Path = typer.Option(None, "--calib-dir",
+                                       help="calibrate from this frame directory "
+                                            "instead of the tracked window"),
         no_llm: bool = typer.Option(False, "--no-llm")):
     """Full pipeline. GPU host."""
     from .pipeline import Pipeline, load_config
@@ -206,7 +227,16 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
     console.print_json(data=pipe.load_shots(video, shots_json if shots_json.exists() else None))
 
     console.rule("[bold]calibration")
-    cal = pipe.calibrate()
+    cdir = calib_dir
+    if cdir is None:
+        auto = data_dir / "interim" / f"{slug}_calib"
+        if auto.exists() and any(auto.glob("*.jpg")):
+            cdir = auto
+    if cdir is not None:
+        console.print(f"[cyan]calibrating from[/] {cdir.name} "
+                      f"(gi colour is invariant across the match, so the prototypes "
+                      f"transfer to any window)")
+    cal = pipe.calibrate(calib_dir=cdir)
     console.print_json(data=cal)
     if "warning" in cal:
         console.print(f"[yellow]{cal['warning']}")
