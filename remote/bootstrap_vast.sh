@@ -14,7 +14,7 @@ python -c "import torch, sys; print('torch', torch.__version__, 'cuda', torch.cu
 
 pip install -q --upgrade pip
 pip install -q numpy opencv-python-headless pyyaml tqdm rich typer pillow scipy scikit-learn \
-                ultralytics anthropic lap
+                ultralytics anthropic lap pyarrow
 
 echo "== SAM2 =="
 if ! python -c "import sam2" 2>/dev/null; then
@@ -37,11 +37,15 @@ print("yolo weights ready")
 PY
 
 echo "== install package =="
-pip install -q -e .
+pip install -q -e . || true
+# uv/pip editable installs have proved unreliable; the wrapper sets PYTHONPATH
+# explicitly so the run never dies on an import path problem
+chmod +x ./bjj 2>/dev/null || true
 
 echo
-python -m bjjvision.cli doctor
+./bjj doctor
 echo
 echo "ready. next:"
-echo "  python -m bjjvision.cli frames <slug>"
-echo "  python -m bjjvision.cli run <slug>"
+echo "  ./bjj frames <slug>"
+echo "  ./bjj scout <slug>                      # CPU, maps the cuts"
+echo "  ./bjj run <slug> --frames START:END     # the slice you actually want"

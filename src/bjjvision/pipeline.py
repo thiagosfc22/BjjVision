@@ -17,7 +17,9 @@ import cv2
 import numpy as np
 import yaml
 
+from . import features as feat
 from .appearance import build_color_model
+from .maskstore import MaskWriter
 from .identity import Health, IdentityManager, RecalEvent
 from .llm_supervisor import LlmSupervisor
 from .render import RenderState, ReportRenderer, TimelineEvent, VideoWriter
@@ -175,10 +177,13 @@ class Pipeline:
 
     # ------------------------------------------------------------------
     def run(self, out_video: Path, max_frames: int | None = None,
-            progress: bool = True) -> dict:
+            progress: bool = True, frame_range: tuple[int, int] | None = None) -> dict:
         cfg = self.cfg
         chunk = cfg["video"]["chunk_frames"]
-        total = min(self.n_frames, max_frames or self.n_frames)
+        lo = frame_range[0] if frame_range else 0
+        total = min(self.n_frames, frame_range[1] if frame_range else
+                    (max_frames or self.n_frames))
+        self.frame_lo, self.frame_hi = lo, total
 
         probe = self.frame(0)
         vh, vw = probe.shape[:2]
@@ -190,6 +195,8 @@ class Pipeline:
 
         raw_out = out_video.with_suffix(".raw.mp4")
         writer = VideoWriter(str(raw_out), self.fps, (renderer.out_w, renderer.out_h))
+        self.masks_out = MaskWriter(self.out_dir / "masks", (vh, vw))
+        self.rows: list[dict] = []
         t_start = time.time()
         written = 0
         prev_masks: dict[str, np.ndarray] = {}
@@ -202,12 +209,13 @@ class Pipeline:
                     for a, b, f in windows(self.shots, chunk,
                                            tuple(cfg.get("shots", {}).get(
                                                "track_kinds", ["match", "mat"])))
-                    if a < total]
+                    if a < total and b > lo]
+            wins = [(max(a, lo), b, f or a < lo) for a, b, f in wins]
         else:
-            wins = [(a, min(a + chunk, total), a == 0) for a in range(0, total, chunk)]
+            wins = [(a, min(a + chunk, total), a == lo) for a in range(lo, total, chunk)]
 
         try:
-            out_cursor = 0
+            out_cursor = lo
             for win_start, win_end, new_shot in wins:
                 if win_end <= win_start:
                     continue
@@ -289,7 +297,23 @@ class Pipeline:
                         else:
                             self.identity.maybe_update_prototypes(fr, masks, fh)
 
+                        # Pose on EVERY frame, not only at window seeds. This is
+                        # the deliverable: the mask is what makes an attributed
+                        # skeleton possible at all, since a pose estimator alone
+                        # cannot say whose limb is whose once the bodies interlock.
                         t_s = f_idx / self.fps
+                        persons = self.detector.detect(fr, persist=True)
+                        skeletons = feat.attribute_skeletons(
+                            [p.keypoints for p in persons if p.keypoints is not None],
+                            masks)
+                        ff = feat.extract(f_idx, t_s, masks, skeletons)
+                        ff.track_confidence = fh.score
+                        ff.track_state = fh.state.value
+                        ff.shot_kind = next((sh.kind for sh in self.shots
+                                             if sh.start <= f_idx < sh.end), "")
+                        self.rows.append(ff.to_row(vw, vh))
+                        self.masks_out.add(f_idx, masks)
+
                         if (self.supervisor.enabled and cfg["llm"]["narrate"]
                                 and t_s - self._last_narrate_t >= narrate_every):
                             n = self.supervisor.narrate(
@@ -336,6 +360,7 @@ class Pipeline:
                                                separability=self.separability))
         finally:
             writer.close()
+            self.masks_path = self.masks_out.close()
 
         self._encode_final(raw_out, out_video)
         return self._finalise(out_video, time.time() - t_start, written)
@@ -437,6 +462,19 @@ class Pipeline:
                  "kind": e.kind.value, "triggers": e.triggers, "resolved": e.resolved}
                 for e in self.identity.events
             ][:400],
+        }
+        table = feat.write_parquet(
+            self.rows, self.out_dir / "features.parquet",
+            meta={"fps": self.fps, "frames": len(self.rows),
+                  "gi_separability": self.separability,
+                  "frame_range": [self.frame_lo, self.frame_hi]})
+        attributed = sum(1 for r in self.rows
+                         if r.get("A_attributed") and r.get("B_attributed"))
+        metrics["features"] = {
+            "table": table, "rows": len(self.rows),
+            "both_athletes_attributed": attributed,
+            "attribution_rate": round(attributed / max(len(self.rows), 1), 4),
+            "masks": getattr(self, "masks_path", None),
         }
         (self.out_dir / "report.json").write_text(json.dumps(metrics, indent=2))
         (self.out_dir / "supervisor_log.json").write_text(

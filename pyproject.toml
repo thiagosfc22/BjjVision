@@ -28,6 +28,7 @@ gpu = [
     "sam2 @ git+https://github.com/facebookresearch/sam2.git",
     "anthropic>=0.34",
     "lap>=0.4",
+    "pyarrow>=17.0",
 ]
 
 [project.scripts]

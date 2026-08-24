@@ -157,6 +157,8 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
         data_dir: Path = typer.Option(ROOT / "data"),
         device: str = typer.Option("cuda"),
         max_frames: int = typer.Option(None, help="cap for smoke tests"),
+        frames: str = typer.Option(None, "--frames",
+                                   help="process only START:END, e.g. 5400:7200"),
         no_llm: bool = typer.Option(False, "--no-llm")):
     """Full pipeline. GPU host."""
     from .pipeline import Pipeline, load_config
@@ -189,8 +191,17 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
         console.print(f"[yellow]{cal['warning']}")
 
     console.rule("[bold]tracking")
+    rng = None
+    if frames:
+        try:
+            a, b = frames.split(":")
+            rng = (int(a), int(b))
+        except ValueError:
+            raise typer.BadParameter("--frames expects START:END, e.g. 5400:7200")
+        console.print(f"[cyan]window[/] frames {rng[0]}-{rng[1]} "
+                      f"({(rng[1]-rng[0])/fps:.0f}s)")
     out_video = out_dir / f"{slug}_analysis.mp4"
-    metrics = pipe.run(out_video, max_frames=max_frames)
+    metrics = pipe.run(out_video, max_frames=max_frames, frame_range=rng)
 
     console.rule("[bold]summary")
     console.print_json(data={k: v for k, v in metrics.items() if k != "recal_events"})
