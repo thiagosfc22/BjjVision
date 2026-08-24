@@ -1,0 +1,76 @@
+# Local smoke-test profile: Apple Metal, tiny checkpoint, short window.
+# Purpose is to prove the code executes end to end, not to produce the deliverable.
+# SAM2-tiny on MPS measured at ~1 fps, so keep the window small.
+video:
+  target_fps: 30
+  max_width: 1280
+  chunk_frames: 60
+
+shots:
+  z_threshold: 150
+  min_shot_frames: 10
+  flat_max: 0.55
+  track_kinds: [match, mat]
+
+detect:
+  model: yolo11x-pose.pt
+  conf: 0.25
+  iou: 0.60
+  min_box_area_frac: 0.004
+  max_persons: 12
+
+segment:
+  sam2_cfg: configs/sam2.1/sam2.1_hiera_t.yaml
+  sam2_ckpt: checkpoints/sam2.1_hiera_tiny.pt
+  offload_video_to_cpu: true
+  offload_state_to_cpu: false
+  prompt_points_per_obj: 6
+
+appearance:
+  color_space: lab
+  hist_bins: [8, 12, 12]
+  torso_only: true
+  torso_band: [0.15, 0.60]
+  min_mask_pixels: 400
+  prototype_bank: 24
+  prototype_update_conf: 0.80
+
+reid:
+  embed_model: osnet_x1_0
+  weight_color: 0.65
+  weight_embed: 0.25
+  weight_motion: 0.10
+
+roles:
+  mat_estimate_frames: 20
+  referee_color_margin: 0.35
+  contact_window_s: 3.0
+  contact_iou_min: 0.02
+  crowd_y_reject_frac: 0.35
+  require_inside_mat: true
+
+recalibrate:
+  purity_min: 0.62
+  proto_dist_max: 0.45
+  mask_iou_max: 0.15
+  area_jump_max: 2.2
+  sam2_score_min: 0.55
+  cooldown_frames: 8
+  max_consecutive: 5
+
+llm:
+  enabled: false
+  model: claude-opus-5
+  adjudicate_every_s: 10.0
+  escalate_on_recal: true
+  contact_sheet_cols: 3
+  max_calls_per_minute: 12
+  narrate: false
+  tune_between_passes: false
+
+render:
+  hud: true
+  mask_alpha: 0.45
+  timeline: true
+  show_health: true
+  out_crf: 20

@@ -143,13 +143,31 @@ def normalise(src: MatchSource, out_dir: Path, target_fps: int = 30,
     return src
 
 
-def extract_frames(video: Path, frames_dir: Path, quality: int = 2) -> int:
-    """SAM2's video predictor wants a directory of zero-padded JPEGs."""
+def extract_frames(video: Path, frames_dir: Path, quality: int = 2,
+                   frame_range: tuple[int, int] | None = None,
+                   fps: float = 30.0) -> int:
+    """SAM2's video predictor wants a directory of zero-padded JPEGs.
+
+    `frame_range` extracts only the window that will actually be processed. A
+    full 13-minute match is ~23,000 JPEGs and roughly 3.4 GB; a 60-second window
+    is ~340 MB. On a rented box with a small container disk that difference
+    decides whether the run starts at all.
+
+    Filenames keep their ORIGINAL frame index, so a window extracted at
+    5400:7200 is still addressable as frame 5400 everywhere downstream. Renumbering
+    from zero would silently desynchronise the shot table and the feature rows.
+    """
     _require("ffmpeg")
     frames_dir.mkdir(parents=True, exist_ok=True)
     for old in frames_dir.glob("*.jpg"):
         old.unlink()
-    _run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(video),
-          "-q:v", str(quality), "-start_number", "0",
-          str(frames_dir / "%08d.jpg")])
+
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error"]
+    start = 0
+    if frame_range:
+        start, end = frame_range
+        cmd += ["-ss", f"{start / fps:.3f}", "-t", f"{(end - start) / fps:.3f}"]
+    cmd += ["-i", str(video), "-q:v", str(quality),
+            "-start_number", str(start), str(frames_dir / "%08d.jpg")]
+    _run(cmd)
     return len(list(frames_dir.glob("*.jpg")))

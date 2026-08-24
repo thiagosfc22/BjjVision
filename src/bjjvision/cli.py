@@ -71,15 +71,36 @@ def fetch(url: str, name: str = typer.Option(None, "--name", "-n"),
 
 
 @app.command()
-def frames(slug: str, data_dir: Path = typer.Option(ROOT / "data")):
-    """Explode a normalised match into the JPEG directory SAM2 expects."""
+def frames(slug: str, data_dir: Path = typer.Option(ROOT / "data"),
+           window: str = typer.Option(None, "--frames",
+                                      help="extract only START:END (saves disk)")):
+    """Explode a normalised match into the JPEG directory SAM2 expects.
+
+    Pass --frames to extract only the window you intend to process. A full match
+    is ~3.4 GB of JPEG; a 60-second window is ~340 MB.
+    """
+    import json as _json
     from .ingest import extract_frames
     video = data_dir / "interim" / f"{slug}_norm.mp4"
     if not video.exists():
         raise typer.BadParameter(f"{video} not found - run `fetch` first")
+    meta = data_dir / "interim" / f"{slug}.json"
+    fps = _json.loads(meta.read_text())["fps"] if meta.exists() else 30.0
+
+    rng = None
+    if window:
+        try:
+            a, b = window.split(":")
+            rng = (int(a), int(b))
+        except ValueError:
+            raise typer.BadParameter("--frames expects START:END, e.g. 5400:7200")
+
     out = data_dir / "interim" / f"{slug}_frames"
-    n = extract_frames(video, out)
-    console.print(f"[green]{n}[/] frames -> {out}")
+    n = extract_frames(video, out, frame_range=rng, fps=fps)
+    size = sum(f.stat().st_size for f in out.glob("*.jpg")) / 1e9
+    console.print(f"[green]{n}[/] frames ({size:.2f} GB) -> {out}")
+    if rng:
+        console.print(f"  window {rng[0]}-{rng[1]}; filenames keep original indices")
 
 
 @app.command()

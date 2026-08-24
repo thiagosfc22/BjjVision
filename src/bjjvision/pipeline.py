@@ -50,7 +50,10 @@ class Pipeline:
         self.fps = fps
         self.device = device
         self.frame_paths = sorted(frames_dir.glob("*.jpg"))
-        self.n_frames = len(self.frame_paths)
+        # filenames carry absolute video frame numbers; a windowed extraction
+        # starts partway in, so index arithmetic goes through the offset
+        self.frame_offset = int(self.frame_paths[0].stem) if self.frame_paths else 0
+        self.n_frames = self.frame_offset + len(self.frame_paths)
         self.duration = self.n_frames / max(fps, 1e-6)
 
         self.identity = IdentityManager(cfg)
@@ -93,9 +96,10 @@ class Pipeline:
         return self.shot_summary
 
     def frame(self, i: int) -> np.ndarray | None:
-        if not (0 <= i < self.n_frames):
+        j = i - self.frame_offset
+        if not (0 <= j < len(self.frame_paths)):
             return None
-        return cv2.imread(str(self.frame_paths[i]))
+        return cv2.imread(str(self.frame_paths[j]))
 
     # ------------------------------------------------------------------
     def calibrate(self, search_frames: int = 300, n_samples: int = 12) -> dict:
@@ -110,8 +114,14 @@ class Pipeline:
         self.detector = PersonDetector(self.cfg, self.device)
         self.segmenter = Sam2Segmenter(self.cfg, self.frames_dir, self.device)
 
-        probe_idx = np.linspace(0, min(search_frames, self.n_frames) - 1,
-                                self.cfg["roles"]["mat_estimate_frames"] // 2,
+        # Probe within the frames that actually exist. With a windowed extraction
+        # the directory starts partway into the match, so a range beginning at 0
+        # would return None for every probe.
+        lo = self.frame_offset
+        hi = lo + min(search_frames, len(self.frame_paths))
+        probe_idx = np.linspace(lo, hi - 1,
+                                min(self.cfg["roles"]["mat_estimate_frames"] // 2,
+                                    max(hi - lo, 1)),
                                 dtype=int).tolist()
         probe_frames = [f for f in (self.frame(i) for i in probe_idx) if f is not None]
         self.mat.fit(probe_frames)
@@ -180,12 +190,12 @@ class Pipeline:
             progress: bool = True, frame_range: tuple[int, int] | None = None) -> dict:
         cfg = self.cfg
         chunk = cfg["video"]["chunk_frames"]
-        lo = frame_range[0] if frame_range else 0
+        lo = frame_range[0] if frame_range else self.frame_offset
         total = min(self.n_frames, frame_range[1] if frame_range else
                     (max_frames or self.n_frames))
         self.frame_lo, self.frame_hi = lo, total
 
-        probe = self.frame(0)
+        probe = self.frame(self.frame_offset)
         vh, vw = probe.shape[:2]
         renderer = ReportRenderer(cfg, vw, vh, self.duration)
         labels = {"A": self.identity.protos["A"].label or "Fighter A",
@@ -309,6 +319,8 @@ class Pipeline:
                         ff = feat.extract(f_idx, t_s, masks, skeletons)
                         ff.track_confidence = fh.score
                         ff.track_state = fh.state.value
+                        ff.purity = dict(fh.purity)
+                        ff.proto_dist = dict(fh.proto_dist)
                         ff.shot_kind = next((sh.kind for sh in self.shots
                                              if sh.start <= f_idx < sh.end), "")
                         self.rows.append(ff.to_row(vw, vh))

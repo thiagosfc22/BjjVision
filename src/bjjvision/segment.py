@@ -17,6 +17,7 @@ ten-minute grappling match rather than a five-second demo clip:
 """
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 
 import numpy as np
@@ -32,14 +33,22 @@ class Sam2Segmenter:
         s = cfg["segment"]
         self.device = device
         self.frames_dir = frames_dir
+        # SAM2 indexes the frame directory 0..N-1 regardless of filename, while the
+        # rest of the pipeline speaks absolute video frame numbers. When only a
+        # window was extracted (files starting at 00010177.jpg) those two disagree.
+        # The offset is absorbed here so no caller has to think about it.
+        jpgs = sorted(frames_dir.glob("*.jpg"))
+        self.offset = int(jpgs[0].stem) if jpgs else 0
         self.predictor = build_sam2_video_predictor(
             s["sam2_cfg"], s["sam2_ckpt"], device=device)
         self.state = self.predictor.init_state(
             video_path=str(frames_dir),
             offload_video_to_cpu=s["offload_video_to_cpu"],
             offload_state_to_cpu=s["offload_state_to_cpu"])
+        # bf16 autocast is a CUDA-only win here; on MPS it is unsupported and on
+        # CPU it is slower than fp32, so both fall through to a no-op context.
         self._autocast = (torch.autocast("cuda", dtype=torch.bfloat16)
-                          if device == "cuda" else torch.autocast("cpu", enabled=False))
+                          if device == "cuda" else contextlib.nullcontext())
 
     # -- prompting ----------------------------------------------------------
     def reset(self) -> None:
@@ -49,7 +58,7 @@ class Sam2Segmenter:
         with self._autocast, torch.inference_mode():
             for fid, box in boxes.items():
                 self.predictor.add_new_points_or_box(
-                    inference_state=self.state, frame_idx=frame_idx,
+                    inference_state=self.state, frame_idx=frame_idx - self.offset,
                     obj_id=OBJ_IDS[fid], box=np.array(box, dtype=np.float32))
 
     def prompt_points(self, frame_idx: int, points: dict[str, np.ndarray],
@@ -69,7 +78,7 @@ class Sam2Segmenter:
                         coords.append(np.asarray(opp, dtype=np.float32))
                         labels.append(np.zeros(len(opp), dtype=np.int32))
                 self.predictor.add_new_points_or_box(
-                    inference_state=self.state, frame_idx=frame_idx,
+                    inference_state=self.state, frame_idx=frame_idx - self.offset,
                     obj_id=OBJ_IDS[fid],
                     points=np.concatenate(coords, axis=0),
                     labels=np.concatenate(labels, axis=0))
@@ -79,7 +88,7 @@ class Sam2Segmenter:
         """Yield (frame_idx, {fid: bool mask}, {fid: score}) over one window."""
         with self._autocast, torch.inference_mode():
             for f_idx, obj_ids, logits in self.predictor.propagate_in_video(
-                    self.state, start_frame_idx=start_frame,
+                    self.state, start_frame_idx=start_frame - self.offset,
                     max_frame_num_to_track=max_frames):
                 masks, scores = {}, {}
                 for k, oid in enumerate(obj_ids):
@@ -90,7 +99,7 @@ class Sam2Segmenter:
                     masks[fid] = (lg > 0.0).cpu().numpy().squeeze().astype(bool)
                     # peak logit is a usable proxy for the segmenter's own certainty
                     scores[fid] = float(torch.sigmoid(lg.max()).cpu())
-                yield int(f_idx), masks, scores
+                yield int(f_idx) + self.offset, masks, scores
 
 
 def masks_from_boxes_fallback(frame_shape, boxes: dict) -> dict[str, np.ndarray]:

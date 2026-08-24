@@ -143,6 +143,10 @@ class FrameFeatures:
     shot_kind: str = ""
     track_confidence: float = 0.0
     track_state: str = ""
+    # health diagnostics, carried in the table so threshold calibration can be
+    # argued from the data instead of from the aggregate confidence score
+    purity: dict = field(default_factory=dict)
+    proto_dist: dict = field(default_factory=dict)
     # per athlete
     kp: dict[str, np.ndarray | None] = field(default_factory=dict)
     mask_area: dict[str, float] = field(default_factory=dict)
@@ -183,6 +187,8 @@ class FrameFeatures:
         for fid in ("A", "B"):
             row[f"{fid}_mask_area"] = round(self.mask_area.get(fid, 0.0) / (w * h), 6)
             row[f"{fid}_kp_visible"] = self.kp_visible.get(fid, 0)
+            row[f"{fid}_purity"] = round(self.purity.get(fid, 0.0), 4)
+            row[f"{fid}_proto_dist"] = round(self.proto_dist.get(fid, 0.0), 4)
             row[f"{fid}_attributed"] = bool(self.attributed.get(fid, False))
             c = self.centroid.get(fid)
             row[f"{fid}_cx"] = round(c[0] / w, 5) if c else None
