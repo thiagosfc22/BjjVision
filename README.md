@@ -1,8 +1,20 @@
 # BjjVision
 
-Fighter identification and re-identification for Brazilian Jiu-Jitsu match video.
-SAM2 masks, a gi-colour identity anchor, a self-auditing recalibration loop, and
-a VLM supervisor that arbitrates what the pixels cannot.
+A labelling engine for Brazilian Jiu-Jitsu match video.
+
+**The deliverable is a labelled dataset, not a video.** The end goal is a position
+classifier trained on per-athlete pose sequences; the annotated video exists so a
+human can verify the extracted data is correct. See `PROMPT.md` for the full
+framing.
+
+The chain is: **colour-anchored mask → per-athlete pose → dataset.** The mask
+pipeline is the enabler, not the product — off-the-shelf pose estimators fail in
+grappling because they cannot tell whose limb is whose once the bodies fuse, and
+the gi-colour anchor is what solves that.
+
+What follows describes the mask stage: SAM2 masks, a gi-colour identity anchor, a
+self-auditing recalibration loop, and a VLM supervisor that arbitrates what the
+pixels cannot.
 
 ## The core idea
 
