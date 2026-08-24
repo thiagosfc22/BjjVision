@@ -261,30 +261,41 @@ def run(slug: str, config: Path = typer.Option(DEFAULT_CFG),
 
 @app.command("sync-up")
 def sync_up(slug: str, host: str, remote_dir: str = "~/BjjVision",
+            port: int = typer.Option(22, "--port", "-p", help="SSH port"),
             data_dir: Path = typer.Option(ROOT / "data")):
-    """Push code + normalised video to the GPU host."""
+    """Push code + normalised video to the GPU host.
+
+    Rented boxes almost never listen on 22, so the port is threaded into both
+    rsync (via -e) and ssh. An earlier version omitted it entirely and silently
+    could not reach any real instance.
+    """
     import subprocess
-    console.print(f"[cyan]-> {host}:{remote_dir}")
-    subprocess.run(["rsync", "-avz", "--progress",
+    rsh = ["-e", f"ssh -p {port} -o StrictHostKeyChecking=accept-new"]
+    console.print(f"[cyan]-> {host}:{remote_dir} (port {port})")
+    subprocess.run(["rsync", "-avz", "--progress", *rsh,
                     "--exclude", ".venv", "--exclude", "data", "--exclude", ".git",
+                    "--exclude", "checkpoints", "--exclude", "__pycache__",
                     f"{ROOT}/", f"{host}:{remote_dir}/"], check=True)
-    subprocess.run(["ssh", host, f"mkdir -p {remote_dir}/data/interim"], check=True)
-    for pat in (f"{slug}_norm.mp4", f"{slug}.json"):
+    subprocess.run(["ssh", "-p", str(port), host,
+                    f"mkdir -p {remote_dir}/data/interim"], check=True)
+    for pat in (f"{slug}_norm.mp4", f"{slug}.json", f"{slug}_shots.json"):
         p = data_dir / "interim" / pat
         if p.exists():
-            subprocess.run(["rsync", "-avz", "--progress", str(p),
+            subprocess.run(["rsync", "-avz", "--progress", *rsh, str(p),
                             f"{host}:{remote_dir}/data/interim/"], check=True)
     console.print("[green]done")
 
 
 @app.command("sync-down")
 def sync_down(slug: str, host: str, remote_dir: str = "~/BjjVision",
+              port: int = typer.Option(22, "--port", "-p", help="SSH port"),
               data_dir: Path = typer.Option(ROOT / "data")):
     """Pull the finished video and reports back to this machine."""
     import subprocess
     dest = data_dir / "out" / slug
     dest.mkdir(parents=True, exist_ok=True)
     subprocess.run(["rsync", "-avz", "--progress",
+                    "-e", f"ssh -p {port} -o StrictHostKeyChecking=accept-new",
                     f"{host}:{remote_dir}/data/out/{slug}/", f"{dest}/"], check=True)
     console.print(f"[green]-> {dest}")
     for f in sorted(dest.iterdir()):
