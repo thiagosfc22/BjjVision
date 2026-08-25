@@ -13,3 +13,6 @@ checkpoints/
 *.webm
 .DS_Store
 runs/
+
+# handoff interno: notas de processo e endereços de instâncias alugadas
+PROMPT.md

@@ -18,7 +18,7 @@ import numpy as np
 import yaml
 
 from . import features as feat
-from .appearance import build_color_model
+from .appearance import build_color_model, lab_of
 from .maskstore import MaskWriter
 from .identity import Health, IdentityManager, RecalEvent
 from .llm_supervisor import LlmSupervisor
@@ -275,7 +275,32 @@ class Pipeline:
                 # ---- re-seed this window from the colour prototypes ---------
                 self.segmenter.reset()
                 seeded = False
-                if prev_masks:
+                sc = cfg["segment"].get("scale_select", {})
+                if prev_masks and sc.get("enabled", False):
+                    # Settle EXTENT first, from SAM2's object prior, then let
+                    # colour say whose it is. Re-deriving points from colour
+                    # instead asks the segmenter to re-solve extent from pixels
+                    # that only ever live on the gi jacket, which is how a mask
+                    # converges on the jacket and stays there: every guard reads
+                    # a jacket-only mask as pure, so nothing ever disputes it.
+                    fr = self.frame(win_start)
+                    lab = lab_of(fr)
+                    picked: dict[str, np.ndarray] = {}
+                    for fid, prev in prev_masks.items():
+                        pt = self.identity.seed_point(fr, prev, fid, lab)
+                        if pt is None:
+                            continue
+                        cands, _ = self.segmenter.scale_candidates(fr, pt)
+                        m = self.identity.choose_scale(
+                            fr, cands, fid, held=prev,
+                            max_contam=sc.get("max_contam", 0.25),
+                            min_px=sc.get("min_px", 1500), lab=lab)
+                        if m is not None:
+                            picked[fid] = m
+                    if len(picked) == 2:
+                        self.segmenter.prompt_masks(win_start, picked)
+                        seeded = True
+                if prev_masks and not seeded:
                     fr = self.frame(win_start)
                     pts = self.identity.reanchor_prompts(fr, prev_masks,
                                                          cfg["segment"]["prompt_points_per_obj"])

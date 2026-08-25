@@ -30,7 +30,7 @@ appearance:
   color_space: lab
   hist_bins: [8, 12, 12]
   torso_only: true
-  torso_band: [0.15, 0.60]
+  torso_band: [0.05, 0.90]   # was [0.15,0.60] = the jacket; see default.yaml
   min_mask_pixels: 400
   prototype_bank: 24
   prototype_update_conf: 0.80

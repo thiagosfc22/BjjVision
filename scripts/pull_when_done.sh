@@ -7,8 +7,8 @@
 #
 #   nohup scripts/pull_when_done.sh > data/out/_autopull.log 2>&1 &
 set -uo pipefail
-HOST="${1:-root@<host>}"
-PORT="${2:-11436}"
+HOST="${1:?uso: $0 user@host porta [...]}"
+PORT="${2:?porta}"
 SLUG="${3:-galvao-xande}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="$ROOT/data/out/${SLUG}_full"

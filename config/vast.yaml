@@ -25,12 +25,16 @@ segment:
   offload_video_to_cpu: true
   offload_state_to_cpu: false
   prompt_points_per_obj: 6
+  scale_select:
+    enabled: true
+    max_contam: 0.25
+    min_px: 1500
 
 appearance:
   color_space: lab
   hist_bins: [8, 12, 12]
   torso_only: true
-  torso_band: [0.15, 0.60]
+  torso_band: [0.05, 0.90]   # was [0.15,0.60] = the jacket; see default.yaml
   min_mask_pixels: 400
   prototype_bank: 24
   prototype_update_conf: 0.80
@@ -79,4 +83,8 @@ render:
   mask_alpha: 0.45
   timeline: true
   show_health: true
+  clean: true               # the rented box produces the viewable video directly.
+                            # masks.bin still comes back, so any later change of
+                            # overlay is `bjj render` on the laptop, not a second
+                            # rental.
   out_crf: 20

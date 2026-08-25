@@ -34,6 +34,7 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 
+import cv2
 import numpy as np
 
 from .appearance import (ColorModel, FighterPrototype, PixelClassifier,
@@ -266,6 +267,69 @@ class IdentityManager:
                 out[fid] = self.classifier.sample_prompt_points(
                     frame_bgr, src, idx, k, self.rng, lab)
         return out
+
+    # -- object-scale selection --------------------------------------------
+    def seed_point(self, frame_bgr: np.ndarray, mask: np.ndarray, fid: str,
+                   lab: np.ndarray | None = None) -> np.ndarray | None:
+        """The single most colour-confident interior pixel of a mask we hold.
+
+        One point, not six: more than one label suppresses SAM2's object-scale
+        output entirely (`Sam2Segmenter.scale_candidates`). Eroded first so the
+        click lands in the interior -- a boundary pixel is half the other body.
+        """
+        if not self.ready:
+            return None
+        m = mask.astype(bool)
+        ys, xs = np.nonzero(m)
+        if ys.size == 0:
+            return None
+        lab = lab_of(frame_bgr) if lab is None else lab
+        conf = self.classifier.posterior(frame_bgr, m, lab)[:, 0 if fid == "A" else 1]
+        inner = cv2.erode(m.view(np.uint8) if m.dtype == np.bool_ else m.astype(np.uint8),
+                          np.ones((9, 9), np.uint8)).astype(bool)
+        keep = inner[ys, xs]
+        if keep.any():
+            ys, xs, conf = ys[keep], xs[keep], conf[keep]
+        i = int(np.argmax(conf))
+        return np.array([[xs[i], ys[i]]], dtype=np.float32)
+
+    def choose_scale(self, frame_bgr: np.ndarray, candidates: np.ndarray, fid: str,
+                     held: np.ndarray | None = None, max_contam: float = 0.25,
+                     min_px: int = 1500,
+                     lab: np.ndarray | None = None) -> np.ndarray | None:
+        """Largest candidate scale that has not swallowed the opponent.
+
+        This deliberately inverts the bias in `purity`. Purity asks only whether
+        the pixels present agree with the prototype, so it is maximised by the
+        SMALLEST defensible mask -- a jacket-only mask scores 0.997 and passes
+        every health check while missing half its athlete. Size subject to a
+        contamination cap asks the other question: as much of this athlete as
+        possible, stopping before the other one.
+
+        The mask we already hold competes as a candidate, so a seed can never
+        return less than it started with. Without that, a frame whose scales
+        were all contaminated fell back to a 0.0036 fragment over the 0.0347
+        mask in hand.
+        """
+        if not self.ready:
+            return None
+        lab = lab_of(frame_bgr) if lab is None else lab
+        other = 1 if fid == "A" else 0
+        pool = [np.asarray(c, bool) for c in candidates]
+        if held is not None and held.any():
+            pool.append(held.astype(bool))
+        best, best_area = None, -1
+        for m in pool:
+            area = int(m.sum())
+            if area < min_px or area <= best_area:
+                continue
+            post = self.classifier.posterior(frame_bgr, m, lab)
+            if post.shape[0] == 0:
+                continue
+            if float((np.argmax(post, axis=1) == other).mean()) > max_contam:
+                continue
+            best, best_area = m, area
+        return best
 
     # -- prototype maintenance ---------------------------------------------
     def maybe_update_prototypes(self, frame_bgr: np.ndarray,

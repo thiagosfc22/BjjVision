@@ -33,13 +33,35 @@ segment:
   offload_video_to_cpu: true
   offload_state_to_cpu: false
   prompt_points_per_obj: 6  # sampled from color-consistent pixels, not box centers
+  # Seed each window on a chosen object scale instead of on re-derived points.
+  # SAM2 answers a ONE-point prompt with three scales (part / garment / person);
+  # any prompt carrying more labels -- our 6 points + 6 mutual negatives, or a
+  # box, which is encoded as 2 -- suppresses that answer and takes whatever
+  # single mask comes back. Measured over 84 window seeds of galvao-xande:
+  # median mask area A 0.0504 -> 0.0811, B 0.0495 -> 0.0932, and the two masks'
+  # cross-IoU stayed at 0.0000, so the recovered pixels are the athlete's own
+  # legs and head rather than the opponent bleeding in.
+  scale_select:
+    enabled: true
+    max_contam: 0.25        # reject a scale once this much of it votes opponent
+    min_px: 1500            # below this a candidate is a fold, not a body part
 
 # --- Identity: colour is the anchor -------------------------------------
 appearance:
   color_space: lab          # CIELAB: white-vs-blue/black gi separates hard on b* and L*
   hist_bins: [8, 12, 12]    # L, a, b
   torso_only: true          # sample the gi, not skin/hair/mat
-  torso_band: [0.15, 0.60]  # vertical slice of the mask bbox used as "torso"
+  # Vertical slice of the mask bbox the prototype is built from. This was
+  # [0.15, 0.60] -- which is, precisely, the jacket. That made "the colour of
+  # athlete B" mean "the colour of B's jacket", so the prototype never learned
+  # his white trousers, and `purity` scored a jacket-only mask 0.997 while the
+  # athlete's legs were missing. Widening it costs almost nothing in the thing
+  # the narrow band was protecting, and buys back the headroom that completeness
+  # spends. Measured over 140 frames:
+  #   band          separability   B purity min   (purity_min gate is 0.62)
+  #   [0.15, 0.60]     0.847          0.761
+  #   [0.05, 0.90]     0.824          0.876
+  torso_band: [0.05, 0.90]
   min_mask_pixels: 400
   prototype_bank: 24        # rolling high-confidence exemplars per fighter
   prototype_update_conf: 0.80  # only pure, confident frames enter the bank (anti-drift)
@@ -91,4 +113,9 @@ render:
   mask_alpha: 0.45
   timeline: true
   show_health: true         # purity, proto-dist, recal events — the diagnostics panel
+  clean: false              # true = source frame at full size, masks only: no side
+                            # panel, no timeline, no A/B badges. A viewing mode, not
+                            # a diagnostic one. `bjj render --clean` sets it per call
+                            # without re-running anything, which is the point of
+                            # keeping masks.bin.
   out_crf: 18

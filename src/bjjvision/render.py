@@ -18,6 +18,23 @@ BG = (22, 22, 26)
 FG = (238, 238, 242)
 DIM = (140, 140, 150)
 ACCENT = {"A": (60, 190, 255), "B": (255, 150, 60)}
+# The stroke has to be a colour the scene does not already contain, or it reads
+# as part of the scene rather than as annotation. In the full-colour styles that
+# rules out blue (one gi), white (the other), and blue/yellow (the mats), which
+# leaves magenta. `desat` is the exception and it is worth stating: it greys the
+# whole frame, so no hue survives to collide with, and vivid blue becomes the
+# best-contrasting choice precisely where it would otherwise be the worst.
+STROKES = {
+    "magenta": (215, 55, 235),
+    "azul": (255, 140, 25),
+    "ciano": (230, 220, 40),
+    "verde": (90, 230, 110),
+    "amarelo": (60, 215, 250),
+    "branco": (245, 245, 250),
+}
+DEFAULT_STROKE = {"spotlight": "magenta", "outline": "magenta", "desat": "azul"}
+RIVAL_STROKE = (185, 185, 195)
+FOCUS_STYLES = ("spotlight", "desat", "outline")
 OK_C, WARN_C, BAD_C = (110, 220, 130), (70, 200, 250), (80, 90, 245)
 F = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -75,19 +92,83 @@ class RenderState:
 class ReportRenderer:
     def __init__(self, cfg: dict, video_w: int, video_h: int, duration_s: float):
         self.alpha = cfg["render"]["mask_alpha"]
-        self.show_health = cfg["render"]["show_health"]
-        self.show_timeline = cfg["render"]["timeline"]
+        # `clean` is a viewing mode, not a diagnostic one: the source frame at its
+        # own resolution with nothing but the masks on it. The report layout below
+        # is for judging the run; this is for judging the segmentation.
+        self.clean = cfg["render"].get("clean", False)
+        self.show_health = cfg["render"]["show_health"] and not self.clean
+        self.show_timeline = cfg["render"]["timeline"] and not self.clean
         self.vw, self.vh = video_w, video_h
         self.duration = max(duration_s, 1e-3)
         # The panel has a fixed information budget. Rather than let it collide with
         # itself on a short source, give it a floor and letterbox the video to match.
-        self.panel_h = max(video_h, MIN_PANEL_H)
-        self.out_w = video_w + PANEL_W
+        self.panel_h = video_h if self.clean else max(video_h, MIN_PANEL_H)
+        self.out_w = video_w if self.clean else video_w + PANEL_W
         self.out_h = self.panel_h + (TIMELINE_H if self.show_timeline else 0)
         self.events: list[TimelineEvent] = []
 
     def add_event(self, ev: TimelineEvent) -> None:
         self.events.append(ev)
+
+    # -- single-athlete emphasis --------------------------------------------
+    def draw_focus(self, frame: np.ndarray, masks: dict[str, np.ndarray],
+                   focus: str, style: str = "spotlight",
+                   dim: float = 0.55, stroke: tuple | None = None,
+                   rival: tuple = RIVAL_STROKE, neutral: bool = False) -> np.ndarray:
+        """Emphasise one athlete without recolouring him.
+
+        Tinting is the wrong instrument when the subject's identity IS his
+        colour. The white gi is what distinguishes Galvao from an opponent in
+        blue, so a blue wash over it makes him read as the other man -- the
+        overlay destroys the feature it is pointing at. Every style here leaves
+        the focused athlete's pixels untouched and changes his surroundings
+        instead.
+
+        The opponent keeps a thin outline in all of them. Losing it would look
+        cleaner and say less: most of what makes a mask believable is seeing
+        where the boundary between the two bodies falls.
+        """
+        out = frame.copy()
+        m = masks.get(focus)
+        if m is None or not m.any():
+            return out
+        if stroke is None:
+            stroke = STROKES[DEFAULT_STROKE.get(style, "magenta")]
+        m = m.astype(bool)
+        if neutral:
+            # Grey-world balance on the focused athlete alone. The arena lights
+            # are cool -- on the bright fabric of this white gi, B-R measures
+            # +15 -- and a fully desaturated surround exaggerates that into a
+            # visible cyan cast, so the man in the white gi reads as tinted even
+            # though nothing was drawn over him. Correcting only inside the mask
+            # presents the gi as the colour it is understood to be.
+            px = frame[m].astype(np.float32)
+            bright = px[px.mean(axis=1) > 140]
+            if len(bright) > 200:
+                mean = bright.mean(axis=0)
+                gain = float(mean.mean()) / np.maximum(mean, 1.0)
+                out[m] = np.clip(px * gain, 0, 255).astype(np.uint8)
+        other = masks.get("B" if focus == "A" else "A")
+        outside = ~m
+
+        if style == "spotlight":
+            out[outside] = (out[outside].astype(np.float32) * (1.0 - dim)).astype(np.uint8)
+        elif style == "desat":
+            g = cv2.cvtColor(out, cv2.COLOR_BGR2GRAY)
+            grey = cv2.cvtColor(g, cv2.COLOR_GRAY2BGR)
+            out[outside] = (grey[outside].astype(np.float32) * 0.85).astype(np.uint8)
+        elif style == "outline":
+            pass                      # the silhouette alone carries it
+        else:
+            raise ValueError(f"unknown focus style: {style}")
+
+        k = np.ones((3, 3), np.uint8)
+        if other is not None and other.any():
+            oe = cv2.morphologyEx(_as_u8(other), cv2.MORPH_GRADIENT, k).view(bool)
+            out[oe & outside] = rival
+        edge = cv2.dilate(cv2.morphologyEx(_as_u8(m), cv2.MORPH_GRADIENT, k), k).view(bool)
+        out[edge] = stroke
+        return out
 
     # -- masks --------------------------------------------------------------
     def draw_masks(self, frame: np.ndarray, masks: dict[str, np.ndarray],
@@ -114,6 +195,8 @@ class ReportRenderer:
             out[m] = (sel * (1.0 - a) + np.asarray(ACCENT[fid], np.float32) * a).astype(np.uint8)
             edge = cv2.morphologyEx(mu8, cv2.MORPH_GRADIENT, kernel).view(bool)
             out[edge] = ACCENT[fid]
+            if self.clean:
+                continue          # the A/B badge is a diagnostic, not part of the view
             cx, top = x + w // 2, y
             cv2.rectangle(out, (cx - 16, top - 30), (cx + 16, top - 6), ACCENT[fid], -1)
             _text(out, fid, (cx - 9, top - 12), 0.7, (20, 20, 24), 2)
@@ -235,6 +318,8 @@ class ReportRenderer:
         vid = self.draw_masks(frame, masks, referee_mask)
         if vid.shape[:2] != (self.vh, self.vw):
             vid = cv2.resize(vid, (self.vw, self.vh))
+        if self.clean:
+            return vid
         if self.panel_h > self.vh:
             pad = np.full((self.panel_h, self.vw, 3), (12, 12, 14), np.uint8)
             off = (self.panel_h - self.vh) // 2

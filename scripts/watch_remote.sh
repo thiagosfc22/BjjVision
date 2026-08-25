@@ -4,8 +4,8 @@
 #
 #   scripts/watch_remote.sh [user@host] [port] [seconds] [max_ticks]
 set -uo pipefail
-HOST="${1:-root@<host>}"
-PORT="${2:-11436}"
+HOST="${1:?uso: $0 user@host porta [...]}"
+PORT="${2:?porta}"
 EVERY="${3:-5}"
 MAX="${4:-0}"                       # 0 = forever
 

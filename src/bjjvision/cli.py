@@ -302,5 +302,128 @@ def sync_down(slug: str, host: str, remote_dir: str = "~/BjjVision",
         console.print(f"  {f.name}  {f.stat().st_size / 1e6:.1f} MB")
 
 
+@app.command()
+def render(slug: str, config: Path = typer.Option(DEFAULT_CFG),
+           data_dir: Path = typer.Option(ROOT / "data"),
+           run_dir: Path = typer.Option(None, "--run-dir",
+                                        help="directory holding masks.bin "
+                                             "(default: data/out/<slug>)"),
+           out: Path = typer.Option(None, "--out", help="output mp4"),
+           clean: bool = typer.Option(True, "--clean/--report",
+                                      help="fullscreen video only, or the "
+                                           "diagnostic report layout"),
+           focus: str = typer.Option(None, "--focus",
+                                     help="emphasise one athlete: A or B"),
+           style: str = typer.Option("spotlight", "--style",
+                                     help="with --focus: spotlight | desat | outline"),
+           dim: float = typer.Option(0.55, "--dim",
+                                     help="how far the surroundings drop back, 0-1"),
+           neutral: bool = typer.Option(False, "--neutral",
+                                        help="grey-world balance the focused athlete, "
+                                             "so a white gi reads white under cool lights"),
+           stroke: str = typer.Option(None, "--stroke",
+                                      help="silhouette colour: a name "
+                                           "(magenta/azul/ciano/verde/amarelo/branco) "
+                                           "or #RRGGBB. Defaults per style."),
+           frames_range: str = typer.Option(None, "--frames",
+                                            help="only START:END")):
+    """Re-render a finished run from masks.bin. No GPU, no SAM2, no re-run.
+
+    This is what `masks.bin` was written for. Segmentation is the expensive,
+    rented part; how it is drawn is a choice that should stay free to change,
+    and it costs about a minute per pass on a laptop. Without this command every
+    change of overlay style means renting the box again to recompute masks that
+    are already sitting on disk.
+    """
+    import subprocess
+
+    import cv2
+    from .maskstore import MaskReader
+    from .pipeline import load_config
+    from .render import (FOCUS_STYLES, STROKES, RenderState, ReportRenderer,
+                          VideoWriter)
+
+    cfg = load_config(config)
+    cfg["render"]["clean"] = clean
+    rd = run_dir or (data_dir / "out" / slug)
+    masks_path = rd / "masks"
+    if not masks_path.with_suffix(".idx.json").exists():
+        raise typer.BadParameter(f"no masks.bin in {rd} - run `run` first")
+    video = data_dir / "interim" / f"{slug}_norm.mp4"
+    if not video.exists():
+        raise typer.BadParameter(f"{video} not found")
+    if focus and focus not in ("A", "B"):
+        raise typer.BadParameter("--focus expects A or B")
+    if focus and style not in FOCUS_STYLES:
+        raise typer.BadParameter(f"--style expects one of {', '.join(FOCUS_STYLES)}")
+    stroke_bgr = None
+    if stroke:
+        if stroke.startswith("#") and len(stroke) == 7:
+            r, g, b = (int(stroke[i:i + 2], 16) for i in (1, 3, 5))
+            stroke_bgr = (b, g, r)
+        elif stroke in STROKES:
+            stroke_bgr = STROKES[stroke]
+        else:
+            raise typer.BadParameter(
+                f"--stroke expects #RRGGBB or one of {', '.join(STROKES)}")
+
+    meta = data_dir / "interim" / f"{slug}.json"
+    fps = json.loads(meta.read_text())["fps"] if meta.exists() else cfg["video"]["target_fps"]
+
+    mr = MaskReader(masks_path)
+    wanted = mr.frames
+    if frames_range:
+        try:
+            a, b = (int(x) for x in frames_range.split(":"))
+        except ValueError:
+            raise typer.BadParameter("--frames expects START:END")
+        wanted = [f for f in wanted if a <= f <= b]
+    if not wanted:
+        raise typer.BadParameter("no stored frames in that range")
+
+    cap = cv2.VideoCapture(str(video))
+    vh, vw = mr.shape
+    renderer = ReportRenderer(cfg, vw, vh, len(wanted) / max(fps, 1e-3))
+    out = out or (rd / f"{slug}_{'clean' if clean else 'report'}.mp4")
+    raw = out.with_suffix(".raw.mp4")
+    writer = VideoWriter(str(raw), fps, (renderer.out_w, renderer.out_h))
+
+    # Seeking per frame costs more than decoding forward, so walk the video once
+    # and emit whenever the decoder reaches a frame the store holds.
+    want = set(wanted)
+    lo, hi = wanted[0], wanted[-1]
+    cap.set(cv2.CAP_PROP_POS_FRAMES, lo)
+    st = RenderState(duration_s=len(wanted) / max(fps, 1e-3))
+    written, idx = 0, lo
+    with typer.progressbar(length=len(wanted), label="render") as bar:
+        while idx <= hi:
+            ok, frame = cap.read()
+            if not ok:
+                break
+            if idx in want:
+                m = mr.get(idx)
+                if m:
+                    if focus:
+                        composed = renderer.draw_focus(frame, m, focus, style, dim,
+                                                       stroke_bgr, neutral=neutral)
+                    else:
+                        composed = renderer.compose(frame, m, st)
+                    writer.write(composed)
+                    written += 1
+                    bar.update(1)
+            idx += 1
+    writer.close(); cap.release(); mr.close()
+
+    subprocess.run(
+        ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(raw),
+         "-c:v", "libx264", "-preset", "medium",
+         "-crf", str(cfg["render"]["out_crf"]),
+         "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)],
+        check=True)
+    raw.unlink(missing_ok=True)
+    console.print(f"[green]{written}[/] frames -> {out} "
+                  f"({out.stat().st_size / 1e6:.1f} MB, {renderer.out_w}x{renderer.out_h})")
+
+
 if __name__ == "__main__":
     app()
