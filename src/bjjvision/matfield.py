@@ -146,18 +146,16 @@ def fit_mat(frames: list[np.ndarray], graphics: np.ndarray | None = None,
     if not modes:
         return None
 
-    # A large, nearly-static athlete lands in the temporal median and k-means
-    # adopts him as a mat tone; `is_mat` then deletes him. Measured on shot 30:
-    # a mode at L=29.0 b*=-22.0 holding 61.3% of the support, which IS the navy
-    # gi, against L>=92.7 for every legitimate mat tone measured across shots.
-    # Guarding on "could the mat be confused with a gi" is self-defeating there --
-    # the answer is yes precisely because the mode is the gi. Brightness is the
-    # honest test: a mat is one surface under one light, so a tone at 40% of the
-    # dominant tone's lightness is not that surface. Dropping it costs an unlit
-    # corner of mat; keeping it costs the athlete.
-    l_max = max(float(c[0]) for c, _ in modes)
-    kept = [(c, m) for c, m in modes if float(c[0]) >= 0.60 * l_max]
-    modes = kept or modes
+    # NOTE: a brightness filter lived here and was removed after being measured
+    # wrong. It referenced the BRIGHTEST mode, so on shot 2 a yellow border tone
+    # holding 6.0% of the support (L=213.3) set the scale and both blue mat tones
+    # holding 94% (L=110.0 and L=119.9) were dropped as "too dark". The mat then
+    # fell out of the model, blue mat pixels voted blue-gi, and the seed landed on
+    # the frame corner at [1279,719] with a 111k px mask. Any future variant must
+    # reference the DOMINANT tone by share, not the brightest one -- and even then
+    # it does not save shot 30, whose intruding athlete tone IS the dominant mode
+    # at 61.3%. That shot is carried by the multi-frame retry instead.
+
     return MatField(hull=hull.astype(bool), support=support, modes=modes, bg=bg)
 
 
@@ -257,6 +255,21 @@ def seed_point(votes: np.ndarray, near_mat: np.ndarray | None = None,
     dist = cv2.distanceTransform((lbl == best).astype(np.uint8), cv2.DIST_L2, 5)
     y, x = np.unravel_index(int(np.argmax(dist)), dist.shape)
     return np.array([[x, y]], dtype=np.float32), area
+
+
+def dominant_blob(mask: np.ndarray) -> float:
+    """Fraction of the mask living in its single largest connected component.
+
+    An athlete is one body. Occlusion can cut him into a couple of pieces -- a
+    head above the opponent, legs below -- so this is a fraction, not a demand for
+    exactly one component.
+    """
+    m = mask.astype(np.uint8)
+    n, _, stats, _ = cv2.connectedComponentsWithStats(m, 8)
+    if n <= 1:
+        return 0.0
+    total = float(m.sum())
+    return float(stats[1:, cv2.CC_STAT_AREA].max()) / max(1.0, total)
 
 
 def choose_scale(masks: np.ndarray, votes_own: np.ndarray, votes_opp: np.ndarray,

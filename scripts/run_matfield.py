@@ -97,40 +97,68 @@ def main() -> int:
         near_mat = cv2.dilate(mat.hull.astype(np.uint8), np.ones((41, 41), np.uint8)).astype(bool)
         row = dict(shot=si, start=a, end=b, mat=round(float(mat.hull.mean()), 3),
                    modes=len(mat.modes))
-        best_try, picked, mid = None, {}, None
-
-        for frac in (0.50, 0.30, 0.70, 0.15, 0.85):
-            cand = grab(cap, a + int(frac * (b - a)))
-            if cand is None:
-                continue
-            votes = gi_votes(cand, mat, graphics, exclude_mat=exclude)
-            with torch.inference_mode():
-                imgp.set_image(cv2.cvtColor(cand, cv2.COLOR_BGR2RGB))
-            attempt, got = {}, {}
-            for key, other in (("blue", "white"), ("white", "blue")):
-                pt, area = seed_point(votes[key], near_mat)
-                if pt is None:
-                    attempt[key] = None
+        def sweep(exc, want=("blue", "white")):
+            best = None
+            for frac in (0.50, 0.30, 0.70, 0.15, 0.85):
+                cand = grab(cap, a + int(frac * (b - a)))
+                if cand is None:
                     continue
+                votes = gi_votes(cand, mat, graphics, exclude_mat=exc)
                 with torch.inference_mode():
-                    masks, _, _ = imgp.predict(point_coords=pt,
-                                               point_labels=np.ones(1, np.int32),
-                                               multimask_output=True)
-                m, idx, contam = choose_scale(masks, votes[key], votes[other])
-                if m is None:
-                    attempt[key] = None
-                    continue
-                got[key] = m
-                attempt[key] = dict(px=int(m.sum()), scale=int(idx),
-                                    contam=round(float(contam), 3),
-                                    seed=[int(pt[0][0]), int(pt[0][1])], colour_px=area)
-            n_found = sum(1 for v in attempt.values() if v)
-            if best_try is None or n_found > best_try[0]:
-                best_try, picked, mid = (n_found, attempt, frac), got, cand
-            if n_found == 2:
-                break
+                    imgp.set_image(cv2.cvtColor(cand, cv2.COLOR_BGR2RGB))
+                attempt, got = {}, {}
+                for key in want:
+                    other = "white" if key == "blue" else "blue"
+                    pt, area = seed_point(votes[key], near_mat)
+                    if pt is None:
+                        attempt[key] = None
+                        continue
+                    with torch.inference_mode():
+                        masks, _, _ = imgp.predict(point_coords=pt,
+                                                   point_labels=np.ones(1, np.int32),
+                                                   multimask_output=True)
+                    m, idx, contam = choose_scale(masks, votes[key], votes[other])
+                    if m is None:
+                        attempt[key] = None
+                        continue
+                    got[key] = m
+                    attempt[key] = dict(px=int(m.sum()), scale=int(idx),
+                                        contam=round(float(contam), 3),
+                                        seed=[int(pt[0][0]), int(pt[0][1])], colour_px=area)
+                n_found = sum(1 for v in attempt.values() if v)
+                if best is None or n_found > best[0]:
+                    best = (n_found, attempt, frac, got, cand)
+                if n_found == len(want):
+                    break
+            return best
 
-        row.update(best_try[1] if best_try else {"blue": None, "white": None})
+        best_try = sweep(exclude)
+        picked = dict(best_try[3]) if best_try else {}
+        mid = best_try[4] if best_try else None
+        found = dict(best_try[1]) if best_try else {"blue": None, "white": None}
+
+        # LAST RESORT, and only for a gi that found nothing on any frame. Dropping
+        # the mat subtraction is what rescues shot 30, where the athlete was
+        # absorbed into the mat model itself (952 colour px with the subtraction,
+        # 138,238 without). Every earlier attempt at this was a change to the
+        # shared mat model, which couples all 37 shots and traded one failure for
+        # another four times over. This cannot: it runs only where the normal path
+        # already returned nothing.
+        missing = [gi for gi in ("blue", "white") if not found.get(gi)]
+        if missing:
+            relaxed = dict(exclude)
+            for gi in missing:
+                relaxed[gi] = False
+            alt = sweep(relaxed, want=tuple(missing))
+            if alt:
+                for gi in missing:
+                    if alt[1].get(gi):
+                        found[gi] = dict(alt[1][gi], via="no_mat_subtraction")
+                        picked[gi] = alt[3][gi]
+                        if mid is None:
+                            mid = alt[4]
+
+        row.update(found)
         row["seed_frac"] = best_try[2] if best_try else None
 
         def fmt(k):
