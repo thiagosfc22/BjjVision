@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from bjjvision.matfield import (  # noqa: E402
-    choose_scale, fit_mat, gi_votes, seed_point, static_graphics,
+    choose_scale, fit_mat, gi_votes, mat_confusable_with, seed_point, static_graphics,
 )
 
 CKPTS = {
@@ -88,32 +88,50 @@ def main() -> int:
             rows.append(dict(shot=si, start=a, end=b, mat=None))
             continue
 
-        mid = grab(cap, (a + b) // 2)
-        if mid is None:
-            continue
-        votes = gi_votes(mid, mat, graphics)
-        with torch.inference_mode():
-            imgp.set_image(cv2.cvtColor(mid, cv2.COLOR_BGR2RGB))
-
+        # Do not stake the shot on one arbitrary frame. Every threshold change
+        # made so far fixed one shot and broke another -- 28 then 6, 6 then 30,
+        # 30 then 26 -- because the per-shot colour model couples both athletes
+        # and a single mid-frame is a single point of failure. A shot is 150 to
+        # 1700 frames long; take the first candidate frame that yields both.
+        exclude = {gi: mat_confusable_with(mat, gi) for gi in ("blue", "white")}
+        near_mat = cv2.dilate(mat.hull.astype(np.uint8), np.ones((41, 41), np.uint8)).astype(bool)
         row = dict(shot=si, start=a, end=b, mat=round(float(mat.hull.mean()), 3),
                    modes=len(mat.modes))
-        picked = {}
-        for key, other in (("blue", "white"), ("white", "blue")):
-            pt, area = seed_point(votes[key])
-            if pt is None:
-                row[key] = None
+        best_try, picked, mid = None, {}, None
+
+        for frac in (0.50, 0.30, 0.70, 0.15, 0.85):
+            cand = grab(cap, a + int(frac * (b - a)))
+            if cand is None:
                 continue
+            votes = gi_votes(cand, mat, graphics, exclude_mat=exclude)
             with torch.inference_mode():
-                masks, _, _ = imgp.predict(point_coords=pt,
-                                           point_labels=np.ones(1, np.int32),
-                                           multimask_output=True)
-            m, idx, contam = choose_scale(masks, votes[key], votes[other])
-            if m is None:
-                row[key] = None
-                continue
-            picked[key] = m
-            row[key] = dict(px=int(m.sum()), scale=int(idx), contam=round(float(contam), 3),
-                            seed=[int(pt[0][0]), int(pt[0][1])], colour_px=area)
+                imgp.set_image(cv2.cvtColor(cand, cv2.COLOR_BGR2RGB))
+            attempt, got = {}, {}
+            for key, other in (("blue", "white"), ("white", "blue")):
+                pt, area = seed_point(votes[key], near_mat)
+                if pt is None:
+                    attempt[key] = None
+                    continue
+                with torch.inference_mode():
+                    masks, _, _ = imgp.predict(point_coords=pt,
+                                               point_labels=np.ones(1, np.int32),
+                                               multimask_output=True)
+                m, idx, contam = choose_scale(masks, votes[key], votes[other])
+                if m is None:
+                    attempt[key] = None
+                    continue
+                got[key] = m
+                attempt[key] = dict(px=int(m.sum()), scale=int(idx),
+                                    contam=round(float(contam), 3),
+                                    seed=[int(pt[0][0]), int(pt[0][1])], colour_px=area)
+            n_found = sum(1 for v in attempt.values() if v)
+            if best_try is None or n_found > best_try[0]:
+                best_try, picked, mid = (n_found, attempt, frac), got, cand
+            if n_found == 2:
+                break
+
+        row.update(best_try[1] if best_try else {"blue": None, "white": None})
+        row["seed_frac"] = best_try[2] if best_try else None
 
         def fmt(k):
             v = row.get(k)

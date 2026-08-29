@@ -133,6 +133,8 @@ def fit_mat(frames: list[np.ndarray], graphics: np.ndarray | None = None,
     if len(px) > 60_000:
         px = px[np.random.default_rng(0).choice(len(px), 60_000, replace=False)]
     crit = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 1.0)
+    cv2.setRNGSeed(0)          # kmeans++ seeding is random; a validation run that
+                               # reports different areas each time is not evidence
     _, labels, _ = cv2.kmeans(px, n_modes, None, crit, 5, cv2.KMEANS_PP_CENTERS)
     modes = []
     for k in range(n_modes):
@@ -143,6 +145,19 @@ def fit_mat(frames: list[np.ndarray], graphics: np.ndarray | None = None,
         modes.append((c, np.median(np.abs(sel - c), axis=0) + 2.0))
     if not modes:
         return None
+
+    # A large, nearly-static athlete lands in the temporal median and k-means
+    # adopts him as a mat tone; `is_mat` then deletes him. Measured on shot 30:
+    # a mode at L=29.0 b*=-22.0 holding 61.3% of the support, which IS the navy
+    # gi, against L>=92.7 for every legitimate mat tone measured across shots.
+    # Guarding on "could the mat be confused with a gi" is self-defeating there --
+    # the answer is yes precisely because the mode is the gi. Brightness is the
+    # honest test: a mat is one surface under one light, so a tone at 40% of the
+    # dominant tone's lightness is not that surface. Dropping it costs an unlit
+    # corner of mat; keeping it costs the athlete.
+    l_max = max(float(c[0]) for c, _ in modes)
+    kept = [(c, m) for c, m in modes if float(c[0]) >= 0.60 * l_max]
+    modes = kept or modes
     return MatField(hull=hull.astype(bool), support=support, modes=modes, bg=bg)
 
 
@@ -160,8 +175,32 @@ GI_BLUE = dict(b_max=-20.0, chroma_min=20.0, l_max=170.0)
 GI_WHITE = dict(chroma_max=13.0, l_min=150.0)
 
 
+def mat_confusable_with(mat: MatField, gi: str) -> bool:
+    """Would any of this shot's mat tones pass that gi's own colour test?
+
+    Excluding mat colour is mandatory when the mat is blue and so is the gi --
+    without it the blue class seeds on the floor. But it is actively harmful when
+    the mat is NOT confusable: on shot 30, an extreme close-up where the navy gi
+    fills half the frame and barely moves, the athlete enters the temporal median,
+    k-means learns him as a mat tone (share 61.3%, L=28.5, against L>=92.7 for
+    every legitimate mat tone measured elsewhere), and `is_mat` then deletes 95.4%
+    of him. That shot's mat sits at b*=+12 and cannot be mistaken for a blue gi at
+    all, so the exclusion buys nothing and costs the athlete.
+    """
+    for centre, _ in mat.modes:
+        L = float(centre[0])
+        b = float(centre[2]) - 128.0
+        chroma = float(np.hypot(centre[1] - 128.0, centre[2] - 128.0))
+        if gi == "blue" and b < GI_BLUE["b_max"] and chroma > GI_BLUE["chroma_min"] and L < GI_BLUE["l_max"]:
+            return True
+        if gi == "white" and chroma < GI_WHITE["chroma_max"] and L > GI_WHITE["l_min"]:
+            return True
+    return False
+
+
 def gi_votes(frame_bgr: np.ndarray, mat: MatField,
-             graphics: np.ndarray | None = None) -> dict[str, np.ndarray]:
+             graphics: np.ndarray | None = None,
+             exclude_mat: bool | dict[str, bool] = True) -> dict[str, np.ndarray]:
     """Per-pixel 'this is that gi' votes, with mat pixels removed.
 
     Removing the mat is not optional. The mat is blue and so is one gi: without
@@ -172,31 +211,47 @@ def gi_votes(frame_bgr: np.ndarray, mat: MatField,
     a = lab[..., 1] - 128.0
     b = lab[..., 2] - 128.0
     chroma = np.hypot(a, b)
-    ok = ~mat.is_mat(lab, k=3.0)
+    if isinstance(exclude_mat, bool):
+        exclude_mat = {"blue": exclude_mat, "white": exclude_mat}
+    not_mat = ~mat.is_mat(lab, k=3.0)
+    base = np.ones(L.shape, dtype=bool)
     if graphics is not None:
-        ok &= ~graphics
-    return {
-        "blue": ok & (b < GI_BLUE["b_max"]) & (chroma > GI_BLUE["chroma_min"]) & (L < GI_BLUE["l_max"]),
-        "white": ok & (chroma < GI_WHITE["chroma_max"]) & (L > GI_WHITE["l_min"]),
+        base &= ~graphics
+    raw = {
+        "blue": (b < GI_BLUE["b_max"]) & (chroma > GI_BLUE["chroma_min"]) & (L < GI_BLUE["l_max"]),
+        "white": (chroma < GI_WHITE["chroma_max"]) & (L > GI_WHITE["l_min"]),
     }
+    return {k: (v & base & (not_mat if exclude_mat.get(k, True) else True))
+            for k, v in raw.items()}
 
 
-def seed_point(votes: np.ndarray, min_px: int = 1500) -> tuple[np.ndarray | None, int]:
-    """One point, deep inside the largest blob of that gi's colour.
+def seed_point(votes: np.ndarray, near_mat: np.ndarray | None = None,
+               min_px: int = 1500) -> tuple[np.ndarray | None, int]:
+    """One point, deep inside the largest blob of that gi's colour ON the mat.
 
     ONE point, not six. `segment.scale_candidates` can only reach SAM2's
     part/garment/person disambiguation with a single point -- the gate counts
     positives and negatives together, so six confident pixels plus six mutual
     negatives silently take whatever single mask comes back, and that mask is the
     jacket.
+
+    `near_mat` is not optional in practice. Sponsor banners ring the mat and the
+    IBJJF/ZEBRA boards are the same blue as the blue gi: measured on shot 28,
+    banner L=63 b*=-21 against gi L=67 b*=-24. No colour gate separates those.
+    Only position does, and without this test the banner wins the component for
+    being far larger than a distant athlete.
     """
     m = cv2.morphologyEx(votes.astype(np.uint8), cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
     m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((15, 15), np.uint8))
     n, lbl, stats, _ = cv2.connectedComponentsWithStats(m, 8)
     best, area = None, 0
     for i in range(1, n):
-        if stats[i, cv2.CC_STAT_AREA] > area:
-            best, area = i, int(stats[i, cv2.CC_STAT_AREA])
+        a = int(stats[i, cv2.CC_STAT_AREA])
+        if a <= area:
+            continue
+        if near_mat is not None and not ((lbl == i) & near_mat).any():
+            continue                      # a blue thing off the mat is furniture
+        best, area = i, a
     if best is None or area < min_px:
         return None, area
     dist = cv2.distanceTransform((lbl == best).astype(np.uint8), cv2.DIST_L2, 5)
