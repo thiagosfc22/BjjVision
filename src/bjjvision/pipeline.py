@@ -180,6 +180,8 @@ class Pipeline:
                 "athletes are visible on the mat.")
 
         _, seed_idx, masks, seeds, sep = best
+        # run() re-anchors every window against this, so keep it
+        self._mf_state = (mat, graphics, exclude)
         report = {
             "bootstrap": "matfield",
             "seed_frame": int(seed_idx),
@@ -191,6 +193,58 @@ class Pipeline:
             "mat_subtracted": exclude,
         }
         return seed_idx, masks, report
+
+    def _matfield_window_masks(self, fr, seg):
+        """Anchor a window on DETECTED PEOPLE, not on the previous mask.
+
+        Following the previous mask is what let athlete A walk onto the referee
+        and stay there: his navy suit sits close to the blue gi in Lab, so once
+        the mask was on him the colour prototype kept confirming it and the drift
+        sustained itself for about a hundred frames. Re-deriving the anchor from
+        the detector each window breaks that loop by construction -- a referee is
+        a person, but he is not a person wearing either gi, and the colour vote
+        inside the person box is what settles which of the two he is not.
+
+        The extent problem the module docstring warns about is handled the same
+        way the seeding does it: object-scale selection, not raw colour points.
+        """
+        from . import matfield as mf
+        state = getattr(self, "_mf_state", None)
+        if state is None:
+            return None
+        mat, graphics, exclude = state
+        votes = mf.gi_votes(fr, mat, graphics, exclude_mat=exclude)
+        boxes = [p.box for p in self.detector.detect(fr, persist=False)]
+        if not boxes:
+            return None
+        persons = mf.person_support(boxes, fr.shape)
+
+        out = {}
+        for gi, fid, other in (("blue", "A", "white"), ("white", "B", "blue")):
+            pt, _ = mf.seed_point(votes[gi], persons=persons)
+            if pt is None:
+                return None
+            sx, sy = int(pt[0][0]), int(pt[0][1])
+            if not persons[sy, sx]:
+                return None
+            cands, _ = seg.scale_candidates(fr, pt)
+            m, _, _ = mf.choose_scale(cands, votes[gi], votes[other])
+            if m is None:
+                return None
+            out[fid] = m
+
+        # scale_candidates runs set_image, which caches encoder features. Called
+        # once per window alongside a live video predictor those accumulate: a
+        # 240-frame run peaked past 8.7 GB and was SIGKILLed on this laptop.
+        self._free_device_cache()
+        return out if len(out) == 2 else None
+
+    def _free_device_cache(self) -> None:
+        import torch
+        if self.device == "mps" and hasattr(torch, "mps"):
+            torch.mps.empty_cache()
+        elif self.device == "cuda" and torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def calibrate(self, search_frames: int = 300, n_samples: int = 12,
                   calib_dir: Path | None = None) -> dict:
@@ -376,7 +430,13 @@ class Pipeline:
                 self.segmenter.reset()
                 seeded = False
                 sc = cfg["segment"].get("scale_select", {})
-                if prev_masks and sc.get("enabled", False):
+                if cfg["roles"].get("bootstrap") == "matfield":
+                    fr = self.frame(win_start)
+                    mfm = self._matfield_window_masks(fr, self.segmenter) if fr is not None else None
+                    if mfm:
+                        self.segmenter.prompt_masks(win_start, mfm)
+                        seeded = True
+                if prev_masks and not seeded and sc.get("enabled", False):
                     # Settle EXTENT first, from SAM2's object prior, then let
                     # colour say whose it is. Re-deriving points from colour
                     # instead asks the segmenter to re-solve extent from pixels
