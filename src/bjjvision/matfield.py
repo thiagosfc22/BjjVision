@@ -107,7 +107,14 @@ def fit_mat(frames: list[np.ndarray], graphics: np.ndarray | None = None,
     # lowest-sitting large blob, not merely the largest: the banners are flat too
     best = max(range(1, n), key=lambda i: stats[i, cv2.CC_STAT_AREA] if cent[i][1] > 0.50 * h else 0)
     seed = lbl == best
-    if seed.sum() < 0.02 * h * w:
+    # The seed only has to be big enough to take a robust colour median from; it
+    # is the GROWN region that must be substantial, and that check happens below.
+    # Testing the seed instead made this a function of how the caller sampled:
+    # athletes standing on the mat punch holes in its flat region and split it,
+    # so ten frames over four seconds left the largest low-half component at
+    # 1.88% of frame and returned None, while fifteen frames over a 58-second
+    # shot washed the athletes out and left it whole. That is luck, not a test.
+    if seed.sum() < 0.005 * h * w:
         return None
 
     lab = cv2.cvtColor(bg, cv2.COLOR_BGR2Lab).astype(np.float32)
@@ -123,6 +130,8 @@ def fit_mat(frames: list[np.ndarray], graphics: np.ndarray | None = None,
     if n2 <= 1:
         return None
     support = lbl2 == 1 + int(np.argmax(stats2[1:, cv2.CC_STAT_AREA]))
+    if support.sum() < 0.02 * h * w:       # too little mat to model, whatever it is
+        return None
 
     cnts, _ = cv2.findContours(support.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     hull = np.zeros((h, w), np.uint8)

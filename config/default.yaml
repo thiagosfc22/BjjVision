@@ -74,6 +74,13 @@ reid:
 
 # --- Role assignment: who is actually fighting ---------------------------
 roles:
+  # How the two athletes are first identified. "contact" is the original path and
+  # the one galvao-xande was validated on. "matfield" replaces mat model, role
+  # assignment and SAM2 seeding wholesale -- see pipeline._seed_matfield. Use it on
+  # footage where the crowd sits close to the mat: on dalpra-dorsey the contact
+  # path locked onto two seated photographers at confidence 1.00, because contact
+  # history is keyed on track ids and the athletes are the pair that loses ids.
+  bootstrap: contact
   mat_estimate_frames: 90        # frames sampled to learn the mat colour/polygon
   referee_color_margin: 0.35     # dist-to-both-prototypes above this => not a fighter
   contact_window_s: 3.0          # pair with max sustained contact = the two athletes

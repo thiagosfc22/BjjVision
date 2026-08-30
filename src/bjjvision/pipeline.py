@@ -102,6 +102,96 @@ class Pipeline:
         return cv2.imread(str(self.frame_paths[j]))
 
     # ------------------------------------------------------------------
+    def _seed_matfield(self, probe_idx, c_frame, probe_frames, seg):
+        """Choose the seed frame and both athlete masks without tracking anyone.
+
+        Replaces three things at once, each of which was measured to be wrong on
+        footage the contact path does not cover:
+
+        1. the global `MatModel` -- on dalpra-dorsey it is INVERTED at some camera
+           angles, matching the IBJJF banner 23x more strongly than the mat.
+           `matfield.fit_mat` learns the mat per shot instead.
+        2. `RoleAssigner` -- its contact history is keyed on track ids, and the
+           athletes are by definition the pair that occludes itself most, which is
+           what makes a tracker drop ids. Measured over 150 frames they fragmented
+           into 6 ids while a static press row held 3, so the pair with maximal
+           sustained contact was two seated photographers at confidence 1.00.
+           Nothing here uses a track id.
+        3. `prompt_boxes` -- a box is two labels, which silently skips SAM2's
+           part/garment/person disambiguation and hands back the jacket. One point
+           per athlete, then `choose_scale`, then prompt with the chosen MASK.
+
+        Identity keeps its existing convention: A is the blue gi, B is the white
+        one, as in the galvao-xande run this project was validated on.
+        """
+        from . import matfield as mf
+        from .roles import _box_iou
+
+        graphics = mf.static_graphics(probe_frames)
+        mat = mf.fit_mat(probe_frames, graphics)
+        if mat is None:
+            raise RuntimeError("calibration failed: no mat found in the probe frames")
+
+        exclude = {gi: mf.mat_confusable_with(mat, gi) for gi in ("blue", "white")}
+        gi_to_obj = {"blue": "A", "white": "B"}
+        best = None
+
+        for i in probe_idx:
+            fr = c_frame(i)
+            if fr is None:
+                continue
+            votes = mf.gi_votes(fr, mat, graphics, exclude_mat=exclude)
+            boxes = [p.box for p in self.detector.detect(fr, persist=False)]
+            persons = mf.person_support(boxes, fr.shape) if boxes else None
+
+            masks, seeds, area = {}, {}, 0
+            for gi, other in (("blue", "white"), ("white", "blue")):
+                pt, _ = mf.seed_point(votes[gi], persons=persons)
+                if pt is None:
+                    break
+                sx, sy = int(pt[0][0]), int(pt[0][1])
+                # a seed off every detected person is furniture, and accepting it
+                # is exactly how a scoreboard and a sponsor board became athletes
+                if persons is not None and not persons[sy, sx]:
+                    break
+                cands, _ = seg.scale_candidates(fr, pt)
+                m, _, _ = mf.choose_scale(cands, votes[gi], votes[other])
+                if m is None:
+                    break
+                masks[gi_to_obj[gi]] = m
+                seeds[gi] = [sx, sy]
+                area += int(m.sum())
+            if len(masks) < 2:
+                continue
+
+            # prefer the frame where the two masks are least interlocked: identity
+            # prototypes built from tangled bodies inherit whatever occlusion hid
+            ax, ay, aw, ah = cv2.boundingRect(masks["A"].view(np.uint8))
+            bx, by, bw, bh = cv2.boundingRect(masks["B"].view(np.uint8))
+            sep = 1.0 - _box_iou((ax, ay, ax + aw, ay + ah), (bx, by, bx + bw, by + bh))
+            score = sep * area
+            if best is None or score > best[0]:
+                best = (score, i, masks, seeds, sep)
+
+        if best is None:
+            raise RuntimeError(
+                "calibration failed: no probe frame gave both gi colours on a "
+                "detected person. Point --calib-frames at a stretch where both "
+                "athletes are visible on the mat.")
+
+        _, seed_idx, masks, seeds, sep = best
+        report = {
+            "bootstrap": "matfield",
+            "seed_frame": int(seed_idx),
+            "seeds": seeds,
+            "mask_px": {k: int(v.sum()) for k, v in masks.items()},
+            "box_separation": round(float(sep), 3),
+            "mat_frac": round(float(mat.hull.mean()), 3),
+            "mat_modes": len(mat.modes),
+            "mat_subtracted": exclude,
+        }
+        return seed_idx, masks, report
+
     def calibrate(self, search_frames: int = 300, n_samples: int = 12,
                   calib_dir: Path | None = None) -> dict:
         """Learn the mat and both gi prototypes.
@@ -143,34 +233,43 @@ class Pipeline:
         probe_frames = [f for f in (c_frame(i) for i in probe_idx) if f is not None]
         self.mat.fit(probe_frames)
 
-        # prefer a frame where the two are furthest apart: prototypes built from
-        # interlocked bodies inherit whatever the occlusion hid
-        best = None
-        for i in probe_idx:
-            fr = c_frame(i)
-            if fr is None:
-                continue
-            persons = self.detector.detect(fr, persist=True)
-            self.roles.update(persons)
-            dec = self.roles.assign(fr, persons, self.mat.mask(fr), None, None)
-            if dec.fighters is None:
-                continue
-            sel = [p for p in persons if p.track_id in dec.fighters]
-            if len(sel) < 2:
-                continue
-            pa, pb = sel[0], sel[1]
-            sep = 1.0 - _box_iou(pa.box, pb.box)
-            score = sep * (pa.area + pb.area)
-            if best is None or score > best[0]:
-                best = (score, i, pa, pb)
+        bootstrap = self.cfg["roles"].get("bootstrap", "contact")
+        seed_report: dict = {"bootstrap": bootstrap}
 
-        if best is None:
-            raise RuntimeError(f"calibration failed: never saw two people on the mat "
-                               f"in {src_dir.name}")
+        if bootstrap == "matfield":
+            seed_idx, seed_masks, seed_report = self._seed_matfield(
+                probe_idx, c_frame, probe_frames, seg)
+            seg.reset()
+            seg.prompt_masks(seed_idx, seed_masks)
+        else:
+            # prefer a frame where the two are furthest apart: prototypes built from
+            # interlocked bodies inherit whatever the occlusion hid
+            best = None
+            for i in probe_idx:
+                fr = c_frame(i)
+                if fr is None:
+                    continue
+                persons = self.detector.detect(fr, persist=True)
+                self.roles.update(persons)
+                dec = self.roles.assign(fr, persons, self.mat.mask(fr), None, None)
+                if dec.fighters is None:
+                    continue
+                sel = [p for p in persons if p.track_id in dec.fighters]
+                if len(sel) < 2:
+                    continue
+                pa, pb = sel[0], sel[1]
+                sep = 1.0 - _box_iou(pa.box, pb.box)
+                score = sep * (pa.area + pb.area)
+                if best is None or score > best[0]:
+                    best = (score, i, pa, pb)
 
-        _, seed_idx, pa, pb = best
-        seg.reset()
-        seg.prompt_boxes(seed_idx, {"A": pa.box, "B": pb.box})
+            if best is None:
+                raise RuntimeError(f"calibration failed: never saw two people on the mat "
+                                   f"in {src_dir.name}")
+
+            _, seed_idx, pa, pb = best
+            seg.reset()
+            seg.prompt_boxes(seed_idx, {"A": pa.box, "B": pb.box})
 
         samples: list[tuple[np.ndarray, dict]] = []
         rejected = 0
@@ -208,7 +307,8 @@ class Pipeline:
         sw = {k: v.model.swatch_bgr for k, v in self.identity.protos.items()}
         report = {"calib_source": src_dir.name, "seed_frame": int(seed_idx),
                   "clean_samples": len(samples), "interlocked_rejected": rejected,
-                  "separability": round(self.separability, 3), "gi_swatches_bgr": sw}
+                  "separability": round(self.separability, 3), "gi_swatches_bgr": sw,
+                  "seed": seed_report}
 
         if self.separability < 0.35:
             report["warning"] = (
