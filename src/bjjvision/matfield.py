@@ -223,8 +223,28 @@ def gi_votes(frame_bgr: np.ndarray, mat: MatField,
             for k, v in raw.items()}
 
 
+def person_support(boxes, shape) -> np.ndarray:
+    """Union of detected person boxes, as a mask.
+
+    The independent cross-check that exposed how bad the colour-only seeding was
+    is also the cue that fixes it. Colour answers WHICH athlete; a person detector
+    answers WHETHER it is a person at all, and it knows nothing about gi tones, so
+    the two signals fail in unrelated places. Banners, scoreboards and mat leaks
+    are all rejected by construction here -- none of them is a person.
+
+    Use it as a preference, never a veto: measured on this match, the detector
+    finds nobody in an extreme close-up where a torso fills half the frame, and
+    that is exactly where the colour seeding is at its most reliable.
+    """
+    m = np.zeros(shape[:2], dtype=bool)
+    for x1, y1, x2, y2 in boxes:
+        m[max(0, int(y1)):int(y2) + 1, max(0, int(x1)):int(x2) + 1] = True
+    return m
+
+
 def seed_point(votes: np.ndarray, near_mat: np.ndarray | None = None,
-               min_px: int = 1500) -> tuple[np.ndarray | None, int]:
+               min_px: int = 1500,
+               persons: np.ndarray | None = None) -> tuple[np.ndarray | None, int]:
     """One point, deep inside the largest blob of that gi's colour ON the mat.
 
     ONE point, not six. `segment.scale_candidates` can only reach SAM2's
@@ -242,17 +262,52 @@ def seed_point(votes: np.ndarray, near_mat: np.ndarray | None = None,
     m = cv2.morphologyEx(votes.astype(np.uint8), cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
     m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((15, 15), np.uint8))
     n, lbl, stats, _ = cv2.connectedComponentsWithStats(m, 8)
-    best, area = None, 0
-    for i in range(1, n):
-        a = int(stats[i, cv2.CC_STAT_AREA])
-        if a <= area:
-            continue
-        if near_mat is not None and not ((lbl == i) & near_mat).any():
-            continue                      # a blue thing off the mat is furniture
-        best, area = i, a
+
+    def pick(require_person: bool, min_on_person: float = 0.5):
+        best, area = None, 0
+        for i in range(1, n):
+            a = int(stats[i, cv2.CC_STAT_AREA])
+            if a <= area:
+                continue
+            comp = lbl == i
+            if require_person:
+                # Mostly inside a detected person, and that is the WHOLE test. Being
+                # inside a person is a stronger claim than being near the mat
+                # polygon, and the mat test actively rejects athletes: in a wide
+                # shot the gi component is the jacket, 300px above the mat surface
+                # with only bare feet touching it. Measured, the white gi was
+                # 7,099 px at 100% inside a person on shot 2 and 25,627 px at 100%
+                # on shot 17, and both were discarded for not reaching the mat --
+                # after which the seed fell on the scoreboard and on the yellow
+                # border. Demanding a real FRACTION, not any overlap, also drops
+                # the "WINNER" caption on shot 36: 24,806 px at 0.3% inside.
+                if (comp & persons).sum() < min_on_person * a:
+                    continue
+            elif near_mat is not None and not (comp & near_mat).any():
+                continue                  # no detector to lean on: furniture test
+            best, area = i, a
+        return best, area
+
+    best, area = (pick(True) if persons is not None and persons.any() else (None, 0))
+    on_person = best is not None
+    if best is None or area < min_px:      # nobody detected, or nobody wearing it
+        best, area = pick(False)
+        on_person = False
     if best is None or area < min_px:
         return None, area
-    dist = cv2.distanceTransform((lbl == best).astype(np.uint8), cv2.DIST_L2, 5)
+
+    comp = lbl == best
+    # Take the deepest point INSIDE the person, not inside the component. This
+    # arena's mat panels are bright and near-neutral, so they satisfy the white-gi
+    # test and merge with the white gi into one blob; the blob does touch a person
+    # box, so it passes the test above, but its distance-transform maximum sits
+    # out in the open mat. Measured: six of ten failing shots seeded the white gi
+    # on bare mat and three seeded the blue gi on a sponsor banner, all while the
+    # component itself was legitimately part-athlete.
+    region = (comp & persons) if on_person else comp
+    if not region.any():
+        region = comp
+    dist = cv2.distanceTransform(region.astype(np.uint8), cv2.DIST_L2, 5)
     y, x = np.unravel_index(int(np.argmax(dist)), dist.shape)
     return np.array([[x, y]], dtype=np.float32), area
 

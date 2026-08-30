@@ -27,7 +27,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from bjjvision.matfield import (  # noqa: E402
-    choose_scale, fit_mat, gi_votes, mat_confusable_with, seed_point, static_graphics,
+    choose_scale, fit_mat, gi_votes, mat_confusable_with, person_support, seed_point,
+    static_graphics,
 )
 
 CKPTS = {
@@ -49,6 +50,8 @@ def main() -> int:
     ap.add_argument("--device", default="mps")
     ap.add_argument("--data-dir", type=Path, default=ROOT / "data")
     ap.add_argument("--sheet", type=Path, default=None, help="write a contact sheet here")
+    ap.add_argument("--no-verify", action="store_true",
+                    help="skip the independent person-detector cross-check")
     args = ap.parse_args()
 
     video = args.data_dir / "interim" / f"{args.slug}_norm.mp4"
@@ -74,8 +77,17 @@ def main() -> int:
     predictor = build_sam2_video_predictor(cfg, str(ROOT / ckpt), device=args.device)
     imgp = SAM2ImagePredictor(predictor)
 
+    detector = None
+    if not args.no_verify:
+        import yaml
+        from bjjvision.detect import PersonDetector
+        pcfg = yaml.safe_load((ROOT / "config" / "default.yaml").read_text())
+        detector = PersonDetector(pcfg, device=args.device)
+
     rows, tiles = [], []
-    hdr = f"{'shot':>4} {'frames':>13} {'mat':>6} {'blue_px':>8} {'sc':>3} {'ctm':>5} {'white_px':>9} {'sc':>3} {'ctm':>5}"
+    hdr = (f"{'shot':>4} {'frames':>13} {'mat':>6} "
+           f"{'blue_px':>8} {'sc':>3} {'ctm':>5} {'in_p':>5} "
+           f"{'white_px':>9} {'sc':>3} {'ctm':>5} {'in_p':>5}")
     print("\n" + hdr)
     print("-" * len(hdr))
     for si, s in enumerate(shots):
@@ -104,12 +116,14 @@ def main() -> int:
                 if cand is None:
                     continue
                 votes = gi_votes(cand, mat, graphics, exclude_mat=exc)
+                boxes = [p.box for p in detector.detect(cand, persist=False)] if detector else []
+                persons = person_support(boxes, cand.shape) if boxes else None
                 with torch.inference_mode():
                     imgp.set_image(cv2.cvtColor(cand, cv2.COLOR_BGR2RGB))
                 attempt, got = {}, {}
                 for key in want:
                     other = "white" if key == "blue" else "blue"
-                    pt, area = seed_point(votes[key], near_mat)
+                    pt, area = seed_point(votes[key], near_mat, persons=persons)
                     if pt is None:
                         attempt[key] = None
                         continue
@@ -121,13 +135,24 @@ def main() -> int:
                     if m is None:
                         attempt[key] = None
                         continue
+                    sx, sy = int(pt[0][0]), int(pt[0][1])
+                    on_person = bool(persons[sy, sx]) if persons is not None else None
                     got[key] = m
                     attempt[key] = dict(px=int(m.sum()), scale=int(idx),
                                         contam=round(float(contam), 3),
-                                        seed=[int(pt[0][0]), int(pt[0][1])], colour_px=area)
-                n_found = sum(1 for v in attempt.values() if v)
+                                        seed=[sx, sy], colour_px=area,
+                                        seed_in_person=on_person)
+                # A seed counts as FOUND only if it survives the independent check.
+                # Without this the sweep stopped at the first frame yielding two
+                # seeds regardless of quality: on shot 8 it accepted a white seed
+                # sitting on the mat and never tried the other four frames, in a
+                # shot where the white gi happens to be almost entirely buried
+                # under the blue one at that instant. The cross-check is worth far
+                # more as an acceptance criterion than as a post-hoc report.
+                n_found = sum(1 for v in attempt.values()
+                              if v and v.get("seed_in_person") is not False)
                 if best is None or n_found > best[0]:
-                    best = (n_found, attempt, frac, got, cand)
+                    best = (n_found, attempt, frac, got, cand, boxes)
                 if n_found == len(want):
                     break
             return best
@@ -161,10 +186,39 @@ def main() -> int:
         row.update(found)
         row["seed_frac"] = best_try[2] if best_try else None
 
+        # INDEPENDENT CHECK. Seeded area and contamination cannot tell an athlete
+        # from arena furniture: shot 2 reported 33,247 px at contamination 0.176
+        # with its seed on the JIU-JITSU board and both athletes untouched, and it
+        # read as fine on a 426x240 contact-sheet tile. A person detector knows
+        # nothing about gi colour, mat tones or Lab modes, so agreeing with it is
+        # evidence rather than self-confirmation.
+        if detector is not None and mid is not None:
+            boxes = best_try[5] if (best_try and len(best_try) > 5) else []
+            for gi in ("blue", "white"):
+                v = row.get(gi)
+                if not v:
+                    continue
+                sx, sy = v["seed"]
+                v.setdefault("seed_in_person",
+                             any(x1 <= sx <= x2 and y1 <= sy <= y2
+                                 for x1, y1, x2, y2 in boxes))
+                m = picked.get(gi)
+                if m is not None and m.any():
+                    inside = np.zeros(m.shape, dtype=bool)
+                    for x1, y1, x2, y2 in boxes:
+                        inside[max(0, int(y1)):int(y2) + 1, max(0, int(x1)):int(x2) + 1] = True
+                    v["mask_in_person"] = round(float((m & inside).sum() / m.sum()), 3)
+            row["n_persons"] = len(boxes)
+
         def fmt(k):
             v = row.get(k)
-            return (f"{'--':>8} {'-':>3} {'-':>5}" if not v
-                    else f"{v['px']:8d} {v['scale']:3d} {v['contam']:5.3f}")
+            if not v:
+                return f"{'--':>8} {'-':>3} {'-':>5} {'-':>5}"
+            ok = v.get("seed_in_person")
+            flag = "-" if ok is None else ("yes" if ok else "NO")
+            mip = v.get("mask_in_person")
+            return (f"{v['px']:8d} {v['scale']:3d} {v['contam']:5.3f} "
+                    f"{flag:>5}" + ("" if mip is None else f"/{mip:.2f}"))
         print(f"{si:4d} {a:6d}-{b:6d} {row['mat']:6.3f} {fmt('blue')} {fmt('white')}")
         rows.append(row)
 
@@ -175,7 +229,7 @@ def main() -> int:
                 m = picked[key]
                 ov[m] = (0.40 * ov[m] + 0.60 * np.array(col)).astype(np.uint8)
         cv2.putText(ov, f"shot {si}", (10, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
-        tiles.append(cv2.resize(ov, (426, 240)))
+        tiles.append(cv2.resize(ov, (640, 360)))
     cap.release()
 
     out = args.data_dir / "out" / f"{args.slug}_matfield.json"
@@ -193,20 +247,43 @@ def main() -> int:
         print(f"  blue  px : median {np.median(bp):7.0f}  min {bp.min():6d}  max {bp.max():6d}")
         print(f"  white px : median {np.median(wp):7.0f}  min {wp.min():6d}  max {wp.max():6d}")
         print(f"  worst contamination per shot: median {np.median(ct):.3f}  max {ct.max():.3f}")
+        checked = [r for r in both
+                   if r["blue"].get("seed_in_person") is not None
+                   and r["white"].get("seed_in_person") is not None]
+        if checked:
+            good = [r for r in checked
+                    if r["blue"]["seed_in_person"] and r["white"]["seed_in_person"]]
+            print(f"\n  INDEPENDENT CHECK (person detector, knows nothing of gi colour):")
+            print(f"    both seeds land inside a detected person: "
+                  f"{len(good)}/{len(checked)} shots")
+            for r in checked:
+                bad = [g for g in ("blue", "white") if not r[g]["seed_in_person"]]
+                if bad:
+                    print(f"    !! shot {r['shot']:2d}: {', '.join(bad)} seed is NOT on a person "
+                          + " ".join(f"{g}={r[g]['seed']}" for g in bad))
     for r in rows:
         if r.get("mat") is None or not (r.get("blue") and r.get("white")):
             print(f"  !! shot {r['shot']} ({r['start']}-{r['end']}) incomplete")
     print(f"\n-> {out}")
 
     if tiles:
-        sheet = args.sheet or (args.data_dir / "out" / f"{args.slug}_matfield.jpg")
-        cols = 4
-        rows_n = (len(tiles) + cols - 1) // cols
-        blank = np.zeros_like(tiles[0])
-        grid = np.vstack([np.hstack((tiles[r * cols:(r + 1) * cols]
-                                     + [blank] * cols)[:cols]) for r in range(rows_n)])
-        cv2.imwrite(str(sheet), grid)
-        print(f"-> {sheet}")
+        # 640x360 tiles in sheets of 12. The previous 426x240 grid was too small
+        # to judge: shot 2 read as fine on it while its blue mask sat on a sponsor
+        # board and its white mask on the scoreboard, with both athletes untouched.
+        # A verification image you cannot read is not verification.
+        base = args.sheet or (args.data_dir / "out" / f"{args.slug}_matfield.jpg")
+        per, cols = 12, 2
+        for k in range(0, len(tiles), per):
+            part = tiles[k:k + per]
+            grid = []
+            for i in range(0, len(part), cols):
+                row = part[i:i + cols]
+                while len(row) < cols:
+                    row.append(np.zeros_like(part[0]))
+                grid.append(np.hstack(row))
+            out_p = base.with_name(f"{base.stem}_{k // per}{base.suffix}")
+            cv2.imwrite(str(out_p), np.vstack(grid))
+            print(f"-> {out_p}")
     return 0
 
 
