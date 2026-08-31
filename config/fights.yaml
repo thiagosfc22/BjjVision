@@ -15,13 +15,12 @@ fights:
 - slug: galvao-xande
   role: train
   status: in-dataset
-  notes: azul vs branco; a luta que calibrou tudo. Teacher completo; dataset
-    student_gx_320
+  notes: azul vs branco; a luta que calibrou tudo. Teacher completo; dataset student_gx_320
 - slug: dalpra-dorsey
   role: train
   status: labeled
-  notes: crowd rente ao tatame; bootstrap contact escolhe fotografos. Receita
-    matfield validada; 48 frames integ
+  notes: crowd rente ao tatame; bootstrap contact escolhe fotografos. Receita matfield
+    validada; 48 frames integ
 - slug: buchecha-lo
   role: TBD
   status: triaged
@@ -39,3 +38,12 @@ fights:
     - 26
     - 27
     - 61
+- slug: gracie-bastos
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 100.0
+    frames_pct:
+      cleanup: 100.0
+    review_shots: []
