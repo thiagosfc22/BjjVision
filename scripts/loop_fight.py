@@ -26,11 +26,59 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "config" / "fights.yaml"
+sys.path.insert(0, str(ROOT / "src"))
 
 
 def run(cmd: list[str], why: str) -> None:
     print(f"\n=== {why}\n    $ {' '.join(cmd)}", flush=True)
     subprocess.run(cmd, cwd=ROOT, check=True)
+
+
+def duration_s(video: Path) -> float:
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "csv=p=0", str(video)], capture_output=True, text=True)
+    try:
+        return float(out.stdout.strip())
+    except ValueError:
+        return 0.0
+
+
+def ensure_norm_complete(slug: str, clipped: bool) -> None:
+    """Fail loudly on the silent-truncation failure mode, then heal it.
+
+    gracie-bastos came out of a batch run with HALF the match missing: ffmpeg
+    exited 0, produced 248s from a 488s source, and every downstream number
+    would have described a video that does not exist. The same command re-run
+    by hand produced the full file, so the cause is transient -- which makes
+    detection, not diagnosis, the fix. A norm shorter than 95% of its raw is
+    re-normalised once; stale scout/triage outputs of the truncated video are
+    deleted because they describe it.
+    """
+    if clipped:
+        return                       # a requested clip is SUPPOSED to be shorter
+    meta_path = ROOT / "data" / "interim" / f"{slug}.json"
+    if not meta_path.exists():
+        return
+    meta = json.loads(meta_path.read_text())
+    raw = Path(meta.get("raw_path") or "")
+    norm = ROOT / "data" / "interim" / f"{slug}_norm.mp4"
+    if not raw.exists() or not norm.exists():
+        return
+    raw_d, norm_d = duration_s(raw), duration_s(norm)
+    if raw_d <= 0 or norm_d >= 0.95 * raw_d:
+        return
+    print(f"!! norm truncado: {norm_d:.0f}s de {raw_d:.0f}s -- renormalizando")
+    from bjjvision.ingest import MatchSource, normalise
+    src = normalise(MatchSource(**meta), ROOT / "data" / "interim")
+    src.save(meta_path)
+    (ROOT / "data" / "interim" / f"{slug}_shots.json").unlink(missing_ok=True)
+    import shutil
+    shutil.rmtree(ROOT / "data" / "out" / f"{slug}_triage", ignore_errors=True)
+    norm_d = duration_s(norm)
+    if norm_d < 0.95 * duration_s(raw):
+        raise SystemExit(f"{slug}: norm segue truncado ({norm_d:.0f}s) apos "
+                         "renormalizar -- investigar antes de continuar")
 
 
 def triage_summary(slug: str) -> dict:
@@ -101,6 +149,8 @@ def main() -> None:
         run(cmd, f"fetch {a.slug}")
     else:
         print(f"fetch: {norm.name} ja existe, pulando")
+
+    ensure_norm_complete(a.slug, clipped=a.start is not None and a.end is not None)
 
     if not shots.exists():
         run([str(ROOT / "bjj"), "scout", a.slug], f"scout {a.slug}")
