@@ -139,3 +139,16 @@ fights:
     review_shots:
     - 0
     - 2
+- slug: paulista22-roxa
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 47.8
+    frames_pct:
+      cleanup: 47.8
+      review: 51.9
+      skip: 0.2
+    review_shots:
+    - 0
+    - 3
