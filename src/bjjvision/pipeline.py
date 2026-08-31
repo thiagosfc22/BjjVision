@@ -194,6 +194,34 @@ class Pipeline:
         }
         return seed_idx, masks, report
 
+    def _mf_refit(self, win_start: int, win_end: int) -> None:
+        """Refit the mat for the shot this window belongs to.
+
+        Carrying one mat model from calibration through the whole match is the
+        exact mistake this module exists to avoid: the global colour model is
+        INVERTED at some camera angles here, matching a banner 23x more strongly
+        than the mat. Calibration may also have run on a different stretch
+        entirely -- gi colour is invariant for the bout, mat appearance is not.
+        """
+        from . import matfield as mf
+        shot = next((sh for sh in self.shots if sh.start <= win_start < sh.end), None)
+        lo, hi = (shot.start, shot.end) if shot else (win_start, win_end)
+        lo = max(lo, self.frame_offset)
+        hi = min(hi, self.n_frames)
+        if hi - lo < 2:
+            return
+        idx = np.linspace(lo, hi - 1, 15).astype(int)
+        frames = [f for f in (self.frame(int(i)) for i in idx) if f is not None]
+        if len(frames) < 3:
+            return
+        graphics = mf.static_graphics(frames)
+        mat = mf.fit_mat(frames, graphics)
+        if mat is None:
+            return
+        exclude = {gi: mf.mat_confusable_with(mat, gi) for gi in ("blue", "white")}
+        self._mf_state = (mat, graphics, exclude)
+        self._mf_shot = (lo, hi)
+
     def _matfield_window_masks(self, fr, seg):
         """Anchor a window on DETECTED PEOPLE, not on the previous mask.
 
@@ -431,6 +459,9 @@ class Pipeline:
                 seeded = False
                 sc = cfg["segment"].get("scale_select", {})
                 if cfg["roles"].get("bootstrap") == "matfield":
+                    if new_shot or getattr(self, "_mf_shot", None) is None or not (
+                            self._mf_shot[0] <= win_start < self._mf_shot[1]):
+                        self._mf_refit(win_start, win_end)
                     fr = self.frame(win_start)
                     mfm = self._matfield_window_masks(fr, self.segmenter) if fr is not None else None
                     if mfm:
