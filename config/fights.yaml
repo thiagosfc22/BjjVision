@@ -75,3 +75,13 @@ fights:
     frames_pct:
       cleanup: 100.0
     review_shots: []
+- slug: wardzinski-lo
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 0.0
+    frames_pct:
+      review: 100.0
+    review_shots:
+    - 0
