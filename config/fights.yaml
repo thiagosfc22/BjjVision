@@ -12,17 +12,30 @@
 #                                 multi-luta; na hora de treinar, decide)
 
 fights:
-  - slug: galvao-xande
-    role: train
-    status: in-dataset          # teacher completo; dataset student_gx_320
-    notes: azul vs branco; a luta que calibrou tudo
-
-  - slug: dalpra-dorsey
-    role: train
-    status: labeled             # receita matfield validada; 48 frames integ
-    notes: crowd rente ao tatame; bootstrap contact escolhe fotografos
-
-  - slug: buchecha-lo
-    role: TBD
-    status: scouted             # norm.mp4 + shots.json prontos, matfield feito
-    notes: primeira luta a passar pelo loop de triagem
+- slug: galvao-xande
+  role: train
+  status: in-dataset
+  notes: azul vs branco; a luta que calibrou tudo. Teacher completo; dataset
+    student_gx_320
+- slug: dalpra-dorsey
+  role: train
+  status: labeled
+  notes: crowd rente ao tatame; bootstrap contact escolhe fotografos. Receita
+    matfield validada; 48 frames integ
+- slug: buchecha-lo
+  role: TBD
+  status: triaged
+  notes: primeira luta a passar pelo loop de triagem; matfield feito
+  triage:
+    date: '2026-08-31'
+    usable_pct: 84.6
+    frames_pct:
+      cleanup: 77.3
+      ok: 7.4
+      review: 3.9
+      skip: 11.4
+    review_shots:
+    - 23
+    - 26
+    - 27
+    - 61
