@@ -47,7 +47,7 @@ def main() -> None:
 
     x = torch.randn(1, 3, H, W)
     torch.onnx.export(model, (x,), str(out), input_names=["image"],
-                      output_names=["logits"], opset_version=17,
+                      output_names=["logits"], opset_version=18,
                       dynamic_axes={"image": {0: "batch"}, "logits": {0: "batch"}})
     # The dynamo exporter externalises weights into a sidecar .onnx.data; a
     # phone deployment wants ONE file, so fold them back in.
@@ -56,7 +56,7 @@ def main() -> None:
     sidecar = out.with_suffix(".onnx.data")
     onnx.save(m, str(out), save_as_external_data=False)
     sidecar.unlink(missing_ok=True)
-    print(f"exportado {out}  ({out.stat().st_size / 1e6:.1f} MB, opset 17, arquivo unico)")
+    print(f"exportado {out}  ({out.stat().st_size / 1e6:.1f} MB, opset 18, arquivo unico)")
     print(f"  origem: {a.ckpt}  git_sha {ck.get('git_sha', 'desconhecido')}")
 
     import onnxruntime as ort
