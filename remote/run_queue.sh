@@ -17,10 +17,16 @@
 set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+# Default queue = the five fights the FREE local matfield validation cleared
+# (paulista23 7/7, lo 1/1, roxa 4/4, bastos 4/4, ferreira 51/59). The other
+# three (calasans, paulista22-branca, adgs26) all fail for ONE reason -- the
+# seeder assumes a blue athlete exists, and those fights are white-vs-white or
+# black-vs-white. They join the queue when colour-agnostic seeding lands;
+# renting GPU for a bootstrap that cannot seed is the mistake this project
+# already paid for once.
 QUEUE=("$@")
 [ ${#QUEUE[@]} -eq 0 ] && QUEUE=(paulista23-master2 wardzinski-ferreira
-                                 wardzinski-lo adgs26-artsygov paulista22-roxa
-                                 paulista22-branca gracie-calasans gracie-bastos)
+                                 wardzinski-lo paulista22-roxa gracie-bastos)
 CFG=config/vast_teacher.yaml
 
 for slug in "${QUEUE[@]}"; do
