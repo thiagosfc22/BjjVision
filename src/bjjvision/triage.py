@@ -19,6 +19,12 @@ shot is scored on signals a wrong segmentation cannot fake all at once:
               Grapplers touch; the dalpra failure mode (two seated
               photographers) lives far apart.
   area        athlete pixels as a fraction of the frame.
+  border      fraction of the frame's border pixels claimed by an athlete
+              class. On wide camera work (2009 multi-mat, Pan 2019) the
+              student painted the MAT as athlete B -- and scored stability
+              0.91, because a mat does not move. A body rarely touches much
+              of the frame edge; a mat-fill hugs it, so border is the one
+              cheap signal that catastrophe cannot fake.
 
 Numbers alone do not decide anything -- the dalpra photographers scored
 confidence 1.00 on a pipeline that trusted numbers. Every shot also gets an
@@ -66,6 +72,14 @@ THRESHOLDS = {
     # stable object"; stray_max is only a sanity bound -- past half the mask,
     # 'largest component' stops meaning 'the athlete'.
     "stray_max": 0.50,
+    # mat_fill: gracie-calasans put athlete B on the MAT across a whole
+    # single-camera match and every motion-based gate passed (stability 0.91
+    # -- mats hold still). Measured across all eight triaged matches: the two
+    # catastrophes sit at border 0.271 / 0.305 with area 0.35+, while healthy
+    # shots top out at border ~0.20 (galvao median 0.005) even in legitimate
+    # close-ups whose area hits 0.46.
+    "matfill_area_min": 0.25,
+    "matfill_border_min": 0.25,
 }
 
 
@@ -77,16 +91,27 @@ def load_student(ckpt_path: str | Path, device: torch.device) -> UNetStudent:
     return model
 
 
+# One sampling window per this many frames of shot. Calibrated by failure:
+# 2009 single-camera footage (gracie-bastos) has 2-minute shots, and a flat
+# 3 runs sampled 2% of an 8-minute match -- a verdict on footage barely seen.
+RUN_DENSITY_FRAMES = 360          # ~12 s at 30 fps
+MAX_RUNS_PER_SHOT = 10
+
+
 def sample_runs(start: int, end: int, n_runs: int, run_len: int) -> list[tuple[int, int]]:
-    """N runs of consecutive frames spread across a shot.
+    """Runs of consecutive frames spread across a shot, more for longer shots.
 
     Consecutive frames, not a stride: stability and flip_rate are pair
-    statistics and only mean something on truly adjacent frames.
+    statistics and only mean something on truly adjacent frames. `n_runs` is
+    the floor; density adds runs up to MAX_RUNS_PER_SHOT so a two-minute
+    locked-off shot is not judged on the same three windows as an 8-second
+    broadcast cut.
     """
     length = end - start
     if length < run_len:
         return [(start, length)] if length >= 2 else []
-    n = min(n_runs, max(1, length // run_len))
+    n = min(max(n_runs, length // RUN_DENSITY_FRAMES), MAX_RUNS_PER_SHOT)
+    n = min(n, max(1, length // run_len))
     anchors = np.linspace(start, end - run_len, n).astype(int)
     return [(int(a), run_len) for a in anchors]
 
@@ -159,6 +184,7 @@ class ShotSignals:
     stray_frac: float = np.nan
     dist: float = np.nan
     area: float = np.nan
+    border: float = np.nan
     flags: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -177,9 +203,10 @@ def measure_shot(model: UNetStudent, cap: cv2.VideoCapture, device: torch.device
     sig = ShotSignals(shot_id, start, end, kind)
     all_imgs, all_preds, all_ids = [], [], []
     stab, core_stab, flips = [], [], []
-    empt, margs, frags, strays, dists, areas = [], [], [], [], [], []
+    empt, margs, frags, strays, dists, areas, borders = [], [], [], [], [], [], []
     npx = SIZE[0] * SIZE[1]
     diag = float(np.hypot(*SIZE))
+    n_border_px = 2 * (SIZE[0] + SIZE[1]) - 4
 
     for rs, rl in sample_runs(start, end, n_runs, run_len):
         imgs, ids = read_run(cap, rs, rl)
@@ -194,6 +221,10 @@ def measure_shot(model: UNetStudent, cap: cv2.VideoCapture, device: torch.device
             sa, sb = int(a.sum()), int(b.sum())
             empt.append(sa < MIN_CLASS_PX or sb < MIN_CLASS_PX)
             areas.append((sa + sb) / npx)
+            fg = a | b
+            borders.append((int(fg[0].sum()) + int(fg[-1].sum())
+                            + int(fg[1:-1, 0].sum()) + int(fg[1:-1, -1].sum()))
+                           / n_border_px)
             na, a_core, stray_a = _components(a)
             nb, b_core, stray_b = _components(b)
             if sa >= MIN_CLASS_PX and sb >= MIN_CLASS_PX:
@@ -224,8 +255,11 @@ def measure_shot(model: UNetStudent, cap: cv2.VideoCapture, device: torch.device
     sig.stray_frac = float(np.mean(strays)) if strays else np.nan
     sig.dist = float(np.median(dists)) if dists else np.nan
     sig.area = float(np.median(areas))
+    sig.border = float(np.mean(borders))
 
     t = THRESHOLDS
+    if sig.area > t["matfill_area_min"] and sig.border > t["matfill_border_min"]:
+        sig.flags.append("mat_fill")
     if sig.stability < t["stability_min"]:
         sig.flags.append("unstable")
     if sig.flip_rate > t["flip_rate_max"]:
@@ -296,7 +330,8 @@ def evidence_grid(imgs: list[np.ndarray], preds: list[np.ndarray], ids: list[int
            f"stab {sig.stability:.2f}/{sig.core_stability:.2f}core  "
            f"flip {sig.flip_rate:.3f}  empty {sig.empty_rate:.2f}  "
            f"marg {sig.margin:.2f}  frag {sig.frag:.1f}  "
-           f"stray {sig.stray_frac:.2f}  dist {sig.dist:.2f}  area {sig.area:.3f}")
+           f"stray {sig.stray_frac:.2f}  dist {sig.dist:.2f}  "
+           f"area {sig.area:.3f}  bord {sig.border:.2f}")
     cv2.putText(hdr, txt, (8, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.42,
                 (255, 255, 255), 1, cv2.LINE_AA)
     cv2.putText(hdr, "flags: " + (",".join(sig.flags) or "none"), (8, 30),

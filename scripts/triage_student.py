@@ -86,7 +86,8 @@ def triage_slug(slug: str, model, dev, args, supervisor=None) -> dict:
             v = supervisor.triage(grid, i, {k: row[k] for k in
                                             ("stability", "core_stability",
                                              "flip_rate", "empty_rate", "margin",
-                                             "frag", "stray_frac", "dist", "area")})
+                                             "frag", "stray_frac", "dist", "area",
+                                             "border")})
             if v:
                 row["llm"] = v
                 row["verdict"] = ("student_ok" if v["usable_for_training"]
