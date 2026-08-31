@@ -50,6 +50,12 @@ def _load_features(run_dir: Path) -> dict[str, np.ndarray]:
             sorted(glob.glob(str(run_dir / "features.parquet")))
     acc: dict[str, list] = {c: [] for c in cols}
     for p in parts:
+        # A chunk that tracked nothing (an outro plate, an uncalibratable
+        # stretch) writes an EMPTY parquet with no columns at all; reading it
+        # by name raises. Zero frames is a legitimate hole, not an error.
+        f = pq.ParquetFile(p)
+        if f.metadata.num_rows == 0 or "frame" not in f.schema_arrow.names:
+            continue
         t = pq.read_table(p, columns=cols)
         for c in cols:
             acc[c].append(t[c].to_numpy(zero_copy_only=False))
