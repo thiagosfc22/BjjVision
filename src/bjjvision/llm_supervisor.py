@@ -142,6 +142,46 @@ TRIAGE_SCHEMA = {
     "additionalProperties": False,
 }
 
+_CAND = {
+    "type": "object",
+    "properties": {
+        "both_athletes_covered": {"type": "boolean",
+                                  "description": "Each competitor has their own mask "
+                                                 "covering most of their body."},
+        "non_athletes_masked": {"type": "boolean",
+                                "description": "Any mask sits on referee, crowd, "
+                                               "table, banner, LED wall or mat."},
+        "fused_or_swapped": {"type": "boolean",
+                             "description": "Both competitors share one mask, or "
+                                            "the masks bleed heavily into each other."},
+        "quality": {"type": "string",
+                    "enum": ["correct", "minor_defects", "wrong"],
+                    "description": "correct = usable as ground truth as-is; "
+                                   "minor_defects = a limb missing or slight spill; "
+                                   "wrong = fails any major check."},
+    },
+    "required": ["both_athletes_covered", "non_athletes_masked",
+                 "fused_or_swapped", "quality"],
+    "additionalProperties": False,
+}
+
+GOLD_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "teacher": _CAND,
+        "student": _CAND,
+        "chosen": {"type": "string", "enum": ["teacher", "student", "none"],
+                   "description": "Which candidate may serve as GOLD ground truth "
+                                  "for this frame. 'none' unless one is correct or "
+                                  "has at most minor defects with everything else "
+                                  "clean. When both qualify, pick the better one."},
+        "confidence": {"type": "number", "description": "0.0-1.0"},
+        "reasoning": {"type": "string", "description": "Two sentences maximum."},
+    },
+    "required": ["teacher", "student", "chosen", "confidence", "reasoning"],
+    "additionalProperties": False,
+}
+
 TUNING_SCHEMA = {
     "type": "object",
     "properties": {
@@ -361,6 +401,36 @@ class LlmSupervisor:
         if v:
             v["shot_id"] = shot_id
             self.stats.log.append({"kind": "triage", "shot": shot_id, **v})
+        return v
+
+    # -- job 5: judge gold-eval candidates ----------------------------------
+    def gold(self, card_bgr: np.ndarray, meta: dict) -> dict | None:
+        """Rule which candidate labelling (teacher vs student) is ground truth.
+
+        This builds the EVALUATION set, so the bar is higher than triage: a
+        label chosen here defines what 'correct' means for every future model.
+        When in doubt the right answer is 'none' -- a smaller honest gold set
+        beats a bigger contaminated one, which is the failure this job exists
+        to fix (the teacher's own labels broke on these fights).
+        """
+        prompt = (
+            "This card shows one video frame three times: ORIGINAL (left), the "
+            "TEACHER pipeline's masks (middle), and the STUDENT model's masks "
+            "(right). Red = athlete A, green = athlete B. Context: a "
+            f"jiu-jitsu match, {meta.get('note', '')}\n\n"
+            "The two people fighting are the ONLY valid mask targets -- not the "
+            "referee, not the crowd, not tables, banners, LED panels or the "
+            "mat. Judge EACH candidate, then decide whether either is clean "
+            "enough to serve as ground truth for evaluation. Be strict: "
+            "'none' is the correct answer whenever both candidates have real "
+            "defects."
+        )
+        blocks = [{"type": "text", "text": prompt}, _img_block(card_bgr)]
+        v = self._call(blocks, GOLD_SCHEMA, effort="high")
+        if v:
+            self.stats.log.append({"kind": "gold", **meta,
+                                   "chosen": v["chosen"],
+                                   "confidence": v["confidence"]})
         return v
 
     # -- job 3: tune between passes -----------------------------------------
