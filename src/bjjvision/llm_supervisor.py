@@ -11,6 +11,10 @@ latency budgets and different failure costs:
   tune()       -- called once per pass. Reads the run's own health telemetry and
                   proposes threshold changes for the next pass. This is what makes
                   the pipeline iterative rather than one-shot.
+  triage()     -- called per shot of a NEW match, on the student's own output.
+                  Decides whether a shot's student masks may become training
+                  labels or must go to the teacher. Same failure cost as
+                  adjudicate: a wrong "usable" poisons the dataset.
 
 Cost discipline matters here: the pipeline is designed so the *geometry* handles
 the common case and the model is spent only on genuine ambiguity. The stable
@@ -103,6 +107,38 @@ NARRATION_SCHEMA = {
         "commentary": {"type": "string", "description": "One short sentence for the overlay."},
     },
     "required": ["position", "dominant", "event", "commentary"],
+    "additionalProperties": False,
+}
+
+TRIAGE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "masked": {"type": "string",
+                   "enum": ["athletes", "referee", "crowd", "mixed", "nothing", "unclear"],
+                   "description": "Who the two masks are actually sitting on."},
+        "two_athletes": {"type": "boolean",
+                         "description": "True if the masks cover the two COMPETITORS, "
+                                        "one each, in every tile shown."},
+        "quality": {"type": "string",
+                    "enum": ["clean", "minor_defects", "bleed", "fragments", "wrong_target"],
+                    "description": "clean = usable as-is; minor_defects = a limb missing "
+                                   "or slight spill; bleed = one mask covers parts of "
+                                   "both bodies; fragments = mask is scattered pieces; "
+                                   "wrong_target = mask is on the wrong people entirely."},
+        "identity_consistent": {"type": "boolean",
+                                "description": "The same athlete keeps the same colour "
+                                               "across all tiles."},
+        "usable_for_training": {"type": "boolean",
+                                "description": "True only if these masks could enter a "
+                                               "training set without poisoning it."},
+        "needs_teacher": {"type": "boolean",
+                          "description": "True if this shot should be re-labelled by the "
+                                         "full teacher pipeline instead."},
+        "confidence": {"type": "number", "description": "0.0-1.0"},
+        "reasoning": {"type": "string", "description": "Two sentences maximum."},
+    },
+    "required": ["masked", "two_athletes", "quality", "identity_consistent",
+                 "usable_for_training", "needs_teacher", "confidence", "reasoning"],
     "additionalProperties": False,
 }
 
@@ -297,6 +333,34 @@ class LlmSupervisor:
         if v:
             v["t_s"] = t_s
             self.stats.log.append({"kind": "narrate", "t_s": t_s, **v})
+        return v
+
+    # -- job 4: triage a shot of a NEW match --------------------------------
+    def triage(self, grid_bgr: np.ndarray, shot_id: int, signals: dict) -> dict | None:
+        """Rule on a student-output evidence grid: are these masks the athletes?
+
+        This is the gate that decides whether a shot's labels may enter a
+        training set, so it carries the same effort budget as adjudicate().
+        The numeric signals are attached as context, not as authority -- the
+        dalpra photographers scored perfectly on every number.
+        """
+        prompt = (
+            f"Shot {shot_id} of a match the segmentation STUDENT model has never "
+            "seen. The grid shows sampled frames at the student's own working "
+            "resolution with its two masks overlaid: A red, B green. There is no "
+            "SAM2 and no colour pipeline behind these masks -- only the student.\n\n"
+            f"Numeric signals for this shot (context, not ground truth): {json.dumps(signals)}\n\n"
+            "Rule on: (1) whether the masks sit on the two competitors, one each "
+            "-- beware referees, cornerpeople, photographers and crowd; (2) mask "
+            "quality; (3) whether each athlete keeps its colour across tiles; "
+            "(4) whether these masks could serve as training labels, and whether "
+            "the shot should instead go to the full teacher pipeline."
+        )
+        blocks = [{"type": "text", "text": prompt}, _img_block(grid_bgr)]
+        v = self._call(blocks, TRIAGE_SCHEMA, effort="high")
+        if v:
+            v["shot_id"] = shot_id
+            self.stats.log.append({"kind": "triage", "shot": shot_id, **v})
         return v
 
     # -- job 3: tune between passes -----------------------------------------
