@@ -7,6 +7,10 @@ data/raw/*
 data/interim/*
 data/out/*
 !data/**/.gitkeep
+# Judge verdicts outrank numeric triage and are decisions, not data: versioned.
+!data/out/*_triage/
+data/out/*_triage/*
+!data/out/*_triage/overrides.json
 checkpoints/
 *.pt
 *.mp4

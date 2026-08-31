@@ -1,0 +1,19 @@
+{
+  "shots": {
+    "0": {
+      "verdict": "needs_teacher",
+      "judge": "claude-session-2026-08-31",
+      "reason": "branco-vs-branco: corpos separam mas identidade A/B nao e confiavel (margem 0.66-0.73); labels de identidade seriam ruido"
+    },
+    "1": {
+      "verdict": "needs_teacher",
+      "judge": "claude-session-2026-08-31",
+      "reason": "branco-vs-branco: corpos separam mas identidade A/B nao e confiavel (margem 0.66-0.73); labels de identidade seriam ruido"
+    },
+    "2": {
+      "verdict": "needs_teacher",
+      "judge": "claude-session-2026-08-31",
+      "reason": "branco-vs-branco: corpos separam mas identidade A/B nao e confiavel (margem 0.66-0.73); labels de identidade seriam ruido"
+    }
+  }
+}

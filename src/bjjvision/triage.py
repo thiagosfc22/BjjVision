@@ -37,6 +37,7 @@ belongs to whoever looks at the evidence grid.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -81,6 +82,34 @@ THRESHOLDS = {
     "matfill_area_min": 0.25,
     "matfill_border_min": 0.25,
 }
+
+
+def load_overrides(triage_dir: str | Path) -> dict[int, dict]:
+    """Judge verdicts that outrank the numeric ones, one file per fight.
+
+    Twice now the heuristic queue has been wrong in the dangerous direction --
+    gracie-calasans and paulista23-master2 both scored "usable" while the
+    masks sat on a mat and a table. When a pair of eyes (VLM or human) rules
+    differently, that ruling is recorded in overrides.json next to the
+    evidence it judged, and every consumer (registry, pseudo-label builder)
+    applies it on top of report.json. Re-running triage regenerates the
+    report but never touches the judgement.
+    """
+    p = Path(triage_dir) / "overrides.json"
+    if not p.exists():
+        return {}
+    data = json.loads(p.read_text())
+    return {int(k): v for k, v in data.get("shots", {}).items()}
+
+
+def apply_overrides(rows: list[dict], triage_dir: str | Path) -> list[dict]:
+    ov = load_overrides(triage_dir)
+    for r in rows:
+        o = ov.get(r.get("shot_id", -1))
+        if o:
+            r["verdict"] = o["verdict"]
+            r["override"] = {k: o[k] for k in ("judge", "reason") if k in o}
+    return rows
 
 
 def load_student(ckpt_path: str | Path, device: torch.device) -> UNetStudent:

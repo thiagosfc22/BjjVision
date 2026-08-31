@@ -1,0 +1,9 @@
+{
+  "shots": {
+    "1": {
+      "verdict": "needs_teacher",
+      "judge": "claude-session-2026-08-31",
+      "reason": "verde numa mesa branca e em kimonos da torcida; atletas branco-vs-branco por vezes fundidos num blob; numeros passaram (border 0.06) porque a alucinacao e estavel e pequena"
+    }
+  }
+}

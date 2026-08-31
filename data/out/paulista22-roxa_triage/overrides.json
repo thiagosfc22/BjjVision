@@ -1,0 +1,9 @@
+{
+  "shots": {
+    "1": {
+      "verdict": "needs_teacher",
+      "judge": "claude-session-2026-08-31",
+      "reason": "sangramento entre classes, perna do arbitro em verde, atleta da luta vizinha em vermelho; inutilizavel como label"
+    }
+  }
+}

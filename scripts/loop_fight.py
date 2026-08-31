@@ -82,8 +82,10 @@ def ensure_norm_complete(slug: str, clipped: bool) -> None:
 
 
 def triage_summary(slug: str) -> dict:
-    report = json.loads((ROOT / "data" / "out" / f"{slug}_triage" / "report.json").read_text())
-    rows = report["shots"]
+    from bjjvision.triage import apply_overrides
+    tdir = ROOT / "data" / "out" / f"{slug}_triage"
+    report = json.loads((tdir / "report.json").read_text())
+    rows = apply_overrides(report["shots"], tdir)
     total = sum(r["end"] - r["start"] for r in rows) or 1
     frames = {}
     for r in rows:

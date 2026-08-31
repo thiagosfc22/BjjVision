@@ -43,11 +43,14 @@ fights:
   status: triaged
   triage:
     date: '2026-08-31'
-    usable_pct: 98.1
+    usable_pct: 0.0
     frames_pct:
-      cleanup: 98.1
+      needs_teacher: 98.1
       skip: 1.9
-    review_shots: []
+    review_shots:
+    - 0
+    - 1
+    - 2
 - slug: maquine-abate
   role: TBD
   status: triaged
@@ -144,26 +147,28 @@ fights:
   status: triaged
   triage:
     date: '2026-08-31'
-    usable_pct: 47.8
+    usable_pct: 0.0
     frames_pct:
-      cleanup: 47.8
+      needs_teacher: 47.8
       review: 51.9
       skip: 0.2
     review_shots:
     - 0
+    - 1
     - 3
 - slug: paulista23-master2
   role: TBD
   status: triaged
   triage:
     date: '2026-08-31'
-    usable_pct: 35.4
+    usable_pct: 0.0
     frames_pct:
-      cleanup: 35.4
+      needs_teacher: 35.4
       review: 64.5
       skip: 0.1
     review_shots:
     - 0
+    - 1
     - 3
     - 4
     - 5
