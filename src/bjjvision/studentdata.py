@@ -164,3 +164,58 @@ class StudentSet:
 
     def __getitem__(self, i):
         return self.img[i], self.lab[i]
+
+
+class _CatArray:
+    """Fancy-index view over several memmaps, in place of one big array.
+
+    Training indexes with SORTED integer arrays (`np.sort(rng.choice(...))`),
+    so per-source chunks concatenate back in the caller's order without a
+    gather step. Copying the sources into one array would double the disk for
+    no reason; this reads each memmap only where the batch actually lands.
+    """
+
+    def __init__(self, arrs, bounds):
+        self.arrs, self.bounds = arrs, bounds
+
+    def __getitem__(self, sel):
+        sel = np.asarray(sel)
+        if sel.ndim == 0:
+            sel = sel[None]
+        parts = []
+        for arr, lo, hi in zip(self.arrs, self.bounds[:-1], self.bounds[1:]):
+            m = (sel >= lo) & (sel < hi)
+            if m.any():
+                parts.append(np.asarray(arr[sel[m] - lo]))
+        return np.concatenate(parts) if parts else np.asarray(self.arrs[0][:0])
+
+
+SHOT_STRIDE = 1000   # shot ids offset per source, so shot 3 of two fights differs
+
+
+class ConcatStudentSet:
+    """Several StudentSet roots as one training pool.
+
+    This is what multi-match training runs on: the teacher dataset plus the
+    pseudo-label sets, without merging files. Shot ids get a per-source offset
+    (source i contributes shots i*SHOT_STRIDE + original) so a shot-level
+    split still means something; which offset is which root is in `sources`.
+    """
+
+    def __init__(self, roots):
+        self.roots = [str(r) for r in roots]
+        self.sets = [StudentSet(r) for r in roots]
+        self.bounds = np.concatenate([[0], np.cumsum([len(s) for s in self.sets])])
+        self.img = _CatArray([s.img for s in self.sets], self.bounds)
+        self.lab = _CatArray([s.lab for s in self.sets], self.bounds)
+        self.shots = np.concatenate(
+            [s.shots + i * SHOT_STRIDE for i, s in enumerate(self.sets)])
+        self.frames = np.concatenate([s.frames for s in self.sets])
+        self.occlusion = np.concatenate([s.occlusion for s in self.sets])
+        self.sources = {i * SHOT_STRIDE: r for i, r in enumerate(self.roots)}
+
+    def __len__(self) -> int:
+        return int(self.bounds[-1])
+
+    def __getitem__(self, i):
+        return self.img[i], self.lab[i]

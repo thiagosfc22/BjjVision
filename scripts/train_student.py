@@ -26,7 +26,13 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from bjjvision.student import UNetStudent, metrics, normalise   # noqa: E402
-from bjjvision.studentdata import StudentSet                    # noqa: E402
+from bjjvision.studentdata import ConcatStudentSet, StudentSet  # noqa: E402
+
+
+def load_data(spec: str):
+    """One root, or comma-separated roots pooled through ConcatStudentSet."""
+    roots = [r for r in spec.split(",") if r]
+    return StudentSet(roots[0]) if len(roots) == 1 else ConcatStudentSet(roots)
 
 
 def git_sha() -> str:
@@ -96,15 +102,25 @@ def main() -> None:
     args = ap.parse_args()
 
     dev = device_of(args.device)
-    ds = StudentSet(args.data)
+    ds = load_data(args.data)
     test_shots = {int(s) for s in args.test_shots.split(",") if s != ""}
     is_test = np.isin(ds.shots, list(test_shots))
     tr_idx = np.where(~is_test)[0]
     te_idx = np.where(is_test)[0]
+    test_ds = load_data(args.test_run) if args.test_run else None
+    if not len(te_idx) and test_ds is None:
+        raise SystemExit("sem avaliacao: passe --test-shots e/ou --test-run")
     if args.drop_audit:
         audit = json.loads(Path(args.drop_audit).read_text())
         drop = np.array(audit["drop"], dtype=bool)
-        if len(drop) != len(ds):
+        if len(drop) < len(ds):
+            # The audit was run on the FIRST source of a concat pool (the
+            # teacher set); pseudo-label sources carry their own gates and are
+            # not covered by it, so they pass through un-dropped.
+            print(f"auditoria cobre so os primeiros {len(drop)} frames do pool "
+                  f"de {len(ds)}; fontes pseudo seguem com seus proprios gates")
+            drop = np.concatenate([drop, np.zeros(len(ds) - len(drop), bool)])
+        elif len(drop) != len(ds):
             raise ValueError(f"audit cobre {len(drop)} frames, dataset tem {len(ds)}")
         kept = tr_idx[~drop[tr_idx]]
         print(f"auditoria: {len(tr_idx)-len(kept)} frames de treino descartados "
@@ -145,55 +161,76 @@ def main() -> None:
             print(f"  step {step:5d}/{args.steps}  loss {loss.item():.4f}  "
                   f"{step / (time.time() - t0):.2f} steps/s", flush=True)
         if step % args.eval_every == 0 or step == args.steps:
-            m = evaluate(model, ds, te_idx, dev, args.batch, args.gray)
-            hist.append({"step": step,
-                         "assigned": float(m["assigned"].mean()),
-                         "best": float(m["best"].mean()),
-                         "flipped": float(m["flipped"].mean()),
-                         "union": float(m["iou_union"].mean())})
-            print(f"  [eval {step}] assigned {hist[-1]['assigned']:.4f}  "
-                  f"best {hist[-1]['best']:.4f}  union {hist[-1]['union']:.4f}  "
-                  f"flipped {hist[-1]['flipped']:.3f}", flush=True)
+            h = {"step": step}
+            if len(te_idx):
+                m = evaluate(model, ds, te_idx, dev, args.batch, args.gray)
+                h.update(assigned=float(m["assigned"].mean()),
+                         best=float(m["best"].mean()),
+                         flipped=float(m["flipped"].mean()),
+                         union=float(m["iou_union"].mean()))
+                print(f"  [eval {step}] assigned {h['assigned']:.4f}  "
+                      f"best {h['best']:.4f}  union {h['union']:.4f}  "
+                      f"flipped {h['flipped']:.3f}", flush=True)
+            if test_ds is not None:
+                mr = evaluate(model, test_ds, np.arange(len(test_ds)), dev,
+                              args.batch, args.gray)
+                h["run_assigned"] = float(mr["assigned"].mean())
+                h["run_best"] = float(mr["best"].mean())
+                print(f"  [eval {step}] OUT-OF-MATCH assigned {h['run_assigned']:.4f}  "
+                      f"best {h['run_best']:.4f}", flush=True)
+            hist.append(h)
             model.train()
 
-    m = evaluate(model, ds, te_idx, dev, args.batch, args.gray)
-    print("\n=== held-out shots (same match) ===")
-    print("shot     n   IoU_assigned  IoU_best  IoU_union  flipped%  IoU_A   IoU_B")
-    for s in sorted(test_shots):
-        k = ds.shots[te_idx] == s
-        if not k.any():
-            continue
-        print("%4d %5d       %.4f     %.4f     %.4f     %5.1f   %.4f  %.4f" % (
-            s, k.sum(), m["assigned"][k].mean(), m["best"][k].mean(),
-            m["iou_union"][k].mean(), 100 * m["flipped"][k].mean(),
-            m["iou_A"][k].mean(), m["iou_B"][k].mean()))
-    print("%4s %5d       %.4f     %.4f     %.4f     %5.1f   %.4f  %.4f" % (
-        "ALL", len(te_idx), m["assigned"].mean(), m["best"].mean(),
-        m["iou_union"].mean(), 100 * m["flipped"].mean(),
-        m["iou_A"].mean(), m["iou_B"].mean()))
-    occ = ds.occlusion[te_idx]
-    print("\nby occlusion of the more-hidden athlete:")
-    for lo, hi in [(0, .2), (.2, .4), (.4, .6), (.6, .8), (.8, 1.01)]:
-        k = (occ >= lo) & (occ < hi)
-        if k.sum() < 10:
-            continue
-        print("  %3.0f-%3.0f%%  n=%5d  assigned %.4f  best %.4f  flipped %4.1f%%" % (
-            lo * 100, hi * 100, k.sum(), m["assigned"][k].mean(),
-            m["best"][k].mean(), 100 * m["flipped"][k].mean()))
+    payload = {"history": hist, "test_shots": sorted(test_shots),
+               "data": args.data}
+    if len(te_idx):
+        m = evaluate(model, ds, te_idx, dev, args.batch, args.gray)
+        print("\n=== held-out shots (same match) ===")
+        print("shot     n   IoU_assigned  IoU_best  IoU_union  flipped%  IoU_A   IoU_B")
+        for s in sorted(test_shots):
+            k = ds.shots[te_idx] == s
+            if not k.any():
+                continue
+            print("%4d %5d       %.4f     %.4f     %.4f     %5.1f   %.4f  %.4f" % (
+                s, k.sum(), m["assigned"][k].mean(), m["best"][k].mean(),
+                m["iou_union"][k].mean(), 100 * m["flipped"][k].mean(),
+                m["iou_A"][k].mean(), m["iou_B"][k].mean()))
+        print("%4s %5d       %.4f     %.4f     %.4f     %5.1f   %.4f  %.4f" % (
+            "ALL", len(te_idx), m["assigned"].mean(), m["best"].mean(),
+            m["iou_union"].mean(), 100 * m["flipped"].mean(),
+            m["iou_A"].mean(), m["iou_B"].mean()))
+        occ = ds.occlusion[te_idx]
+        print("\nby occlusion of the more-hidden athlete:")
+        for lo, hi in [(0, .2), (.2, .4), (.4, .6), (.6, .8), (.8, 1.01)]:
+            k = (occ >= lo) & (occ < hi)
+            if k.sum() < 10:
+                continue
+            print("  %3.0f-%3.0f%%  n=%5d  assigned %.4f  best %.4f  flipped %4.1f%%" % (
+                lo * 100, hi * 100, k.sum(), m["assigned"][k].mean(),
+                m["best"][k].mean(), 100 * m["flipped"][k].mean()))
+        payload["final"] = {k: float(v.mean()) for k, v in m.items()}
+        payload["per_shot"] = {int(s): {k: float(v[ds.shots[te_idx] == s].mean())
+                                        for k, v in m.items()}
+                               for s in sorted(test_shots)}
+
+    if test_ds is not None:
+        mr = evaluate(model, test_ds, np.arange(len(test_ds)), dev,
+                      args.batch, args.gray)
+        print("\n=== OUT-OF-MATCH test (%s) ===" % args.test_run)
+        print("  n=%d  assigned %.4f  best %.4f  union %.4f  flipped %.1f%%" % (
+            len(test_ds), mr["assigned"].mean(), mr["best"].mean(),
+            mr["iou_union"].mean(), 100 * mr["flipped"].mean()))
+        payload["test_run"] = args.test_run
+        payload["final_test_run"] = {k: float(v.mean()) for k, v in mr.items()}
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     sha = git_sha()
+    payload["git_sha"] = sha
     torch.save({"model": model.state_dict(), "width": args.width, "args": vars(args),
                 "git_sha": sha},
                out / "student.pt")
-    (out / "history.json").write_text(json.dumps({
-        "git_sha": sha,
-        "history": hist, "test_shots": sorted(test_shots),
-        "final": {k: float(v.mean()) for k, v in m.items()},
-        "per_shot": {int(s): {k: float(v[ds.shots[te_idx] == s].mean())
-                              for k, v in m.items()} for s in sorted(test_shots)},
-    }, indent=2))
+    (out / "history.json").write_text(json.dumps(payload, indent=2))
     print(f"\nwrote {out/'student.pt'}  ({time.time()-t0:.0f}s total)")
 
 
