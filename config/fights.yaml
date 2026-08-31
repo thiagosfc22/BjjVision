@@ -1,0 +1,28 @@
+# Registro das lutas do loop de triagem.
+#
+# Regra numero um, decidida antes de escalar para 10 lutas: o held-out e por
+# LUTA, nao por frame nem por shot. As lutas em `role: heldout` nunca entram
+# em masks.bin nem em nenhum treino do student -- elas existem para responder
+# a unica pergunta que importa: "o student generaliza para uma luta que nunca
+# viu?". Travar isso AQUI, antes de processar qualquer frame novo, evita a
+# tentacao de usar tudo como treino quando os numeros apertarem.
+#
+# status: fetched -> scouted -> triaged -> labeled -> in-dataset
+# role:   train | heldout | TBD  (TBD so e aceitavel antes do primeiro treino
+#                                 multi-luta; na hora de treinar, decide)
+
+fights:
+  - slug: galvao-xande
+    role: train
+    status: in-dataset          # teacher completo; dataset student_gx_320
+    notes: azul vs branco; a luta que calibrou tudo
+
+  - slug: dalpra-dorsey
+    role: train
+    status: labeled             # receita matfield validada; 48 frames integ
+    notes: crowd rente ao tatame; bootstrap contact escolhe fotografos
+
+  - slug: buchecha-lo
+    role: TBD
+    status: scouted             # norm.mp4 + shots.json prontos, matfield feito
+    notes: primeira luta a passar pelo loop de triagem
