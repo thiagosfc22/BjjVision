@@ -152,3 +152,19 @@ fights:
     review_shots:
     - 0
     - 3
+- slug: paulista23-master2
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 35.4
+    frames_pct:
+      cleanup: 35.4
+      review: 64.5
+      skip: 0.1
+    review_shots:
+    - 0
+    - 3
+    - 4
+    - 5
+    - 6
