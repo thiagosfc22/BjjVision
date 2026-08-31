@@ -66,3 +66,12 @@ fights:
     - 47
     - 59
     - 65
+- slug: gracie-calasans
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 100.0
+    frames_pct:
+      cleanup: 100.0
+    review_shots: []
