@@ -40,8 +40,16 @@ for slug in "${QUEUE[@]}"; do
   # has no frame to calibrate from -- three paulista23 chunks died exactly
   # that way. The middle of the longest mat shot is where the fight lives;
   # `bjj run` picks the _calib directory up automatically.
+  # NO_CALIB="slug1 slug2" forces per-chunk self-calibration for those fights.
+  # Measured on this campaign: the shared calib dir works when the mat is
+  # constant across shots (roxa, single camera) and BREAKS the matfield path
+  # when it is not (ferreira, paulista23) -- the per-shot mat refit and a
+  # cross-shot calibration directory disagree about what the mat looks like.
   CAL="data/interim/${slug}_calib"
-  if ! ls "$CAL"/*.jpg >/dev/null 2>&1; then
+  if [[ " ${NO_CALIB:-} " == *" $slug "* ]]; then
+    rm -rf "$CAL"
+    echo "  $slug: auto-calibracao por chunk (NO_CALIB)"
+  elif ! ls "$CAL"/*.jpg >/dev/null 2>&1; then
     read -r ca cb <<< "$("$PY" -c "
 import json
 d = json.load(open('data/interim/${slug}_shots.json'))
