@@ -127,3 +127,15 @@ fights:
     review_shots:
     - 0
     - 1
+- slug: paulista22-branca
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 0.0
+    frames_pct:
+      review: 99.8
+      skip: 0.2
+    review_shots:
+    - 0
+    - 2
