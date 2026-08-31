@@ -1,0 +1,86 @@
+# VAST profile for the teacher campaign (fights 4-12).
+#
+# vast_dalpra.yaml with nothing changed but this header: matfield bootstrap is
+# the default for every new fight because the failure it prevents (contact
+# locking onto the wrong pair) is exactly what regional footage with adjacent
+# fights and close crowds invites. Per-shot mat refit is in the pipeline
+# itself. If a smoke test disagrees with this profile, the fix goes HERE with
+# the measurement that justified it, per fight if needed.
+video:
+  target_fps: 30
+  max_width: 1280
+  chunk_frames: 60
+shots:
+  z_threshold: 150
+  min_shot_frames: 10
+  flat_max: 0.55
+  track_kinds:
+  - match
+  - mat
+detect:
+  model: yolo11x-pose.pt
+  conf: 0.25
+  iou: 0.6
+  min_box_area_frac: 0.004
+  max_persons: 12
+segment:
+  sam2_cfg: configs/sam2.1/sam2.1_hiera_l.yaml
+  sam2_ckpt: checkpoints/sam2.1_hiera_large.pt
+  offload_video_to_cpu: true
+  offload_state_to_cpu: false
+  prompt_points_per_obj: 6
+  scale_select:
+    enabled: true
+    max_contam: 0.25
+    min_px: 1500
+appearance:
+  color_space: lab
+  hist_bins:
+  - 8
+  - 12
+  - 12
+  torso_only: true
+  torso_band:
+  - 0.05
+  - 0.9
+  min_mask_pixels: 400
+  prototype_bank: 24
+  prototype_update_conf: 0.8
+reid:
+  embed_model: osnet_x1_0
+  weight_color: 0.65
+  weight_embed: 0.25
+  weight_motion: 0.1
+roles:
+  mat_estimate_frames: 20
+  referee_color_margin: 0.35
+  contact_window_s: 3.0
+  contact_iou_min: 0.02
+  crowd_y_reject_frac: 0.35
+  require_inside_mat: true
+  bootstrap: matfield
+recalibrate:
+  purity_min: 0.62
+  proto_margin_min: 0.15
+  proto_dist_max: 0.95
+  mask_iou_max: 0.15
+  area_jump_max: 2.2
+  sam2_score_min: 0.55
+  cooldown_frames: 8
+  max_consecutive: 5
+llm:
+  enabled: false
+  model: claude-opus-5
+  adjudicate_every_s: 10.0
+  escalate_on_recal: true
+  contact_sheet_cols: 3
+  max_calls_per_minute: 12
+  narrate: false
+  tune_between_passes: false
+render:
+  hud: true
+  mask_alpha: 0.45
+  timeline: true
+  show_health: true
+  clean: true
+  out_crf: 20
