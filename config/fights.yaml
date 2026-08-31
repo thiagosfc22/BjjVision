@@ -47,3 +47,22 @@ fights:
     frames_pct:
       cleanup: 100.0
     review_shots: []
+- slug: maquine-abate
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 85.9
+    frames_pct:
+      cleanup: 85.9
+      review: 5.8
+      skip: 8.3
+    review_shots:
+    - 0
+    - 15
+    - 17
+    - 20
+    - 42
+    - 47
+    - 59
+    - 65
