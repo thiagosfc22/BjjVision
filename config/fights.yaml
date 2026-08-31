@@ -116,3 +116,14 @@ fights:
     - 50
     - 53
     - 56
+- slug: adgs26-artsygov
+  role: TBD
+  status: triaged
+  triage:
+    date: '2026-08-31'
+    usable_pct: 0.0
+    frames_pct:
+      review: 100.0
+    review_shots:
+    - 0
+    - 1
