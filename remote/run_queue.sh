@@ -35,6 +35,24 @@ for slug in "${QUEUE[@]}"; do
     echo "$slug: sem norm.mp4 -- sync-up faltou"; continue
   fi
   N=$("$PY" -c "import json; print(json.load(open('data/interim/${slug}.json'))['n_frames'])")
+  # Calibrate ONCE per fight, not once per chunk: gi colour is invariant
+  # across the match, and a chunk covering a restart or the neighbouring mat
+  # has no frame to calibrate from -- three paulista23 chunks died exactly
+  # that way. The middle of the longest mat shot is where the fight lives;
+  # `bjj run` picks the _calib directory up automatically.
+  CAL="data/interim/${slug}_calib"
+  if ! ls "$CAL"/*.jpg >/dev/null 2>&1; then
+    read -r ca cb <<< "$("$PY" -c "
+import json
+d = json.load(open('data/interim/${slug}_shots.json'))
+sh = [s for s in d['shots'] if s['kind'] in ('match', 'mat')]
+s = max(sh, key=lambda s: s['end'] - s['start'])
+m = (s['start'] + s['end']) // 2
+print(max(s['start'], m - 75), min(s['end'], m + 75))")"
+    echo "  calibracao da luta: frames $ca-$cb (meio do shot mais longo)"
+    ./bjj frames "$slug" --frames "$ca:$cb" --calib-frames "$ca:$cb" \
+      || echo "  extracao de calibracao falhou; chunks calibram sozinhos"
+  fi
   fail=0
   for ((a = 0; a < N; a += CHUNK)); do
     b=$((a + CHUNK)); [ "$b" -gt "$N" ] && b="$N"
