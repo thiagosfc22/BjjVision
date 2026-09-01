@@ -247,19 +247,43 @@ def phase_eval(ckpt: str) -> None:
     M = {k: np.concatenate(v) for k, v in acc.items()}
     print(f"=== GOLD eval: {ckpt} (git {ck.get('git_sha', '?')[:8]}) ===")
     for slug in sorted({r["slug"] for r in rows}):
-        k = np.array([r["slug"] == slug for r in rows])
+        # teacher-sourced only: the student-sourced rows score 1.0 by construction
+        k = np.array([r["slug"] == slug and r["source"] == "teacher" for r in rows])
+        drop = sum(r["slug"] == slug and r["source"] == "student" for r in rows)
+        if not k.any():
+            print(f"  {slug:22s} sem rotulo independente do student ({drop} circulares)")
+            continue
         unrel = rows[int(np.argmax(k))]["identity_unreliable"]
         head = "best" if unrel else "assigned"
         print(f"  {slug:22s} n={k.sum():3d}  {head} {M[head][k].mean():.4f}  "
-              f"union {M['iou_union'][k].mean():.4f}"
+              f"union {M['iou_union'][k].mean():.4f}  (-{drop} circulares)"
               + ("  [identidade por-frame nao confiavel: headline=best]" if unrel else ""))
+    # Provenance is not a footnote here, it decides whether the number means
+    # anything. 14 of the first 37 gold labels ARE v4's output: scoring a
+    # student-lineage checkpoint against those returns 1.0000 by construction,
+    # and blending that into a headline manufactures a score out of the judge's
+    # own pick. So there is no blended GERAL -- the split IS the result.
+    verdicts = json.loads((OUT / "verdicts.json").read_text())
+    qual = [verdicts[f"{r['slug']}_{r['frame']:06d}"][r["source"]]["quality"] for r in rows]
     for src in ("teacher", "student"):
         k = np.array([r["source"] == src for r in rows])
         if k.any():
+            tag = ("  <- CIRCULAR para checkpoints da linhagem student"
+                   if src == "student" else "")
             print(f"  fonte {src:8s}          n={k.sum():3d}  best {M['best'][k].mean():.4f}  "
-                  f"union {M['iou_union'][k].mean():.4f}")
-    print(f"  GERAL                  n={len(rows)}  best {M['best'].mean():.4f}  "
-          f"union {M['iou_union'].mean():.4f}")
+                  f"union {M['iou_union'][k].mean():.4f}{tag}")
+    k = np.array([r["source"] == "teacher" for r in rows])
+    if k.any():
+        print(f"  HEADLINE (so rotulo de professor, independente do student)\n"
+              f"    n={k.sum():3d}  best {M['best'][k].mean():.4f}  "
+              f"union {M['iou_union'][k].mean():.4f}")
+    from collections import Counter
+    c = Counter(qual)
+    print(f"  qualidade ABSOLUTA dos rotulos de ouro: {dict(c)}")
+    if c.get("correct", 0) < len(rows) / 2:
+        print(f"    AVISO: so {c.get('correct', 0)}/{len(rows)} rotulos o juiz chamou de")
+        print("    'correct'. O resto foi escolhido como 'o melhor dos dois', o que nao")
+        print("    e a mesma coisa. Trate esta regua como piso, nao como gabarito.")
 
 
 def main() -> None:

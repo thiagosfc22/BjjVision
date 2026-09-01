@@ -2132,5 +2132,1365 @@
   "reasoning": "fim de luta: atletas separados andando; verde em um so + vermelho em bystander/banner nos dois",
   "judge": "claude-fable-session",
   "student_union_promising": false
+ },
+ "wardzinski-ferreira_000278": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "The teacher puts both red and green on the single visible white-gi athlete, a clear fusion with no separate second mask. The student separates them, but its green covers the white athlete while the red is an amorphous blob over the dark region beside him that cannot be confirmed as the blue-gi competitor rather than background/crowd, so neither is usable as gold."
+ },
+ "wardzinski-ferreira_000417": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.83,
+  "reasoning": "Only one athlete (blue gi) is visible in this frame; the teacher places a red blob on empty dark background above and a green mask on the on-screen name banner, missing the athlete entirely. The student does track the blue athlete but the mask is grossly oversized, spilling into the dark background and down onto the graphics banner, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_001159": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.8,
+  "reasoning": "The teacher only outlines the blue-gi athlete in red with stray red blobs on the mat and on the white athlete, so the blue competitor is essentially unmasked and there is spill onto non-athlete regions. The student assigns a solid red mask to the blue-gi athlete and green to the white-gi athlete with the referee left clean, with only slight over-extension of the red mask, making it usable as ground truth."
+ },
+ "wardzinski-ferreira_001288": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.6,
+  "reasoning": "The teacher's red mask is a large horizontal blob smeared across the mat to the right of the athletes rather than on a competitor, leaving only a partial green mask on a body, so it fails outright. The student assigns a red mask to the lower/blue-gi athlete and green to the upper/white-gi athlete with only mild boundary spill, making it usable with minor defects."
+ },
+ "wardzinski-ferreira_001509": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.85,
+  "reasoning": "The teacher assigns a compact red mask to the blue-gi athlete and a green mask to the white-gi athlete, with only slight boundary spill. The student's red mask floods the entire dark background/LED region and the green mask leaks onto the mat, making it unusable."
+ },
+ "wardzinski-ferreira_001790": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher assigns green to the upright white-gi athlete and red to the blue-gi athlete underneath with only slight boundary bleed at the contact point. The student's red mask balloons far to the left across the empty mat, making it unusable as ground truth."
+ },
+ "wardzinski-ferreira_001899": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.8,
+  "reasoning": "The teacher gives distinct masks: green on the white-gi athlete on top/behind and red on the blue-gi athlete, with only small boundary imprecision. The student floods nearly both bodies plus mat area with red and leaves only a small green patch on a head, so it is fused and contaminated."
+ },
+ "wardzinski-ferreira_002008": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher gives a compact red mask on the lower/blue-gi athlete and a green mask on the upper white-gi athlete, with only partial coverage of the white athlete's torso as a minor defect. The student's red mask bleeds far across the mat on both sides and overlaps the second athlete, making it unusable as ground truth."
+ },
+ "wardzinski-ferreira_002117": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.82,
+  "reasoning": "The teacher gives two compact, separate masks: green on the upper athlete and red on the athlete underneath, with only slight edge imprecision around the entangled limbs. The student's red mask spills far across the mat surface to the left and right, so it cannot serve as ground truth."
+ },
+ "wardzinski-ferreira_002400": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher panel has no mask at all, so it is unusable. The student's red mask spreads over both the bottom blue athlete and much of the top white athlete's torso/head, while the green mask covers only a small fragment on the right, indicating heavy fusion and incomplete coverage."
+ },
+ "wardzinski-ferreira_003031": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher panel is empty (\"SEM PROFESSOR\"), so it is unusable by definition. The student's red mask bleeds well beyond the bottom athlete onto the mat and into the white-gi athlete's torso/arm region while green covers only part of the upper competitor, so it is contaminated rather than a clean per-athlete separation."
+ },
+ "wardzinski-ferreira_003663": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher panel is empty ('SEM PROFESSOR'), so it is automatically wrong. The student's red mask spills far beyond the blue-gi athlete onto the surrounding mat and appears to swallow much of the white athlete, while the green mask is only a few scattered fragments \u2014 heavily contaminated and fused."
+ },
+ "wardzinski-ferreira_004294": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.55,
+  "reasoning": "The teacher panel is empty (\"SEM PROFESSOR\") so it is unusable. The student gives green to the upper white-gi athlete and red to the lower blue-gi athlete with roughly correct separation, though the red mask appears to spill slightly onto the white athlete's hip/leg area in the entangled zone."
+ },
+ "wardzinski-ferreira_004926": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher panel is empty and therefore unusable. The student's red mask is a large blob covering the LED wall/background rather than the bottom blue-gi athlete, while only the green mask plausibly tracks the top white-gi competitor, so it fails the background and coverage checks."
+ },
+ "wardzinski-ferreira_005557": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "The teacher panel is empty and therefore unusable. The student's green mask reasonably covers the white-gi top athlete, but the red mask balloons far beyond the bottom athlete into the mat and the left-side sponsor banner/background, which is a major spill disqualifying it as ground truth."
+ },
+ "wardzinski-ferreira_006071": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.6,
+  "reasoning": "Teacher assigns red to the bottom blue-gi athlete and green to the top white-gi athlete with reasonable separation, though the green mask misses the top athlete's lower body/legs. Student's masks are blobby and over-grown, with green spilling below into the bottom athlete's area and red bleeding onto the mat, so it is unusable as ground truth."
+ },
+ "wardzinski-ferreira_006180": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher gives a compact green mask on the white-gi athlete and a red mask on the dark/blue athlete underneath, with only slight boundary bleed at the entangled arms. The student's red mask spills well beyond the bodies onto the mat to the right and leaves stray red blobs near the left, disqualifying it."
+ },
+ "wardzinski-ferreira_006298": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher gives two distinct masks \u2014 green on the upper/white-gi athlete and red on the lower athlete \u2014 with only a small unmasked patch of the white gi on the left and no spill onto the mat or referee. The student's masks are blobby, bleed across both bodies and spread red widely onto the mat, so it is unusable as ground truth."
+ },
+ "wardzinski-ferreira_006407": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.5,
+  "reasoning": "The teacher gives two distinct blobs roughly matching the white-gi (green) and blue-gi (red) athletes with some boundary bleed in the entangled area. The student adds a large spurious red streak extending along the mat to the right of the pair, so it is unusable."
+ },
+ "wardzinski-ferreira_006516": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher gives the inverted white-gi athlete a green mask and the blue-gi athlete a red mask with only the white athlete's extended legs/feet left out, a minor omission. The student's red mask balloons far beyond the blue athlete onto the mat surface on both sides, so it cannot serve as ground truth."
+ },
+ "wardzinski-ferreira_006625": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher assigns green to the upright white-gi athlete and red to the grounded blue-gi athlete with only modest spill around the lower body boundary. The student's red mask bleeds broadly across the mat to both sides, making it unusable as ground truth."
+ },
+ "wardzinski-ferreira_006853": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.75,
+  "reasoning": "The teacher leaves the white-gi athlete almost entirely unmasked and splits the crouching blue-gi athlete between the red and green masks, so identities are effectively fused/misassigned. The student correctly gives green to the white-gi athlete and red to the blue-gi athlete, but the red mask bleeds heavily across the mat along the bottom of the frame, so neither is clean enough for ground truth."
+ },
+ "wardzinski-ferreira_006962": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "The teacher leaves the white-gi athlete's upper torso and head unmasked while the red mask sprawls across the mat and mixes with the other body, so neither mask cleanly isolates one competitor. The student is worse: red covers a huge swath of mat to the left and right of the pair and overlaps both athletes, so both candidates are unusable as ground truth."
+ },
+ "wardzinski-ferreira_007186": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "The teacher's red mask spans the grounded blue athlete and also a separate upright figure at the right of the mat, while its green mask covers only a fragment near the mat, so identities are fused and a non-competitor is included. The student's green mask is a single large blob swallowing the upright white-gi figure plus an adjacent person, again fusing bodies; neither candidate cleanly isolates the two competitors."
+ },
+ "wardzinski-ferreira_007295": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "none",
+  "confidence": 0.5,
+  "reasoning": "The teacher's red mask balloons far left and upward over the PushPress banner and table area, well beyond the blue athlete lying on the mat, while the green mask on the white gi is good. The student's masks are tighter but its red region still extends above/left of the blue athlete onto background (and possibly the white athlete's near edge), so neither is clean enough to serve as gold ground truth."
+ },
+ "wardzinski-ferreira_007404": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.78,
+  "reasoning": "The teacher's red mask is pasted over the red PushPress banner instead of the blue-gi athlete on the mat, leaving one competitor uncovered. The student assigns red to the grounded blue-gi athlete and green to the white-gi athlete, with only slight spill above the torso, making it usable as ground truth."
+ },
+ "wardzinski-ferreira_007512": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.83,
+  "reasoning": "Teacher's green correctly covers the white-gi athlete but its red mask sits on the background/banner region instead of the blue-gi athlete lying on the mat, leaving that competitor unsegmented. Student covers both athletes but its red mask bleeds massively leftward across the PushPress banner, a large non-athlete region, so neither is clean enough for ground truth."
+ },
+ "wardzinski-ferreira_007681": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.45,
+  "reasoning": "The teacher's red mask is smeared as a wide horizontal band across the red chairs/background instead of tracking the blue-gi athlete, so it fails outright; only the green mask on the white gi is plausible. The student assigns green to the white-gi athlete and red to the blue-gi athlete with reasonable body coverage, though the red blob visibly spills into the dark background to the right, making it usable only as a minor-defect reference."
+ },
+ "wardzinski-ferreira_007790": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "The teacher's red mask spills into a large rectangular blob over the mat/table area to the right of the pair and only loosely covers the blue athlete, while green covers just part of the white gi. The student's assignment is far more plausible (green on white gi top, red on blue gi bottom) but the red mask is inflated and includes a stray patch over the banner/mat on the left, so neither is clean enough for gold."
+ },
+ "wardzinski-ferreira_007899": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.6,
+  "reasoning": "The teacher output places a large red mask on the PushPress banner and leaves both grapplers essentially unmasked, which is a hard failure. The student assigns a green mask to the top (white gi) athlete and a red mask to the bottom (blue gi) athlete with some blob-like spill onto the surrounding mat, making it usable but imperfect."
+ },
+ "wardzinski-ferreira_008023": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "Both candidates paint the red mask over the ringside PushPro banner/backdrop; the teacher additionally leaves the bottom blue-gi athlete largely uncovered, capturing mostly banner. The student at least follows the grounded athlete's body but still bleeds heavily onto the red banner, so neither is clean enough for ground truth."
+ },
+ "wardzinski-ferreira_008228": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "Teacher's green cleanly follows the white-gi athlete on top and the red mask covers the visible portions of the bottom blue-gi athlete, though the blue athlete is under-covered where he blends into the dark mat. The student's red blob balloons far to the right over the mat and PushPress banner area, adding clear non-athlete regions, so only the teacher is usable."
+ },
+ "wardzinski-ferreira_008352": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.62,
+  "reasoning": "The teacher's green mask engulfs both the white-gi athlete and most of the bottom athlete, leaving only a small red sliver, so the two bodies are fused. The student separates the white-gi athlete (green) from the bottom blue-gi athlete (red) reasonably well, with only slight boundary spill, making it usable as ground truth."
+ },
+ "wardzinski-ferreira_008589": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "The teacher panel is empty, so it is automatically wrong; the student's red mask spills broadly across the mat on both sides of the athletes and also overlaps the white-gi body, while green covers only part of the upper torso. Both candidates therefore have disqualifying defects."
+ },
+ "wardzinski-ferreira_009220": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "The teacher panel is empty and is therefore wrong by definition; the student's red mask sits largely on the magenta LED wall/background rather than on an athlete, while the green mask sprawls across parts of both entangled bodies. Neither candidate provides a clean per-athlete segmentation usable as ground truth."
+ },
+ "wardzinski-ferreira_009852": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher panel carries no mask at all, so it is unusable by definition. The student's red mask is a coarse blob that extends well past the blue athlete onto the mat and background, and the green mask likewise spills rightward off the white gi, so neither can serve as ground truth."
+ },
+ "wardzinski-ferreira_010483": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.6,
+  "reasoning": "Teacher panel is empty, so it is automatically wrong. The student green mask covers the white-gi standing athlete and the red mask covers the blue-gi athlete on the ground, with some spill onto the mat/shadow near the bottom-left but no non-athlete subjects captured."
+ },
+ "wardzinski-ferreira_010861": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.78,
+  "reasoning": "The teacher's red mask is smeared across the blue mat to the left of the athletes rather than on the blue-gi competitor, leaving only the white-gi athlete (green) validly segmented. The student places red on the underneath blue-gi athlete and green on the white-gi athlete with only modest boundary spill, making it usable as ground truth."
+ },
+ "wardzinski-ferreira_011150": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.75,
+  "reasoning": "The teacher gives a green mask on the upper athlete and a smaller red mask on the lower/folded athlete, with the referee and background left clean, so it is usable despite the red mask being undersized. The student's red mask balloons far beyond the bodies onto the mat and banner area and largely swallows the second athlete, making it unusable."
+ },
+ "wardzinski-ferreira_011659": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "none",
+  "confidence": 0.62,
+  "reasoning": "The teacher's red mask is painted across the mat/floor rather than the bottom blue-gi athlete, leaving only the white-gi athlete (green) validly segmented. The student correctly assigns green to the white gi and red to the blue-gi athlete underneath, but the red bleeds in horizontal streaks onto the mat on both sides, so neither is clean enough to serve as gold ground truth."
+ },
+ "wardzinski-ferreira_011767": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "In both candidates the green mask reasonably captures the white-gi athlete, but the red mask does not track the blue-gi athlete: the teacher paints a large swath of the blue mat as red, and the student scatters red fragments across the mat surface. Neither red mask is usable, so no candidate qualifies as ground truth."
+ },
+ "wardzinski-ferreira_011876": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "In both candidates the red mask has flooded the mat surface rather than tracking the blue-gi athlete, leaving that competitor essentially unsegmented. The green mask captures only part of the white-gi athlete, so neither overlay is usable as ground truth."
+ },
+ "wardzinski-ferreira_012154": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher's red mask reasonably covers the bottom blue-gi athlete, but its green mask only catches the top athlete's head and shins, leaving the entire white gi torso unmasked. The student's green is similarly fragmentary on the top athlete and its red mask spills as a large slab onto the bare mat, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_012266": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.82,
+  "reasoning": "The teacher leaves most of the white-gi athlete unmasked, with red covering only part of the entangled pile and green reduced to a foot patch, so the two bodies are not separately represented. The student covers the pile better but bleeds a large red region across the blue mat, a clear non-athlete contamination, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_012435": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.8,
+  "reasoning": "The teacher assigns green to the bent-over white-gi athlete and red to the blue-gi athlete underneath, with only small boundary spill around the entangled limbs. The student's red mask sprays across the LED wall and image edges instead of tracking a body, making it unusable."
+ },
+ "wardzinski-ferreira_012824": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher only produces a tiny green patch on one leg and a small red smear near the mat, leaving both athletes essentially unsegmented. The student's green mask covers only part of the upright athlete while its red mask sits almost entirely on the magenta LED wall, so neither candidate is usable as ground truth."
+ },
+ "wardzinski-ferreira_012946": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher masks only a thin green sliver on one athlete's limbs and paints red across the mat strip at the bottom, leaving the blue-gi athlete essentially unsegmented. The student is worse, dumping a large red blob over the magenta LED wall and background with only fragmentary green on a limb, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_013261": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.72,
+  "reasoning": "The teacher assigns red to the blue-gi athlete underneath and green to the white-gi athlete on top, with only slight boundary spill along the entangled limbs. The student's red mask covers the LED wall/background instead of the blue-gi athlete, leaving that competitor unsegmented, so it cannot serve as ground truth."
+ },
+ "wardzinski-ferreira_013370": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.82,
+  "reasoning": "The teacher gives the blue-gi athlete a coherent red mask and the white-gi athlete a green mask, with only slight spill at the edges. The student paints a large red blob over the magenta LED wall and leaves the blue athlete essentially unmasked, so it is unusable."
+ },
+ "wardzinski-ferreira_013672": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.8,
+  "reasoning": "The teacher's green mask correctly covers the white-gi athlete but its red mask sits on a seated man at the officials' table instead of the bottom blue-gi competitor, leaving one athlete unmasked. The student covers both athletes but its red mask bleeds over a large swath of dark background/table area to the left, which is more than a slight spill, so neither is usable as gold."
+ },
+ "wardzinski-ferreira_013811": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.5,
+  "reasoning": "The teacher assigns a solid red mask to the grounded blue-gi athlete but leaves the white-gi athlete almost entirely unmasked, with only scattered green fragments on a limb and foot, so it is unusable. The student covers both bodies with correct separation (green = upper white-gi athlete, red = bottom blue-gi athlete), though the red mask bleeds somewhat onto the surrounding mat, a slight spill that keeps it at minor defects."
+ },
+ "wardzinski-ferreira_013952": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.72,
+  "reasoning": "The teacher masks the white-gi athlete in green but assigns red to a seated background spectator, leaving the blue-gi athlete on the mat entirely unsegmented. The student covers both competitors (green on white gi, red on the grounded blue gi) with only a slight red spill toward the banner edge, making it usable as ground truth."
+ },
+ "wardzinski-ferreira_014063": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher's red mask sits on a distant background figure above the mat rather than on the second competitor, and only the green mask partially covers one athlete. The student's red mask is a large blob spilling across the PushPress banner and mat, so neither candidate cleanly covers both competitors."
+ },
+ "wardzinski-ferreira_014254": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.72,
+  "reasoning": "The teacher's green mask floods the mat and background while its red blob mixes both bodies, so it is unusable. The student cleanly separates the upper white-gi athlete (green) from the lower athlete (red), with only some possible bleed at the contact area."
+ },
+ "wardzinski-ferreira_014715": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.92,
+  "reasoning": "The teacher panel is empty, so it cannot serve as ground truth. The student's red mask covers the PushPress banner and background wall rather than an athlete, and the green mask is only a small fragment near the floor, so neither competitor is properly segmented."
+ },
+ "wardzinski-ferreira_015346": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "The teacher panel is empty, so it is unusable by definition. The student gives one large green blob over the light-gi athlete but only scattered red fragments at the frame edges that leave the blue-gi athlete essentially unsegmented and spill onto background/LED-wall regions, so neither can serve as ground truth."
+ },
+ "wardzinski-ferreira_015978": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.45,
+  "reasoning": "The teacher panel is empty and is therefore unusable; the student assigns green to the upright white-gi athlete and red to the athlete underneath, keeping the two identities separate. The red mask is blobby and appears to bleed slightly onto the dark blue mat around the bottom athlete, which is a minor spill rather than a full failure, so it is marginally usable."
+ },
+ "wardzinski-ferreira_016609": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.83,
+  "reasoning": "The teacher panel has no masks at all, so it is unusable. The student's red mask covers the left athlete but bleeds far to the right across the PushPress banner and mat area, a large background contamination that disqualifies it as ground truth."
+ },
+ "wardzinski-ferreira_017241": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher panel is empty ('SEM PROFESSOR'), so it is unusable by definition. The student's red mask is smeared across the dark blue background/LED region rather than an athlete, while the single green mask lumps the crouching white-gi athlete together with the body beneath him, so both bodies are fused and background is masked."
+ },
+ "wardzinski-ferreira_017872": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.83,
+  "reasoning": "The teacher panel is empty (\"SEM PROFESSOR\"), so it is unusable by definition. The student green mask reasonably covers the white-gi athlete, but the red mask sits largely on the mat/banner area at lower left rather than cleanly on the dark blue-gi competitor, so it fails the non-athlete check."
+ },
+ "wardzinski-ferreira_018047": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.83,
+  "reasoning": "Teacher covers the single visible gi-clad athlete in green but spills substantially onto the mat/floor and only puts a tiny red patch on the head, so no valid second competitor mask exists. Student segments the dark-uniformed referee as athlete A (red), which is a hard role error, so neither candidate is usable as ground truth."
+ },
+ "wardzinski-ferreira_018155": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Both candidates only mask the white-gi athlete in green and leave the blue-gi athlete essentially unsegmented, while the red mask is dumped on background: the mat/scoreboard banner in the teacher and the large LED wall region in the student. Neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_018324": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "correct"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.92,
+  "reasoning": "The teacher assigns red to the blue-gi athlete on the left and green to the white-gi athlete on the right, with the referee left unmasked and no bleed between them. The student misses the blue-gi athlete entirely and instead paints a large rectangular red region over the LED wall/background, which disqualifies it."
+ },
+ "wardzinski-ferreira_018433": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "correct"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.9,
+  "reasoning": "The teacher assigns red to the blue-gi athlete on the left and green to the white-gi athlete on the right, leaving the suited referee unmasked and no bleed between them. The student leaves the blue-gi athlete unmasked and instead paints a large rectangular block of background/LED wall as athlete A, so it is unusable."
+ },
+ "wardzinski-ferreira_018542": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "In both candidates only the white-gi athlete is properly segmented (green), while the blue-gi athlete on the left is essentially unmasked; the red mask instead lands on background elements (mat/banner strip in the teacher, the LED wall panel plus a stray foot patch in the student). Neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_018827": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "correct"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.88,
+  "reasoning": "The teacher masks cleanly separate the white-gi athlete (green) and the blue-gi athlete (red) with full body coverage and no spill onto the referee or background. The student's green mask captures only fragments of the white-gi athlete (an arm and the lower legs), leaving most of the torso and head unmasked."
+ },
+ "wardzinski-ferreira_018935": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.78,
+  "reasoning": "The teacher assigns green to the upright white-gi athlete and red to the bottom turtled athlete with only slight boundary spill and no extraneous regions. The student's red mask spreads far across the mat on both sides of the pair, contaminating non-athlete area, so it cannot serve as ground truth."
+ },
+ "wardzinski-ferreira_019055": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "Teacher labels the dark-suited referee as athlete A and leaves the blue-gi competitor entirely unmasked, covering only the white-gi athlete in green. Student is worse still: red is smeared over the referee and a large patch of the magenta LED wall/background, and the blue athlete is again missed, so neither candidate is usable."
+ },
+ "wardzinski-ferreira_019704": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher panel is empty by definition and thus wrong. The student's green mask roughly covers the white-gi athlete, but the red mask is a huge blob spanning the dark background and LED wall rather than the blue-gi competitor, so it fails the non-athlete check."
+ },
+ "wardzinski-ferreira_020335": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "student",
+  "confidence": 0.72,
+  "reasoning": "The teacher panel carries no labels at all, so it is unusable. The student assigns red to the blue-gi athlete on the left and green to the white-gi athlete on the right with separate, non-fused masks; only slight boundary spill and lower-leg truncation at the scoreboard overlay, which is acceptable as ground truth."
+ },
+ "wardzinski-ferreira_020446": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "chosen": "teacher",
+  "confidence": 0.5,
+  "reasoning": "Both candidates put red on the blue-gi athlete on the left and green on the white-gi athlete on the right, with no referee, crowd or mat pixels captured, but both leave the upper heads/shoulders partly unmasked. The teacher's masks follow the body contours more tightly with a clean separation gap at the contact line, whereas the student's blobs are coarser and abut each other, so the teacher is the safer ground-truth choice."
+ },
+ "wardzinski-ferreira_020675": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.72,
+  "reasoning": "Both candidates only give a solid mask to the white-gi athlete while the dark blue-gi opponent in the lower left is largely unmasked, and both spill mask colour onto the magenta LED wall/background (student also puts stray red on hair and upper-left panel). Neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_020784": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "In both candidates the green mask reasonably covers the white-gi athlete, but the red mask is painted over the upper background/LED wall area rather than the dark blue-gi opponent. Neither provides a valid second-athlete mask, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_020957": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "In both candidates the green mask correctly captures only the standing white-gi athlete's legs, while the red mask is smeared across the magenta LED wall/background instead of the blue-gi athlete lying on the mat, who is essentially unmasked. Both therefore fail the coverage and non-athlete checks and neither can serve as ground truth."
+ },
+ "wardzinski-ferreira_021066": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "In the teacher output the green mask is placed on the dark-uniformed upright figure (referee/staff) and the red mask sprawls across the magenta LED wall rather than an athlete. The student output likewise paints large background/LED regions red and only assigns green to the white-gi figure, leaving the blue athlete unmasked, so neither is usable as ground truth."
+ },
+ "wardzinski-ferreira_021451": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.65,
+  "reasoning": "Only one athlete (white gi) is actually visible in this frame; the teacher covers him cleanly in green but also places a stray red blob on the mat/background, while the student scatters red across the athlete's head, the background and the scoreboard area. Neither provides a clean two-athlete ground truth, so both should be rejected."
+ },
+ "wardzinski-ferreira_022167": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "The teacher panel is empty by definition, so it is unusable. The student splits a single visible white-gi athlete into overlapping red and green fragments, with no second competitor visible, so the A/B assignment is fused and unreliable."
+ },
+ "wardzinski-ferreira_022799": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "The teacher panel is empty ('SEM PROFESSOR'), so it is wrong by definition; the student overlays both a red and a green mask onto the single visible white-gi athlete's torso in a patchy, interleaved way, so the two identities are fused on one body. Only one competitor is even visible in this close-up, so neither candidate can serve as ground truth."
+ },
+ "wardzinski-ferreira_023158": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "minor_defects"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.82,
+  "reasoning": "The teacher covers the blue-gi athlete fully in red and the white-gi athlete in green, though the green mask misses much of the upper body, and it correctly avoids the referee standing between them. The student places no mask on either competitor and instead paints the magenta LED panel, making it unusable."
+ },
+ "wardzinski-ferreira_024014": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.95,
+  "reasoning": "This frame is an end-card (\"THANK YOU FOR WATCHING\") containing no athletes at all, so any mask is spurious. The teacher paints a red blob and green text overlay on the graphic, and the student paints a large red region across the empty background; neither can serve as ground truth."
  }
 }

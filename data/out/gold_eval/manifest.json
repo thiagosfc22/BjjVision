@@ -1,0 +1,387 @@
+{
+ "n": 37,
+ "size": [
+  320,
+  180
+ ],
+ "source": "gold-eval-vlm-judged",
+ "judge": "claude-opus-5 via LlmSupervisor.gold",
+ "rows": [
+  {
+   "slug": "paulista23-master2",
+   "frame": 0,
+   "source": "teacher",
+   "confidence": 0.85,
+   "identity_unreliable": true
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 1159,
+   "source": "student",
+   "confidence": 0.8,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 1288,
+   "source": "student",
+   "confidence": 0.6,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 1509,
+   "source": "teacher",
+   "confidence": 0.85,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 1790,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 1899,
+   "source": "teacher",
+   "confidence": 0.8,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 2008,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 2117,
+   "source": "teacher",
+   "confidence": 0.82,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 4294,
+   "source": "student",
+   "confidence": 0.55,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6071,
+   "source": "teacher",
+   "confidence": 0.6,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6180,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6298,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6407,
+   "source": "teacher",
+   "confidence": 0.5,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6516,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 6625,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 7404,
+   "source": "student",
+   "confidence": 0.78,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 7681,
+   "source": "student",
+   "confidence": 0.45,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 7899,
+   "source": "student",
+   "confidence": 0.6,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 8228,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 8352,
+   "source": "student",
+   "confidence": 0.62,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 10483,
+   "source": "student",
+   "confidence": 0.6,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 10861,
+   "source": "student",
+   "confidence": 0.78,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 11150,
+   "source": "teacher",
+   "confidence": 0.75,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 12435,
+   "source": "teacher",
+   "confidence": 0.8,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 13261,
+   "source": "teacher",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 13370,
+   "source": "teacher",
+   "confidence": 0.82,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 13811,
+   "source": "student",
+   "confidence": 0.5,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 13952,
+   "source": "student",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 14254,
+   "source": "student",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 15978,
+   "source": "student",
+   "confidence": 0.45,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 18324,
+   "source": "teacher",
+   "confidence": 0.92,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 18433,
+   "source": "teacher",
+   "confidence": 0.9,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 18827,
+   "source": "teacher",
+   "confidence": 0.88,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 18935,
+   "source": "teacher",
+   "confidence": 0.78,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 20335,
+   "source": "student",
+   "confidence": 0.72,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 20446,
+   "source": "teacher",
+   "confidence": 0.5,
+   "identity_unreliable": false
+  },
+  {
+   "slug": "wardzinski-ferreira",
+   "frame": 23158,
+   "source": "teacher",
+   "confidence": 0.82,
+   "identity_unreliable": false
+  }
+ ],
+ "frames": [
+  0,
+  1159,
+  1288,
+  1509,
+  1790,
+  1899,
+  2008,
+  2117,
+  4294,
+  6071,
+  6180,
+  6298,
+  6407,
+  6516,
+  6625,
+  7404,
+  7681,
+  7899,
+  8228,
+  8352,
+  10483,
+  10861,
+  11150,
+  12435,
+  13261,
+  13370,
+  13811,
+  13952,
+  14254,
+  15978,
+  18324,
+  18433,
+  18827,
+  18935,
+  20335,
+  20446,
+  23158
+ ],
+ "shots": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "occlusion": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ]
+}
