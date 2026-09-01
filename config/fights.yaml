@@ -8,8 +8,19 @@
 # tentacao de usar tudo como treino quando os numeros apertarem.
 #
 # status: fetched -> scouted -> triaged -> labeled -> in-dataset
-# role:   train | heldout | TBD  (TBD so e aceitavel antes do primeiro treino
-#                                 multi-luta; na hora de treinar, decide)
+# role:   train | heldout | fora-de-escopo | TBD  (TBD so e aceitavel antes do
+#                                 primeiro treino multi-luta; na hora de treinar, decide)
+#
+# `fora-de-escopo` (2026-09-01): a luta nao entra em treino NEM em held-out,
+# porque o produto nao promete resolve-la. So entra aqui com o numero que
+# justifica a saida -- escopo definido por medicao, nunca por incomodo com o
+# resultado. O limiar medido e a altura do atleta no quadro: abaixo de ~40% da
+# altura do quadro, os dois corpos sao achados em 18% dos quadros; entre 40% e
+# 60%, em 52% (n=116 vereditos de juiz, `scripts/scale_scope.py cross`).
+# A causa e a escala mesmo, nao "footage dificil": recortar 2.5x em volta do
+# par e rodar o MESMO v4 melhora o recall no par em 33 de 47 quadros wide e
+# piora em 0 (`scale_scope.py quant`). Ou seja, sai do held-out mas nao sai do
+# roadmap: volta quando existir zoom digital com ROI honesta.
 
 fights:
 - slug: galvao-xande
@@ -157,8 +168,18 @@ fights:
     - 1
     - 3
 - slug: paulista23-master2
-  role: heldout
+  role: fora-de-escopo
   status: triaged
+  scope:
+    date: '2026-09-01'
+    was: heldout
+    why: 'camera aberta demais para o escopo do produto: altura mediana do atleta
+      0.338 do quadro (juiz-wide) contra 0.466 nos planos medios. Como ouro rendeu
+      1 cartao aproveitavel em 106 julgados -- um held-out que nao mede nada.
+      Some-se branco-vs-branco (identidade por-frame nao decidivel) e ginasio
+      com outras lutas no quadro.'
+    reentra_quando: 'existir pre-processamento de zoom digital com ROI no par;
+      o experimento crop-zoom mostra a mascara ressuscitando no mesmo v4.'
   triage:
     date: '2026-08-31'
     usable_pct: 0.0
