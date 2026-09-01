@@ -1,1162 +1,1510 @@
 [
  {
   "key": "paulista23-master2_000000",
+  "slug": "paulista23-master2",
   "h": 0.38824379444122314,
   "iou": 0.6106980964203693,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.1917397323488694,
   "pur_hoje": 0.21386138613861386,
-  "pur_zoom": 0.2310901001112347
+  "pur_zoom": 0.2310901001112347,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_000072",
+  "slug": "paulista23-master2",
   "h": 0.37528517842292786,
   "iou": 0.19885606855272034,
   "pair_in_crop": true,
   "rec_hoje": 0.04666666666666667,
   "rec_zoom": 0.0003940110323089047,
   "pur_hoje": 0.15063731170336037,
-  "pur_zoom": 0.27977295055124984
+  "pur_zoom": 0.27977295055124984,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_000132",
+  "slug": "paulista23-master2",
   "h": 0.38582634925842285,
   "iou": 0.4089942230211309,
   "pair_in_crop": true,
   "rec_hoje": 0.0013623978201634877,
   "rec_zoom": 0.49220153812980666,
   "pur_hoje": 0.34906092533211175,
-  "pur_zoom": 0.6647858425237241
+  "pur_zoom": 0.6647858425237241,
+  "split_hoje": 0.0,
+  "split_zoom": 0.04862733644859813
  },
  {
   "key": "paulista23-master2_000212",
+  "slug": "paulista23-master2",
   "h": 0.37171781063079834,
   "iou": 0.14831503246625644,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.47874460312188644,
   "pur_hoje": 0.45081967213114754,
-  "pur_zoom": 0.5620351788454728
+  "pur_zoom": 0.5620351788454728,
+  "split_hoje": NaN,
+  "split_zoom": 0.1553936871314603
  },
  {
   "key": "paulista23-master2_000272",
+  "slug": "paulista23-master2",
   "h": 0.41448312997817993,
   "iou": 0.19572870852813723,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.7541137752703339,
   "pur_hoje": 0.6737311767986615,
-  "pur_zoom": 0.5968814661543009
+  "pur_zoom": 0.5968814661543009,
+  "split_hoje": NaN,
+  "split_zoom": 0.035536159600997506
  },
  {
   "key": "paulista23-master2_000462",
+  "slug": "paulista23-master2",
   "h": 0.3706095218658447,
   "iou": 0.033297721701057256,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.010753620674702974,
   "pur_hoje": 0.631248129302604,
-  "pur_zoom": 0.5096529405200313
+  "pur_zoom": 0.5096529405200313,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_000540",
+  "slug": "paulista23-master2",
   "h": 0.3627558946609497,
   "iou": 0.5841020531533972,
   "pair_in_crop": true,
   "rec_hoje": 0.2840909090909091,
   "rec_zoom": 0.44220183486238535,
   "pur_hoje": 0.564622641509434,
-  "pur_zoom": 0.9398765030874228
+  "pur_zoom": 0.9398765030874228,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_000737",
+  "slug": "paulista23-master2",
   "h": 0.40288078784942627,
   "iou": 0.17489235620062663,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.35878102419101476,
   "pur_hoje": 0.3499323410013532,
-  "pur_zoom": 0.698361215431888
+  "pur_zoom": 0.698361215431888,
+  "split_hoje": NaN,
+  "split_zoom": 0.2683887915936953
  },
  {
   "key": "paulista23-master2_000953",
+  "slug": "paulista23-master2",
   "h": 0.3532910943031311,
   "iou": 0.35206339478041104,
   "pair_in_crop": true,
   "rec_hoje": 0.011686991869918699,
   "rec_zoom": 0.48550016291951775,
   "pur_hoje": 0.5994166261545941,
-  "pur_zoom": 0.9992153170119272
+  "pur_zoom": 0.9992153170119272,
+  "split_hoje": 0.17391304347826086,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_001090",
+  "slug": "paulista23-master2",
   "h": 0.3553095757961273,
   "iou": 0.058411500624928364,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.41853932584269665,
   "pur_hoje": 0.4868119266055046,
-  "pur_zoom": 0.5678172095284395
+  "pur_zoom": 0.5678172095284395,
+  "split_hoje": NaN,
+  "split_zoom": 0.0027635215159889457
  },
  {
   "key": "paulista23-master2_001154",
+  "slug": "paulista23-master2",
   "h": 0.3622908592224121,
   "iou": 0.3107344742078923,
   "pair_in_crop": true,
   "rec_hoje": 0.10454296661193213,
   "rec_zoom": 0.6383486562942009,
   "pur_hoje": 0.516384778012685,
-  "pur_zoom": 0.9978779178629384
+  "pur_zoom": 0.9978779178629384,
+  "split_hoje": 0.0,
+  "split_zoom": 0.006924248719013987
  },
  {
   "key": "paulista23-master2_001200",
+  "slug": "paulista23-master2",
   "h": 0.36128565669059753,
   "iou": 0.20756369788458026,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.1839080459770115,
   "pur_hoje": 0.39028599605522685,
-  "pur_zoom": 0.47970633051669204
+  "pur_zoom": 0.47970633051669204,
+  "split_hoje": NaN,
+  "split_zoom": 0.06346153846153846
  },
  {
   "key": "paulista23-master2_001324",
+  "slug": "paulista23-master2",
   "h": 0.38877952098846436,
   "iou": 0.5771726604545028,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.5915119363395226,
   "pur_hoje": 0.443827650013217,
-  "pur_zoom": 0.9935983827493261
+  "pur_zoom": 0.9935983827493261,
+  "split_hoje": NaN,
+  "split_zoom": 0.019013452914798206
  },
  {
   "key": "paulista23-master2_001448",
+  "slug": "paulista23-master2",
   "h": 0.35064926743507385,
   "iou": 0.15170207306866934,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.44190097039064447,
-  "pur_zoom": 0.0
+  "pur_zoom": 0.0,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_001572",
+  "slug": "paulista23-master2",
   "h": 0.34071773290634155,
   "iou": 0.053364499632953914,
   "pair_in_crop": false,
   "rec_hoje": 0.009040034438226431,
   "rec_zoom": 0.6558753913109873,
   "pur_hoje": 0.5092804474955505,
-  "pur_zoom": 0.8249248245907117
+  "pur_zoom": 0.8249248245907117,
+  "split_hoje": 0.0,
+  "split_zoom": 0.027590221187427242
  },
  {
   "key": "paulista23-master2_001696",
+  "slug": "paulista23-master2",
   "h": 0.33219027519226074,
   "iou": 0.3493568261953134,
   "pair_in_crop": true,
   "rec_hoje": 0.018602540834845735,
   "rec_zoom": 0.5036556251865115,
   "pur_hoje": 0.532051282051282,
-  "pur_zoom": 0.8298685245533206
+  "pur_zoom": 0.8298685245533206,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0005925048141016146
  },
  {
   "key": "paulista23-master2_001820",
+  "slug": "paulista23-master2",
   "h": 0.32466012239456177,
   "iou": 0.4233516764140539,
   "pair_in_crop": true,
   "rec_hoje": 0.008711885500933417,
   "rec_zoom": 0.5452752022095088,
   "pur_hoje": 0.3563125168964585,
-  "pur_zoom": 0.9408593091828138
+  "pur_zoom": 0.9408593091828138,
+  "split_hoje": 0.0,
+  "split_zoom": 0.004341534008683068
  },
  {
   "key": "paulista23-master2_001944",
+  "slug": "paulista23-master2",
   "h": 0.32426726818084717,
   "iou": 0.16483171798641624,
   "pair_in_crop": true,
   "rec_hoje": 0.016296296296296295,
   "rec_zoom": 0.5870623145400593,
   "pur_hoje": 0.4945994599459946,
-  "pur_zoom": 0.9977809158765383
+  "pur_zoom": 0.9977809158765383,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_002068",
+  "slug": "paulista23-master2",
   "h": 0.33798256516456604,
   "iou": 0.6911933235256598,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.6132664134563213,
   "pur_hoje": 0.5073985680190931,
-  "pur_zoom": 0.9865291517575248
+  "pur_zoom": 0.9865291517575248,
+  "split_hoje": NaN,
+  "split_zoom": 0.0013271400132714001
  },
  {
   "key": "paulista23-master2_002192",
+  "slug": "paulista23-master2",
   "h": 0.3242762088775635,
   "iou": 0.10943059618691042,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.014766686355581808,
   "pur_hoje": 0.4037122969837587,
-  "pur_zoom": 0.19797644216248866
+  "pur_zoom": 0.19797644216248866,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_002316",
+  "slug": "paulista23-master2",
   "h": 0.3216207027435303,
   "iou": 0.1058175828320312,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.3504092149136102,
-  "pur_zoom": 0.3455144841130673
+  "pur_zoom": 0.3455144841130673,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_002432",
+  "slug": "paulista23-master2",
   "h": 0.3308740258216858,
   "iou": 0.13452825965793358,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0365644434913146,
   "pur_hoje": 0.31252423419930203,
-  "pur_zoom": 0.2616425633541197
+  "pur_zoom": 0.2616425633541197,
+  "split_hoje": NaN,
+  "split_zoom": 0.1348973607038123
  },
  {
   "key": "paulista23-master2_002492",
+  "slug": "paulista23-master2",
   "h": 0.33104681968688965,
   "iou": 0.23456789739817008,
   "pair_in_crop": false,
   "rec_hoje": 0.009071504802561366,
   "rec_zoom": 0.025481423847500486,
   "pur_hoje": 0.39420935412026725,
-  "pur_zoom": 0.47552951780081115
+  "pur_zoom": 0.47552951780081115,
+  "split_hoje": 0.17647058823529413,
+  "split_zoom": 0.44656488549618323
  },
  {
   "key": "paulista23-master2_002611",
+  "slug": "paulista23-master2",
   "h": 0.30630064010620117,
   "iou": 0.21571706808443353,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.3630662020905923,
-  "pur_zoom": 0.23988277979346917
+  "pur_zoom": 0.23988277979346917,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_002677",
+  "slug": "paulista23-master2",
   "h": 0.3708544969558716,
   "iou": 0.1250812446721505,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0031901318587834963,
   "pur_hoje": 0.6547452080411407,
-  "pur_zoom": 0.26245250431778927
+  "pur_zoom": 0.26245250431778927,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_002737",
+  "slug": "paulista23-master2",
   "h": 0.33772552013397217,
   "iou": 0.19915348096426144,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.002583701151900097,
   "pur_hoje": 0.6151523469667857,
-  "pur_zoom": 0.36220091839200835
+  "pur_zoom": 0.36220091839200835,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_002857",
+  "slug": "paulista23-master2",
   "h": 0.30666494369506836,
   "iou": 0.08999145999597821,
   "pair_in_crop": true,
   "rec_hoje": 0.013414634146341463,
   "rec_zoom": 0.43639558723030364,
   "pur_hoje": 0.4440748440748441,
-  "pur_zoom": 0.4641775157618931
+  "pur_zoom": 0.4641775157618931,
+  "split_hoje": 0.0,
+  "split_zoom": 0.21297539149888142
  },
  {
   "key": "paulista23-master2_002991",
+  "slug": "paulista23-master2",
   "h": 0.30182763934135437,
   "iou": 0.14041499337332136,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0036409976333515383,
   "pur_hoje": 0.2330357142857143,
-  "pur_zoom": 0.34199658217032186
+  "pur_zoom": 0.34199658217032186,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003208",
+  "slug": "paulista23-master2",
   "h": 0.2809944748878479,
   "iou": 0.22292682813166653,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0006784260515603799,
   "pur_hoje": 0.0717032967032967,
-  "pur_zoom": 0.07855479865482452
+  "pur_zoom": 0.07855479865482452,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003268",
+  "slug": "paulista23-master2",
   "h": 0.2764931321144104,
   "iou": 0.08045862609601696,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.06376286694624476,
   "pur_hoje": 0.022861183125147302,
-  "pur_zoom": 0.22888663454222674
+  "pur_zoom": 0.22888663454222674,
+  "split_hoje": NaN,
+  "split_zoom": 0.4663677130044843
  },
  {
   "key": "paulista23-master2_003328",
+  "slug": "paulista23-master2",
   "h": 0.2593483328819275,
   "iou": 0.08672145258954665,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.07289632728963273,
   "pur_hoje": 0.010397830018083183,
-  "pur_zoom": 0.2771336951159349
+  "pur_zoom": 0.2771336951159349,
+  "split_hoje": NaN,
+  "split_zoom": 0.49107142857142855
  },
  {
   "key": "paulista23-master2_003388",
+  "slug": "paulista23-master2",
   "h": 0.2856214940547943,
   "iou": 0.09001948829889402,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.007014809041309431,
-  "pur_zoom": 0.099636803874092
+  "pur_zoom": 0.099636803874092,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_003448",
+  "slug": "paulista23-master2",
   "h": 0.3208865523338318,
   "iou": 0.4823814649442691,
   "pair_in_crop": true,
   "rec_hoje": 0.02275960170697013,
   "rec_zoom": 0.5133949191685913,
   "pur_hoje": 0.008068234209313048,
-  "pur_zoom": 0.9790794979079498
+  "pur_zoom": 0.9790794979079498,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0006747638326585695
  },
  {
   "key": "paulista23-master2_003508",
+  "slug": "paulista23-master2",
   "h": 0.3258059620857239,
   "iou": 0.43518146863646984,
   "pair_in_crop": true,
   "rec_hoje": 0.0152046783625731,
   "rec_zoom": 0.4988982739625413,
   "pur_hoje": 0.011743681388817973,
-  "pur_zoom": 0.9717453505007153
+  "pur_zoom": 0.9717453505007153,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003568",
+  "slug": "paulista23-master2",
   "h": 0.34601470828056335,
   "iou": 0.08974805267487078,
   "pair_in_crop": false,
   "rec_hoje": 0.026607538802660754,
   "rec_zoom": 0.0463208046585495,
   "pur_hoje": 0.025559105431309903,
-  "pur_zoom": 0.6011856329187493
+  "pur_zoom": 0.6011856329187493,
+  "split_hoje": 0.05,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003641",
+  "slug": "paulista23-master2",
   "h": 0.3355710506439209,
   "iou": 0.23035772951597952,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.08605495075168482,
   "pur_hoje": 0.021739130434782608,
-  "pur_zoom": 0.2844278697471348
+  "pur_zoom": 0.2844278697471348,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003765",
+  "slug": "paulista23-master2",
   "h": 0.3217417895793915,
   "iou": 0.1930853755594036,
   "pair_in_crop": true,
   "rec_hoje": 0.05135658914728682,
   "rec_zoom": 0.11527062860708158,
   "pur_hoje": 0.3258620689655172,
-  "pur_zoom": 0.5114571092831962
+  "pur_zoom": 0.5114571092831962,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_003889",
+  "slug": "paulista23-master2",
   "h": 0.3164379596710205,
   "iou": 0.05904203869226795,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.07139265962795374,
   "pur_hoje": 0.03925233644859813,
-  "pur_zoom": 0.17810137216465977
+  "pur_zoom": 0.17810137216465977,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_004013",
+  "slug": "paulista23-master2",
   "h": 0.31767362356185913,
   "iou": 0.39585368674254917,
   "pair_in_crop": true,
   "rec_hoje": 0.0018148820326678765,
   "rec_zoom": 0.5146334395827297,
   "pur_hoje": 0.0007955449482895784,
-  "pur_zoom": 0.9876406567054049
+  "pur_zoom": 0.9876406567054049,
+  "split_hoje": 0.3333333333333333,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_004137",
+  "slug": "paulista23-master2",
   "h": 0.31402426958084106,
   "iou": 0.07345692055190989,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.016971279373368148,
   "pur_hoje": 0.4451754385964912,
-  "pur_zoom": 0.2502700756211739
+  "pur_zoom": 0.2502700756211739,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_004261",
+  "slug": "paulista23-master2",
   "h": 0.5956847071647644,
   "iou": 0.15950164534225247,
   "pair_in_crop": true,
   "rec_hoje": 0.604330364938013,
   "rec_zoom": 0.5571740102885261,
   "pur_hoje": 0.9859345415201515,
-  "pur_zoom": 0.9426706399886476
+  "pur_zoom": 0.9426706399886476,
+  "split_hoje": 0.0,
+  "split_zoom": 0.021626775051432585
  },
  {
   "key": "paulista23-master2_004385",
+  "slug": "paulista23-master2",
   "h": 0.5363055467605591,
   "iou": 0.2422629757427255,
   "pair_in_crop": false,
   "rec_hoje": 0.5969433090456726,
   "rec_zoom": 0.6674791533033996,
   "pur_hoje": 0.9563147577709326,
-  "pur_zoom": 0.9585688240656336
+  "pur_zoom": 0.9585688240656336,
+  "split_hoje": 0.0,
+  "split_zoom": 0.06265615990774553
  },
  {
   "key": "paulista23-master2_004509",
+  "slug": "paulista23-master2",
   "h": 0.5151033401489258,
   "iou": 0.25468083932345875,
   "pair_in_crop": false,
   "rec_hoje": 0.5790910864053053,
   "rec_zoom": 0.595734126984127,
   "pur_hoje": 0.9765089722675367,
-  "pur_zoom": 0.9847490980649394
+  "pur_zoom": 0.9847490980649394,
+  "split_hoje": 0.0,
+  "split_zoom": 0.04457396613932834
  },
  {
   "key": "paulista23-master2_004633",
+  "slug": "paulista23-master2",
   "h": 0.6068843603134155,
   "iou": 0.6974913022968013,
   "pair_in_crop": false,
   "rec_hoje": 0.34158368895211,
   "rec_zoom": 0.4615959595959596,
   "pur_hoje": 0.9986817822304245,
-  "pur_zoom": 0.9958670495083964
+  "pur_zoom": 0.9958670495083964,
+  "split_hoje": 0.0,
+  "split_zoom": 0.08311085824324915
  },
  {
   "key": "paulista23-master2_004757",
+  "slug": "paulista23-master2",
   "h": 0.49146515130996704,
   "iou": 0.0,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.994413407821229,
-  "pur_zoom": 0.4254303486185448
+  "pur_zoom": 0.4254303486185448,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_004978",
+  "slug": "paulista23-master2",
   "h": 0.48752379417419434,
   "iou": 0.20965237029814177,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.00012755102040816328,
   "pur_hoje": 0.9855915766140205,
-  "pur_zoom": 0.7245739417262232
+  "pur_zoom": 0.7245739417262232,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_005037",
+  "slug": "paulista23-master2",
   "h": 0.47159627079963684,
   "iou": 0.23029938312236758,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.9538896746817539,
-  "pur_zoom": 0.5242519174678621
+  "pur_zoom": 0.5242519174678621,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_005097",
+  "slug": "paulista23-master2",
   "h": 0.44577866792678833,
   "iou": 0.11733143203670746,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.21450980392156863,
   "pur_hoje": 0.9620253164556962,
-  "pur_zoom": 0.29282634261074086
+  "pur_zoom": 0.29282634261074086,
+  "split_hoje": NaN,
+  "split_zoom": 0.02681291895185862
  },
  {
   "key": "paulista23-master2_005157",
+  "slug": "paulista23-master2",
   "h": 0.45713603496551514,
   "iou": 0.1635291382450609,
   "pair_in_crop": true,
   "rec_hoje": 0.3307291666666667,
   "rec_zoom": 0.5183112777327029,
   "pur_hoje": 0.9461862423958821,
-  "pur_zoom": 0.9737171464330413
+  "pur_zoom": 0.9737171464330413,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0985102018784411
  },
  {
   "key": "paulista23-master2_005217",
+  "slug": "paulista23-master2",
   "h": 0.37875843048095703,
   "iou": 0.1672394850871441,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.9889101338432122,
-  "pur_zoom": 0.0
+  "pur_zoom": 0.0,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_005277",
+  "slug": "paulista23-master2",
   "h": 0.45283469557762146,
   "iou": 0.41101575082994907,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.0,
   "pur_hoje": 0.98458304134548,
-  "pur_zoom": 0.14008169771844176
+  "pur_zoom": 0.14008169771844176,
+  "split_hoje": NaN,
+  "split_zoom": NaN
  },
  {
   "key": "paulista23-master2_005397",
+  "slug": "paulista23-master2",
   "h": 0.46935153007507324,
   "iou": 0.5363044674451363,
   "pair_in_crop": true,
   "rec_hoje": 0.4768035969752708,
   "rec_zoom": 0.44483640247257195,
   "pur_hoje": 0.9981994958588405,
-  "pur_zoom": 0.9627933241310076
+  "pur_zoom": 0.9627933241310076,
+  "split_hoje": 0.0,
+  "split_zoom": 0.033975991269552565
  },
  {
   "key": "paulista23-master2_005517",
+  "slug": "paulista23-master2",
   "h": 0.44281500577926636,
   "iou": 0.478048826131116,
   "pair_in_crop": true,
   "rec_hoje": 0.3105730184990224,
   "rec_zoom": 0.49211137446431563,
   "pur_hoje": 0.9995159728944821,
-  "pur_zoom": 0.9984153616703952
+  "pur_zoom": 0.9984153616703952,
+  "split_hoje": 0.006779661016949152,
+  "split_zoom": 0.2978350766236925
  },
  {
   "key": "paulista23-master2_005600",
+  "slug": "paulista23-master2",
   "h": 0.5100628137588501,
   "iou": 0.6768090114538662,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.21,
   "pur_hoje": 0.9952913478516775,
-  "pur_zoom": 0.5318918918918919
+  "pur_zoom": 0.5318918918918919,
+  "split_hoje": NaN,
+  "split_zoom": 0.013802622498274672
  },
  {
   "key": "paulista23-master2_005660",
+  "slug": "paulista23-master2",
   "h": 0.6019221544265747,
   "iou": 0.20391868026495175,
   "pair_in_crop": false,
   "rec_hoje": 0.13172450709251493,
   "rec_zoom": 0.36227430555555556,
   "pur_hoje": 1.0,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.10667118184896715,
+  "split_zoom": 0.40719796808357694
  },
  {
   "key": "paulista23-master2_005720",
+  "slug": "paulista23-master2",
   "h": 0.4653826951980591,
   "iou": 0.28298587030584155,
   "pair_in_crop": true,
   "rec_hoje": 0.16358543417366947,
   "rec_zoom": 0.3580508474576271,
   "pur_hoje": 0.9982181040627227,
-  "pur_zoom": 0.7989351348256712
+  "pur_zoom": 0.7989351348256712,
+  "split_hoje": 0.003424657534246575,
+  "split_zoom": 0.11872088631499433
  },
  {
   "key": "paulista23-master2_005780",
+  "slug": "paulista23-master2",
   "h": 0.44045591354370117,
   "iou": 0.4155550348649933,
   "pair_in_crop": true,
   "rec_hoje": 0.48857349049795523,
   "rec_zoom": 0.6238892490751687,
   "pur_hoje": 1.0,
-  "pur_zoom": 0.9767854264065775
+  "pur_zoom": 0.9767854264065775,
+  "split_hoje": 0.002461841457410143,
+  "split_zoom": 0.09150926095727123
  },
  {
   "key": "paulista23-master2_005900",
+  "slug": "paulista23-master2",
   "h": 0.3930045962333679,
   "iou": 0.6246763134449012,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.2178152215070049,
   "pur_hoje": 0.9869494290375204,
-  "pur_zoom": 0.24219101813566954
+  "pur_zoom": 0.24219101813566954,
+  "split_hoje": NaN,
+  "split_zoom": 0.20860495436766624
  },
  {
   "key": "paulista23-master2_005960",
+  "slug": "paulista23-master2",
   "h": 0.42513489723205566,
   "iou": 0.17611002327297104,
   "pair_in_crop": false,
   "rec_hoje": 0.3249446027223805,
   "rec_zoom": 0.4772483408178675,
   "pur_hoje": 0.994816414686825,
-  "pur_zoom": 0.8657883686752047
+  "pur_zoom": 0.8657883686752047,
+  "split_hoje": 0.0058451047247929854,
+  "split_zoom": 0.16412690482138395
  },
  {
   "key": "paulista23-master2_006019",
+  "slug": "paulista23-master2",
   "h": 0.369493305683136,
   "iou": 0.05876904924909265,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.06189086231633108,
   "pur_hoje": 0.9665859564164649,
-  "pur_zoom": 0.24250945408707456
+  "pur_zoom": 0.24250945408707456,
+  "split_hoje": NaN,
+  "split_zoom": 0.3205435651478817
  },
  {
   "key": "paulista23-master2_006079",
+  "slug": "paulista23-master2",
   "h": 0.46698862314224243,
   "iou": 0.16172561153821588,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.08944206008583691,
   "pur_hoje": 0.9904963041182682,
-  "pur_zoom": 0.08372167764743693
+  "pur_zoom": 0.08372167764743693,
+  "split_hoje": NaN,
+  "split_zoom": 0.023032629558541268
  },
  {
   "key": "paulista23-master2_006139",
+  "slug": "paulista23-master2",
   "h": 0.4268333315849304,
   "iou": 0.10184862552465034,
   "pair_in_crop": true,
   "rec_hoje": 0.1620926243567753,
   "rec_zoom": 0.23526669153301008,
   "pur_hoje": 0.9442622950819672,
-  "pur_zoom": 0.7266600594648166
+  "pur_zoom": 0.7266600594648166,
+  "split_hoje": 0.02821869488536155,
+  "split_zoom": 0.10245739199365834
  },
  {
   "key": "paulista23-master2_006214",
+  "slug": "paulista23-master2",
   "h": 0.3774651288986206,
   "iou": 0.038516065893224156,
   "pair_in_crop": true,
   "rec_hoje": 0.00918762088974855,
   "rec_zoom": 0.2743307578240849,
   "pur_hoje": 0.8959760273972602,
-  "pur_zoom": 0.7179010432806529
+  "pur_zoom": 0.7179010432806529,
+  "split_hoje": 0.0,
+  "split_zoom": 0.110099573257468
  },
  {
   "key": "paulista23-master2_006305",
+  "slug": "paulista23-master2",
   "h": 0.40917134284973145,
   "iou": 0.6438522795606942,
   "pair_in_crop": true,
   "rec_hoje": 0.5612529928172386,
   "rec_zoom": 0.5902041336263176,
   "pur_hoje": 0.9889913716155906,
-  "pur_zoom": 0.9568115804009333
+  "pur_zoom": 0.9568115804009333,
+  "split_hoje": 0.025595449697831497,
+  "split_zoom": 0.0906491123941078
  },
  {
   "key": "paulista23-master2_006365",
+  "slug": "paulista23-master2",
   "h": 0.3912496864795685,
   "iou": 0.6311030986928795,
   "pair_in_crop": true,
   "rec_hoje": 0.5314349112426036,
   "rec_zoom": 0.5982055027275166,
   "pur_hoje": 0.993439550140581,
-  "pur_zoom": 0.9765842102865473
+  "pur_zoom": 0.9765842102865473,
+  "split_hoje": 0.03688239387613083,
+  "split_zoom": 0.15836157065975684
  },
  {
   "key": "paulista23-master2_006425",
+  "slug": "paulista23-master2",
   "h": 0.37082892656326294,
   "iou": 0.5586482021247341,
   "pair_in_crop": true,
   "rec_hoje": 0.5208056241687251,
   "rec_zoom": 0.5115415950031683,
   "pur_hoje": 0.9908747640025173,
-  "pur_zoom": 0.9536640777724943
+  "pur_zoom": 0.9536640777724943,
+  "split_hoje": 0.029186428310835462,
+  "split_zoom": 0.07709549932165398
  },
  {
   "key": "paulista23-master2_006634",
+  "slug": "paulista23-master2",
   "h": 0.5578028559684753,
   "iou": 0.1947693061220403,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.17610308473252637,
   "pur_hoje": 0.2985664854176965,
-  "pur_zoom": 0.1760756501182033
+  "pur_zoom": 0.1760756501182033,
+  "split_hoje": NaN,
+  "split_zoom": 0.42350332594235035
  },
  {
   "key": "paulista23-master2_006694",
+  "slug": "paulista23-master2",
   "h": 0.4822937548160553,
   "iou": 0.6153113564704198,
   "pair_in_crop": true,
   "rec_hoje": 0.20094829532625874,
   "rec_zoom": 0.4326171875,
   "pur_hoje": 0.935672514619883,
-  "pur_zoom": 0.9966168593177333
+  "pur_zoom": 0.9966168593177333,
+  "split_hoje": 0.20674157303370785,
+  "split_zoom": 0.25022991388679877
  },
  {
   "key": "paulista23-master2_006754",
+  "slug": "paulista23-master2",
   "h": 0.4809300899505615,
   "iou": 0.14686632971531458,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.2670019342359768,
   "pur_hoje": 0.8348837209302326,
-  "pur_zoom": 0.5958521384053299
+  "pur_zoom": 0.5958521384053299,
+  "split_hoje": NaN,
+  "split_zoom": 0.372355838887279
  },
  {
   "key": "paulista23-master2_006814",
+  "slug": "paulista23-master2",
   "h": 0.5046835541725159,
   "iou": 0.10600962449766828,
   "pair_in_crop": false,
   "rec_hoje": 0.000725689404934688,
   "rec_zoom": 0.1830339051735783,
   "pur_hoje": 0.49616858237547895,
-  "pur_zoom": 0.6132992327365729
+  "pur_zoom": 0.6132992327365729,
+  "split_hoje": 0.0,
+  "split_zoom": 0.4445264452644526
  },
  {
   "key": "paulista23-master2_006873",
+  "slug": "paulista23-master2",
   "h": 0.5391832590103149,
   "iou": 0.5039375515368469,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.2515090543259557,
   "pur_hoje": 0.6669491525423729,
-  "pur_zoom": 0.4424663482414242
+  "pur_zoom": 0.4424663482414242,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_006933",
+  "slug": "paulista23-master2",
   "h": 0.544471263885498,
   "iou": 0.2855840078841614,
   "pair_in_crop": false,
   "rec_hoje": 0.025054171180931745,
   "rec_zoom": 0.2825862957238537,
   "pur_hoje": 0.6738305941845765,
-  "pur_zoom": 0.7400524068322981
+  "pur_zoom": 0.7400524068322981,
+  "split_hoje": 0.372972972972973,
+  "split_zoom": 0.4542258106524287
  },
  {
   "key": "paulista23-master2_006993",
+  "slug": "paulista23-master2",
   "h": 0.5543214678764343,
   "iou": 0.2717515290234859,
   "pair_in_crop": false,
   "rec_hoje": 0.012984956452889945,
   "rec_zoom": 0.2324023318541721,
   "pur_hoje": 0.326510234648028,
-  "pur_zoom": 0.686984332993418
+  "pur_zoom": 0.686984332993418,
+  "split_hoje": 0.0,
+  "split_zoom": 0.40864844627480346
  },
  {
   "key": "paulista23-master2_007053",
+  "slug": "paulista23-master2",
   "h": 0.4684007167816162,
   "iou": 0.5436668244093622,
   "pair_in_crop": true,
   "rec_hoje": 0.02333860759493671,
   "rec_zoom": 0.3495716660273622,
   "pur_hoje": 0.6050269299820467,
-  "pur_zoom": 0.836205281887994
+  "pur_zoom": 0.836205281887994,
+  "split_hoje": 0.13559322033898305,
+  "split_zoom": 0.2020848573518654
  },
  {
   "key": "paulista23-master2_007150",
+  "slug": "paulista23-master2",
   "h": 0.3749472200870514,
   "iou": 0.28885239434878274,
   "pair_in_crop": false,
   "rec_hoje": 0.010213143872113677,
   "rec_zoom": 0.1986543313708999,
   "pur_hoje": 0.930835734870317,
-  "pur_zoom": 0.7228224623182606
+  "pur_zoom": 0.7228224623182606,
+  "split_hoje": 0.34782608695652173,
+  "split_zoom": 0.4449618966977138
  },
  {
   "key": "paulista23-master2_007210",
+  "slug": "paulista23-master2",
   "h": 0.4048369228839874,
   "iou": 0.651564603362241,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.2912285372021829,
   "pur_hoje": 0.9724770642201835,
-  "pur_zoom": 0.9884262526464361
+  "pur_zoom": 0.9884262526464361,
+  "split_hoje": NaN,
+  "split_zoom": 0.26508226691042047
  },
  {
   "key": "paulista23-master2_007270",
+  "slug": "paulista23-master2",
   "h": 0.5028635859489441,
   "iou": 0.3843024213905007,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.1553491044919069,
   "pur_hoje": 0.002181500872600349,
-  "pur_zoom": 0.49047094030555993
+  "pur_zoom": 0.49047094030555993,
+  "split_hoje": NaN,
+  "split_zoom": 0.43896424167694204
  },
  {
   "key": "paulista23-master2_007330",
+  "slug": "paulista23-master2",
   "h": 0.4686075448989868,
   "iou": 0.6826615184698371,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.19782608695652174,
   "pur_hoje": 0.0,
-  "pur_zoom": 0.7544993662864385
+  "pur_zoom": 0.7544993662864385,
+  "split_hoje": NaN,
+  "split_zoom": 0.38245361196180866
  },
  {
   "key": "paulista23-master2_007554",
+  "slug": "paulista23-master2",
   "h": 0.6114639639854431,
   "iou": 0.27600358732621877,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.23353057199211044,
   "pur_hoje": 0.3816442239546421,
-  "pur_zoom": 0.6734835088798339
+  "pur_zoom": 0.6734835088798339,
+  "split_hoje": NaN,
+  "split_zoom": 0.2040165165165165
  },
  {
   "key": "paulista23-master2_007662",
+  "slug": "paulista23-master2",
   "h": 0.5852095484733582,
   "iou": 0.2648882610187066,
   "pair_in_crop": true,
   "rec_hoje": 0.0011947431302270011,
   "rec_zoom": 0.1857599699021821,
   "pur_hoje": 0.7175324675324676,
-  "pur_zoom": 0.646895341183354
+  "pur_zoom": 0.646895341183354,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0810126582278481
  },
  {
   "key": "paulista23-master2_007735",
+  "slug": "paulista23-master2",
   "h": 0.4386805295944214,
   "iou": 0.16031759911245505,
   "pair_in_crop": true,
   "rec_hoje": 0.0044365572315882874,
   "rec_zoom": 0.021,
   "pur_hoje": 0.9551362683438155,
-  "pur_zoom": 0.8945872801082544
+  "pur_zoom": 0.8945872801082544,
+  "split_hoje": 0.0,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_007865",
+  "slug": "paulista23-master2",
   "h": 0.4862971305847168,
   "iou": 0.17411861517530416,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.3370920895267384,
   "pur_hoje": 0.9984059511158342,
-  "pur_zoom": 0.6402615044999151
+  "pur_zoom": 0.6402615044999151,
+  "split_hoje": NaN,
+  "split_zoom": 0.0067578982936306806
  },
  {
   "key": "paulista23-master2_007956",
+  "slug": "paulista23-master2",
   "h": 0.48950624465942383,
   "iou": 0.31475693497940316,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.03653179190751445,
   "pur_hoje": 0.9765807962529274,
-  "pur_zoom": 0.3773542600896861
+  "pur_zoom": 0.3773542600896861,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "paulista23-master2_008023",
+  "slug": "paulista23-master2",
   "h": 0.4784708619117737,
   "iou": 0.16187906581870282,
   "pair_in_crop": false,
   "rec_hoje": 0.01113811259619279,
   "rec_zoom": 0.45016055659620013,
   "pur_hoje": 0.8970005659309565,
-  "pur_zoom": 0.8632637376713206
+  "pur_zoom": 0.8632637376713206,
+  "split_hoje": 0.0,
+  "split_zoom": 0.11272105810670233
  },
  {
   "key": "paulista23-master2_008083",
+  "slug": "paulista23-master2",
   "h": 0.43059051036834717,
   "iou": 0.3586508549630035,
   "pair_in_crop": true,
   "rec_hoje": 0.32333051563820797,
   "rec_zoom": 0.4717291918784456,
   "pur_hoje": 0.9807692307692307,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.0,
+  "split_zoom": 0.04838594740967719
  },
  {
   "key": "paulista23-master2_008226",
+  "slug": "paulista23-master2",
   "h": 0.46384668350219727,
   "iou": 0.24504929030653613,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.41994884910485936,
   "pur_hoje": 0.9918941979522184,
-  "pur_zoom": 0.7020316027088036
+  "pur_zoom": 0.7020316027088036,
+  "split_hoje": NaN,
+  "split_zoom": 0.02466504263093788
  },
  {
   "key": "paulista23-master2_008286",
+  "slug": "paulista23-master2",
   "h": 0.432620644569397,
   "iou": 0.18698192352850262,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.3007572172266919,
   "pur_hoje": 0.5212489158716392,
-  "pur_zoom": 0.6308771929824561
+  "pur_zoom": 0.6308771929824561,
+  "split_hoje": NaN,
+  "split_zoom": 0.022029897718332022
  },
  {
   "key": "paulista23-master2_008482",
+  "slug": "paulista23-master2",
   "h": 0.35881829261779785,
   "iou": 0.181396860363501,
   "pair_in_crop": true,
   "rec_hoje": 0.08192090395480225,
   "rec_zoom": 0.594850094534978,
   "pur_hoje": 0.8724584103512015,
-  "pur_zoom": 0.9191499016790198
+  "pur_zoom": 0.9191499016790198,
+  "split_hoje": 0.14482758620689656,
+  "split_zoom": 0.43423641592250645
  },
  {
   "key": "paulista23-master2_008606",
+  "slug": "paulista23-master2",
   "h": 0.3553994297981262,
   "iou": 0.08385380315793835,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.13675018982536066,
   "pur_hoje": 0.8609022556390977,
-  "pur_zoom": 0.4297698673619771
+  "pur_zoom": 0.4297698673619771,
+  "split_hoje": NaN,
+  "split_zoom": 0.00277623542476402
  },
  {
   "key": "paulista23-master2_008730",
+  "slug": "paulista23-master2",
   "h": 0.3545452356338501,
   "iou": 0.17206805219313323,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.16550034989503148,
   "pur_hoje": 0.7932816537467701,
-  "pur_zoom": 0.6470320327918627
+  "pur_zoom": 0.6470320327918627,
+  "split_hoje": NaN,
+  "split_zoom": 0.2512332628611698
  },
  {
   "key": "paulista23-master2_008854",
+  "slug": "paulista23-master2",
   "h": 0.4162778854370117,
   "iou": 0.285158473124013,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.28637634838194165,
   "pur_hoje": 0.9558154645873944,
-  "pur_zoom": 0.8729864003613188
+  "pur_zoom": 0.8729864003613188,
+  "split_hoje": NaN,
+  "split_zoom": 0.4087611607142857
  },
  {
   "key": "paulista23-master2_008978",
+  "slug": "paulista23-master2",
   "h": 0.3767753839492798,
   "iou": 0.12382826740170469,
   "pair_in_crop": true,
   "rec_hoje": 0.035588752196836555,
   "rec_zoom": 0.46071179344033497,
   "pur_hoje": 0.9365021770682148,
-  "pur_zoom": 0.9206221865668316
+  "pur_zoom": 0.9206221865668316,
+  "split_hoje": 0.0,
+  "split_zoom": 0.08043017267494698
  },
  {
   "key": "paulista23-master2_009102",
+  "slug": "paulista23-master2",
   "h": 0.30465081334114075,
   "iou": 0.07661455045760827,
   "pair_in_crop": true,
   "rec_hoje": 0.1442663378545006,
   "rec_zoom": 0.6481925304573597,
   "pur_hoje": 0.9983649444081099,
-  "pur_zoom": 0.8747237523501665
+  "pur_zoom": 0.8747237523501665,
+  "split_hoje": 0.26495726495726496,
+  "split_zoom": 0.05915883531042983
  },
  {
   "key": "paulista23-master2_009226",
+  "slug": "paulista23-master2",
   "h": 0.5147040486335754,
   "iou": 0.6768386645478239,
   "pair_in_crop": true,
   "rec_hoje": 0.008744038155802861,
   "rec_zoom": 0.380440414507772,
   "pur_hoje": 0.7404483738553836,
-  "pur_zoom": 0.9936473504803223
+  "pur_zoom": 0.9936473504803223,
+  "split_hoje": 0.0,
+  "split_zoom": 0.34048348655090227
  },
  {
   "key": "paulista23-master2_009350",
+  "slug": "paulista23-master2",
   "h": 0.3748455345630646,
   "iou": 0.31782694822172824,
   "pair_in_crop": true,
   "rec_hoje": 0.26838854576080856,
   "rec_zoom": 0.5729203855765798,
   "pur_hoje": 0.3194819212088505,
-  "pur_zoom": 0.7885039054676547
+  "pur_zoom": 0.7885039054676547,
+  "split_hoje": 0.04811715481171548,
+  "split_zoom": 0.26655242249571587
  },
  {
   "key": "paulista23-master2_009474",
+  "slug": "paulista23-master2",
   "h": 0.383346289396286,
   "iou": 0.14940947340555086,
   "pair_in_crop": true,
   "rec_hoje": 0.046153846153846156,
   "rec_zoom": 0.31657158020432535,
   "pur_hoje": 0.5681142177275431,
-  "pur_zoom": 0.829108124618204
+  "pur_zoom": 0.829108124618204,
+  "split_hoje": 0.02702702702702703,
+  "split_zoom": 0.29777870913663035
  },
  {
   "key": "paulista23-master2_009599",
+  "slug": "paulista23-master2",
   "h": 0.39997047185897827,
   "iou": 0.3018934234808953,
   "pair_in_crop": true,
   "rec_hoje": 0.023906408952187184,
   "rec_zoom": 0.30895303326810175,
   "pur_hoje": 0.8489405331510594,
-  "pur_zoom": 0.9329300368227249
+  "pur_zoom": 0.9329300368227249,
+  "split_hoje": 0.19148936170212766,
+  "split_zoom": 0.316970176827659
  },
  {
   "key": "paulista23-master2_009657",
+  "slug": "paulista23-master2",
   "h": 0.4346352517604828,
   "iou": 0.08284918568704068,
   "pair_in_crop": false,
   "rec_hoje": 0.20401742497579864,
   "rec_zoom": 0.42752343431598966,
   "pur_hoje": 0.6224340175953079,
-  "pur_zoom": 0.9390254130671811
+  "pur_zoom": 0.9390254130671811,
+  "split_hoje": 0.2372479240806643,
+  "split_zoom": 0.17551106874271794
  },
  {
   "key": "paulista23-master2_006535",
+  "slug": "paulista23-master2",
   "h": 0.43764427304267883,
   "iou": 0.1870668446189194,
   "pair_in_crop": false,
   "rec_hoje": 0.004879000780640125,
   "rec_zoom": 0.11204353786714304,
   "pur_hoje": 0.8934274043817304,
-  "pur_zoom": 0.9860662486541263
+  "pur_zoom": 0.9860662486541263,
+  "split_hoje": 0.0,
+  "split_zoom": 0.06451612903225806
  },
  {
   "key": "paulista23-master2_007795",
+  "slug": "paulista23-master2",
   "h": 0.4531708359718323,
   "iou": 0.35287097971061376,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.3576086956521739,
   "pur_hoje": 0.9959899749373433,
-  "pur_zoom": 0.7035702218718324
+  "pur_zoom": 0.7035702218718324,
+  "split_hoje": NaN,
+  "split_zoom": 0.49523809523809526
  },
  {
   "key": "paulista23-master2_009717",
+  "slug": "paulista23-master2",
   "h": 0.43534135818481445,
   "iou": 0.15171804726860996,
   "pair_in_crop": true,
   "rec_hoje": 0.4866197183098592,
   "rec_zoom": 0.475234418091561,
   "pur_hoje": 0.7615615615615615,
-  "pur_zoom": 0.7912973408541499
+  "pur_zoom": 0.7912973408541499,
+  "split_hoje": 0.25470332850940663,
+  "split_zoom": 0.3010677808727948
  },
  {
   "key": "paulista23-master2_009777",
+  "slug": "paulista23-master2",
   "h": 0.45655959844589233,
   "iou": 0.26147501889174585,
   "pair_in_crop": false,
   "rec_hoje": 0.18978782933084634,
   "rec_zoom": 0.45336024438140954,
   "pur_hoje": 0.6661490683229814,
-  "pur_zoom": 0.9778849547112104
+  "pur_zoom": 0.9778849547112104,
+  "split_hoje": 0.4692874692874693,
+  "split_zoom": 0.10877150764047648
  },
  {
   "key": "paulista23-master2_009837",
+  "slug": "paulista23-master2",
   "h": 0.4504176378250122,
   "iou": 0.1955167584580352,
   "pair_in_crop": false,
   "rec_hoje": 0.34549356223175964,
   "rec_zoom": 0.4964007421150278,
   "pur_hoje": 0.8105482303955587,
-  "pur_zoom": 0.7519066846119336
+  "pur_zoom": 0.7519066846119336,
+  "split_hoje": 0.2422360248447205,
+  "split_zoom": 0.03378681417252205
  },
  {
   "key": "paulista23-master2_009897",
+  "slug": "paulista23-master2",
   "h": 0.46271538734436035,
   "iou": 0.1448224896612216,
   "pair_in_crop": true,
   "rec_hoje": 0.0,
   "rec_zoom": 0.006422817330720662,
   "pur_hoje": 0.9103972950126796,
-  "pur_zoom": 0.13695899772209566
+  "pur_zoom": 0.13695899772209566,
+  "split_hoje": NaN,
+  "split_zoom": 0.0
  },
  {
   "key": "wardzinski-ferreira_000278",
+  "slug": "wardzinski-ferreira",
   "h": 0.7522900104522705,
   "iou": 0.2763916982693127,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.18754078225156412,
   "pur_hoje": 0.9680270082414855,
-  "pur_zoom": 0.9995908346972177
+  "pur_zoom": 0.9995908346972177,
+  "split_hoje": NaN,
+  "split_zoom": 0.4916086778550962
  },
  {
   "key": "wardzinski-ferreira_000417",
+  "slug": "wardzinski-ferreira",
   "h": 0.666160523891449,
   "iou": 0.06925050950756158,
   "pair_in_crop": false,
   "rec_hoje": 0.0,
   "rec_zoom": 0.06398814318394175,
   "pur_hoje": 0.9036345912825512,
-  "pur_zoom": 0.36574585635359114
+  "pur_zoom": 0.36574585635359114,
+  "split_hoje": NaN,
+  "split_zoom": 0.011077542799597181
  },
  {
   "key": "wardzinski-ferreira_001159",
+  "slug": "wardzinski-ferreira",
   "h": 0.6415426135063171,
   "iou": 0.044878289061761806,
   "pair_in_crop": false,
   "rec_hoje": 0.2113564668769716,
   "rec_zoom": 0.5109548611111111,
   "pur_hoje": 0.908800613105122,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.0,
+  "split_zoom": 0.3649892969997622
  },
  {
   "key": "wardzinski-ferreira_001288",
+  "slug": "wardzinski-ferreira",
   "h": 0.5153748989105225,
   "iou": 0.2753217636016757,
   "pair_in_crop": true,
   "rec_hoje": 0.7151898734177216,
   "rec_zoom": 0.5737890768925545,
   "pur_hoje": 0.714185393258427,
-  "pur_zoom": 0.9776887043028928
+  "pur_zoom": 0.9776887043028928,
+  "split_hoje": 0.46804326450344147,
+  "split_zoom": 0.34828352679673996
  },
  {
   "key": "wardzinski-ferreira_001509",
+  "slug": "wardzinski-ferreira",
   "h": 0.45025086402893066,
   "iou": 0.12873092924664775,
   "pair_in_crop": false,
   "rec_hoje": 0.6573078454798885,
   "rec_zoom": 0.3705068143100511,
   "pur_hoje": 0.3827690166975881,
-  "pur_zoom": 0.7253512319172886
+  "pur_zoom": 0.7253512319172886,
+  "split_hoje": 0.45168130869433504,
+  "split_zoom": 0.18909132708776366
  },
  {
   "key": "wardzinski-ferreira_001790",
+  "slug": "wardzinski-ferreira",
   "h": 0.770293116569519,
   "iou": 0.4864380507593621,
   "pair_in_crop": false,
   "rec_hoje": 0.6782911077993046,
   "rec_zoom": 0.5372685129001723,
   "pur_hoje": 0.7923630454967502,
-  "pur_zoom": 0.9995033187339143
+  "pur_zoom": 0.9995033187339143,
+  "split_hoje": 0.37058737366339534,
+  "split_zoom": 0.42686122153957357
  },
  {
   "key": "wardzinski-ferreira_001899",
+  "slug": "wardzinski-ferreira",
   "h": 0.7505022883415222,
   "iou": 0.395383714633944,
   "pair_in_crop": false,
   "rec_hoje": 0.5709514266628495,
   "rec_zoom": 0.4747497934074006,
   "pur_hoje": 0.7257399320718098,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.029249540364365702,
+  "split_zoom": 0.38874383521903105
  },
  {
   "key": "wardzinski-ferreira_002008",
+  "slug": "wardzinski-ferreira",
   "h": 0.6500483751296997,
   "iou": 0.1657106790801534,
   "pair_in_crop": false,
   "rec_hoje": 0.6744871794871795,
   "rec_zoom": 0.633921647693787,
   "pur_hoje": 0.6022636332456842,
-  "pur_zoom": 0.9980465888557895
+  "pur_zoom": 0.9980465888557895,
+  "split_hoje": 0.14616992967116518,
+  "split_zoom": 0.43416352693643884
  },
  {
   "key": "wardzinski-ferreira_002117",
+  "slug": "wardzinski-ferreira",
   "h": 0.36013489961624146,
   "iou": 0.16668413779968497,
   "pair_in_crop": false,
   "rec_hoje": 0.7603625216580034,
   "rec_zoom": 0.6885374120100808,
   "pur_hoje": 0.6123872906826965,
-  "pur_zoom": 0.9401922392310431
+  "pur_zoom": 0.9401922392310431,
+  "split_hoje": 0.2508326029798422,
+  "split_zoom": 0.4523118347427321
  },
  {
   "key": "wardzinski-ferreira_002400",
+  "slug": "wardzinski-ferreira",
   "h": 0.7186412811279297,
   "iou": 0.27656227409259154,
   "pair_in_crop": false,
   "rec_hoje": 0.5879017013232514,
   "rec_zoom": 0.43570140506424226,
   "pur_hoje": 0.7518360188534473,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.08857059339374451,
+  "split_zoom": 0.43220521664151756
  },
  {
   "key": "wardzinski-ferreira_003031",
+  "slug": "wardzinski-ferreira",
   "h": 0.765333354473114,
   "iou": 0.2941614748788848,
   "pair_in_crop": false,
   "rec_hoje": 0.5809539527974913,
   "rec_zoom": 0.49059924793983517,
   "pur_hoje": 0.794492720911861,
-  "pur_zoom": 1.0
+  "pur_zoom": 1.0,
+  "split_hoje": 0.12798295454545455,
+  "split_zoom": 0.4286937377690802
  },
  {
   "key": "wardzinski-ferreira_003663",
+  "slug": "wardzinski-ferreira",
   "h": 0.8927618265151978,
   "iou": 0.04395407534354,
   "pair_in_crop": false,
   "rec_hoje": 0.0421468554494567,
   "rec_zoom": 0.0,
   "pur_hoje": 0.5086741016109045,
-  "pur_zoom": 0.0
+  "pur_zoom": 0.0,
+  "split_hoje": 0.0,
+  "split_zoom": NaN
  }
 ]

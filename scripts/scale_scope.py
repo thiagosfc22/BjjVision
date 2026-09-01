@@ -231,7 +231,12 @@ def _score(pred, pairm, peoplem):
     fg = pred > 0
     rec = (fg & pairm).sum() / max(pairm.sum(), 1)
     pur = (fg & peoplem).sum() / fg.sum() if fg.sum() else np.nan
-    return float(rec), float(pur)
+    # identity inside the pair: share of the minority label. 0.5 = two athletes
+    # cleanly split, 0.0 = one blob wearing a single colour (fused).
+    a = ((pred == 1) & pairm).sum()
+    b = ((pred == 2) & pairm).sum()
+    split = min(a, b) / (a + b) if a + b else np.nan
+    return float(rec), float(pur), float(split)
 
 
 def phase_quant() -> None:
@@ -255,8 +260,10 @@ def phase_quant() -> None:
         sx, sy = SIZE[0] / (X1 - X0), SIZE[1] / (Y1 - Y0)
         rc = _score(cropped, rasterise(pair, sx, sy, (X0, Y0)),
                     rasterise(allb, sx, sy, (X0, Y0)))
-        rows.append(dict(key=key, h=SC[key]["top2"], iou=IOU[key], pair_in_crop=inside,
-                         rec_hoje=rf[0], rec_zoom=rc[0], pur_hoje=rf[1], pur_zoom=rc[1]))
+        rows.append(dict(key=key, slug=s["slug"], h=SC[key]["top2"], iou=IOU[key],
+                         pair_in_crop=inside, rec_hoje=rf[0], rec_zoom=rc[0],
+                         pur_hoje=rf[1], pur_zoom=rc[1],
+                         split_hoje=rf[2], split_zoom=rc[2]))
     (OUT / "zoom_quant.json").write_text(json.dumps(rows, indent=1))
 
     def show(sel, name):
@@ -265,7 +272,8 @@ def phase_quant() -> None:
             return
         f = lambda k: np.nanmean([r[k] for r in g])  # noqa: E731
         print(f"  {name:34s} n={len(g):3d}  recall_par {f('rec_hoje'):.3f} -> {f('rec_zoom'):.3f}"
-              f"   pureza {f('pur_hoje'):.3f} -> {f('pur_zoom'):.3f}")
+              f"   pureza {f('pur_hoje'):.3f} -> {f('pur_zoom'):.3f}"
+              f"   split {f('split_hoje'):.3f} -> {f('split_zoom'):.3f}")
 
     print(f"\n=== v4 hoje -> v4 no recorte {ZOOM}x  ({len(rows)} quadros) ===")
     print("  recall_par: fracao da caixa do par coberta pela mascara (a caixa tem fundo")
@@ -274,6 +282,13 @@ def phase_quant() -> None:
     show(lambda r: r["h"] < WIDE and not r["pair_in_crop"], "WIDE, par cortado (ROI errada)")
     show(lambda r: r["h"] >= WIDE and r["pair_in_crop"], "MEDIO, par inteiro no recorte")
     show(lambda r: r["h"] < WIDE and r["pair_in_crop"] and r["iou"] >= 0.25, "WIDE + par entrelacado")
+    print("\n  split: fracao da minoria dentro da caixa do par. 0.5 = dois atletas")
+    print("  separados, 0.0 = um blob so. A escala nao deveria mexer nisso.")
+    for slug in sorted({r["slug"] for r in rows}):
+        g = [r for r in rows if r["slug"] == slug and r["pair_in_crop"]]
+        if g:
+            print(f"    {slug:22s} n={len(g):3d}  split {np.nanmean([r['split_hoje'] for r in g]):.3f}"
+                  f" -> {np.nanmean([r['split_zoom'] for r in g]):.3f}")
     g = [r for r in rows if r["h"] < WIDE and r["pair_in_crop"]]
     print(f"\n  wide com ROI certa (n={len(g)}): zoom melhora recall em "
           f"{sum(r['rec_zoom'] > r['rec_hoje'] + 0.05 for r in g)}, "
