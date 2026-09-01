@@ -1,0 +1,466 @@
+{
+ "paulista23-master2_000000": {
+  "n_people": 12,
+  "top2": 0.38824379444122314
+ },
+ "paulista23-master2_000072": {
+  "n_people": 12,
+  "top2": 0.37528517842292786
+ },
+ "paulista23-master2_000132": {
+  "n_people": 12,
+  "top2": 0.38582634925842285
+ },
+ "paulista23-master2_000212": {
+  "n_people": 13,
+  "top2": 0.37171781063079834
+ },
+ "paulista23-master2_000272": {
+  "n_people": 15,
+  "top2": 0.41448312997817993
+ },
+ "paulista23-master2_000462": {
+  "n_people": 13,
+  "top2": 0.3706095218658447
+ },
+ "paulista23-master2_000540": {
+  "n_people": 16,
+  "top2": 0.3627558946609497
+ },
+ "paulista23-master2_000737": {
+  "n_people": 14,
+  "top2": 0.40288078784942627
+ },
+ "paulista23-master2_000953": {
+  "n_people": 15,
+  "top2": 0.3532910943031311
+ },
+ "paulista23-master2_001090": {
+  "n_people": 14,
+  "top2": 0.3553095757961273
+ },
+ "paulista23-master2_001154": {
+  "n_people": 16,
+  "top2": 0.3622908592224121
+ },
+ "paulista23-master2_001200": {
+  "n_people": 16,
+  "top2": 0.36128565669059753
+ },
+ "paulista23-master2_001324": {
+  "n_people": 16,
+  "top2": 0.38877952098846436
+ },
+ "paulista23-master2_001448": {
+  "n_people": 13,
+  "top2": 0.35064926743507385
+ },
+ "paulista23-master2_001572": {
+  "n_people": 13,
+  "top2": 0.34071773290634155
+ },
+ "paulista23-master2_001696": {
+  "n_people": 16,
+  "top2": 0.33219027519226074
+ },
+ "paulista23-master2_001820": {
+  "n_people": 18,
+  "top2": 0.32466012239456177
+ },
+ "paulista23-master2_001944": {
+  "n_people": 15,
+  "top2": 0.32426726818084717
+ },
+ "paulista23-master2_002068": {
+  "n_people": 17,
+  "top2": 0.33798256516456604
+ },
+ "paulista23-master2_002192": {
+  "n_people": 14,
+  "top2": 0.3242762088775635
+ },
+ "paulista23-master2_002316": {
+  "n_people": 13,
+  "top2": 0.3216207027435303
+ },
+ "paulista23-master2_002432": {
+  "n_people": 14,
+  "top2": 0.3308740258216858
+ },
+ "paulista23-master2_002492": {
+  "n_people": 11,
+  "top2": 0.33104681968688965
+ },
+ "paulista23-master2_002611": {
+  "n_people": 11,
+  "top2": 0.30630064010620117
+ },
+ "paulista23-master2_002677": {
+  "n_people": 12,
+  "top2": 0.3708544969558716
+ },
+ "paulista23-master2_002737": {
+  "n_people": 12,
+  "top2": 0.33772552013397217
+ },
+ "paulista23-master2_002857": {
+  "n_people": 14,
+  "top2": 0.30666494369506836
+ },
+ "paulista23-master2_002991": {
+  "n_people": 11,
+  "top2": 0.30182763934135437
+ },
+ "paulista23-master2_003208": {
+  "n_people": 12,
+  "top2": 0.2809944748878479
+ },
+ "paulista23-master2_003268": {
+  "n_people": 9,
+  "top2": 0.2764931321144104
+ },
+ "paulista23-master2_003328": {
+  "n_people": 10,
+  "top2": 0.2593483328819275
+ },
+ "paulista23-master2_003388": {
+  "n_people": 12,
+  "top2": 0.2856214940547943
+ },
+ "paulista23-master2_003448": {
+  "n_people": 13,
+  "top2": 0.3208865523338318
+ },
+ "paulista23-master2_003508": {
+  "n_people": 11,
+  "top2": 0.3258059620857239
+ },
+ "paulista23-master2_003568": {
+  "n_people": 13,
+  "top2": 0.34601470828056335
+ },
+ "paulista23-master2_003641": {
+  "n_people": 14,
+  "top2": 0.3355710506439209
+ },
+ "paulista23-master2_003765": {
+  "n_people": 12,
+  "top2": 0.3217417895793915
+ },
+ "paulista23-master2_003889": {
+  "n_people": 10,
+  "top2": 0.3164379596710205
+ },
+ "paulista23-master2_004013": {
+  "n_people": 14,
+  "top2": 0.31767362356185913
+ },
+ "paulista23-master2_004137": {
+  "n_people": 12,
+  "top2": 0.31402426958084106
+ },
+ "paulista23-master2_004261": {
+  "n_people": 11,
+  "top2": 0.5956847071647644
+ },
+ "paulista23-master2_004385": {
+  "n_people": 9,
+  "top2": 0.5363055467605591
+ },
+ "paulista23-master2_004509": {
+  "n_people": 7,
+  "top2": 0.5151033401489258
+ },
+ "paulista23-master2_004633": {
+  "n_people": 10,
+  "top2": 0.6068843603134155
+ },
+ "paulista23-master2_004757": {
+  "n_people": 6,
+  "top2": 0.49146515130996704
+ },
+ "paulista23-master2_004978": {
+  "n_people": 8,
+  "top2": 0.48752379417419434
+ },
+ "paulista23-master2_005037": {
+  "n_people": 8,
+  "top2": 0.47159627079963684
+ },
+ "paulista23-master2_005097": {
+  "n_people": 9,
+  "top2": 0.44577866792678833
+ },
+ "paulista23-master2_005157": {
+  "n_people": 10,
+  "top2": 0.45713603496551514
+ },
+ "paulista23-master2_005217": {
+  "n_people": 5,
+  "top2": 0.37875843048095703
+ },
+ "paulista23-master2_005277": {
+  "n_people": 11,
+  "top2": 0.45283469557762146
+ },
+ "paulista23-master2_005397": {
+  "n_people": 10,
+  "top2": 0.46935153007507324
+ },
+ "paulista23-master2_005517": {
+  "n_people": 9,
+  "top2": 0.44281500577926636
+ },
+ "paulista23-master2_005600": {
+  "n_people": 9,
+  "top2": 0.5100628137588501
+ },
+ "paulista23-master2_005660": {
+  "n_people": 10,
+  "top2": 0.6019221544265747
+ },
+ "paulista23-master2_005720": {
+  "n_people": 7,
+  "top2": 0.4653826951980591
+ },
+ "paulista23-master2_005780": {
+  "n_people": 9,
+  "top2": 0.44045591354370117
+ },
+ "paulista23-master2_005900": {
+  "n_people": 9,
+  "top2": 0.3930045962333679
+ },
+ "paulista23-master2_005960": {
+  "n_people": 8,
+  "top2": 0.42513489723205566
+ },
+ "paulista23-master2_006019": {
+  "n_people": 7,
+  "top2": 0.369493305683136
+ },
+ "paulista23-master2_006079": {
+  "n_people": 7,
+  "top2": 0.46698862314224243
+ },
+ "paulista23-master2_006139": {
+  "n_people": 6,
+  "top2": 0.4268333315849304
+ },
+ "paulista23-master2_006214": {
+  "n_people": 6,
+  "top2": 0.3774651288986206
+ },
+ "paulista23-master2_006305": {
+  "n_people": 9,
+  "top2": 0.40917134284973145
+ },
+ "paulista23-master2_006365": {
+  "n_people": 7,
+  "top2": 0.3912496864795685
+ },
+ "paulista23-master2_006425": {
+  "n_people": 7,
+  "top2": 0.37082892656326294
+ },
+ "paulista23-master2_006634": {
+  "n_people": 10,
+  "top2": 0.5578028559684753
+ },
+ "paulista23-master2_006694": {
+  "n_people": 10,
+  "top2": 0.4822937548160553
+ },
+ "paulista23-master2_006754": {
+  "n_people": 9,
+  "top2": 0.4809300899505615
+ },
+ "paulista23-master2_006814": {
+  "n_people": 8,
+  "top2": 0.5046835541725159
+ },
+ "paulista23-master2_006873": {
+  "n_people": 12,
+  "top2": 0.5391832590103149
+ },
+ "paulista23-master2_006933": {
+  "n_people": 10,
+  "top2": 0.544471263885498
+ },
+ "paulista23-master2_006993": {
+  "n_people": 10,
+  "top2": 0.5543214678764343
+ },
+ "paulista23-master2_007053": {
+  "n_people": 10,
+  "top2": 0.4684007167816162
+ },
+ "paulista23-master2_007150": {
+  "n_people": 7,
+  "top2": 0.3749472200870514
+ },
+ "paulista23-master2_007210": {
+  "n_people": 9,
+  "top2": 0.4048369228839874
+ },
+ "paulista23-master2_007270": {
+  "n_people": 8,
+  "top2": 0.5028635859489441
+ },
+ "paulista23-master2_007330": {
+  "n_people": 7,
+  "top2": 0.4686075448989868
+ },
+ "paulista23-master2_007554": {
+  "n_people": 9,
+  "top2": 0.6114639639854431
+ },
+ "paulista23-master2_007662": {
+  "n_people": 12,
+  "top2": 0.5852095484733582
+ },
+ "paulista23-master2_007735": {
+  "n_people": 10,
+  "top2": 0.4386805295944214
+ },
+ "paulista23-master2_007865": {
+  "n_people": 9,
+  "top2": 0.4862971305847168
+ },
+ "paulista23-master2_007956": {
+  "n_people": 9,
+  "top2": 0.48950624465942383
+ },
+ "paulista23-master2_008023": {
+  "n_people": 8,
+  "top2": 0.4784708619117737
+ },
+ "paulista23-master2_008083": {
+  "n_people": 10,
+  "top2": 0.43059051036834717
+ },
+ "paulista23-master2_008226": {
+  "n_people": 11,
+  "top2": 0.46384668350219727
+ },
+ "paulista23-master2_008286": {
+  "n_people": 10,
+  "top2": 0.432620644569397
+ },
+ "paulista23-master2_008482": {
+  "n_people": 10,
+  "top2": 0.35881829261779785
+ },
+ "paulista23-master2_008606": {
+  "n_people": 8,
+  "top2": 0.3553994297981262
+ },
+ "paulista23-master2_008730": {
+  "n_people": 9,
+  "top2": 0.3545452356338501
+ },
+ "paulista23-master2_008854": {
+  "n_people": 8,
+  "top2": 0.4162778854370117
+ },
+ "paulista23-master2_008978": {
+  "n_people": 8,
+  "top2": 0.3767753839492798
+ },
+ "paulista23-master2_009102": {
+  "n_people": 7,
+  "top2": 0.30465081334114075
+ },
+ "paulista23-master2_009226": {
+  "n_people": 14,
+  "top2": 0.5147040486335754
+ },
+ "paulista23-master2_009350": {
+  "n_people": 12,
+  "top2": 0.3748455345630646
+ },
+ "paulista23-master2_009474": {
+  "n_people": 13,
+  "top2": 0.383346289396286
+ },
+ "paulista23-master2_009599": {
+  "n_people": 13,
+  "top2": 0.39997047185897827
+ },
+ "paulista23-master2_009657": {
+  "n_people": 9,
+  "top2": 0.4346352517604828
+ },
+ "paulista23-master2_006535": {
+  "n_people": 7,
+  "top2": 0.43764427304267883
+ },
+ "paulista23-master2_007795": {
+  "n_people": 11,
+  "top2": 0.4531708359718323
+ },
+ "paulista23-master2_009717": {
+  "n_people": 11,
+  "top2": 0.43534135818481445
+ },
+ "paulista23-master2_009777": {
+  "n_people": 11,
+  "top2": 0.45655959844589233
+ },
+ "paulista23-master2_009837": {
+  "n_people": 10,
+  "top2": 0.4504176378250122
+ },
+ "paulista23-master2_009897": {
+  "n_people": 13,
+  "top2": 0.46271538734436035
+ },
+ "wardzinski-ferreira_000278": {
+  "n_people": 4,
+  "top2": 0.7522900104522705
+ },
+ "wardzinski-ferreira_000417": {
+  "n_people": 3,
+  "top2": 0.666160523891449
+ },
+ "wardzinski-ferreira_001159": {
+  "n_people": 5,
+  "top2": 0.6415426135063171
+ },
+ "wardzinski-ferreira_001288": {
+  "n_people": 10,
+  "top2": 0.5153748989105225
+ },
+ "wardzinski-ferreira_001509": {
+  "n_people": 2,
+  "top2": 0.45025086402893066
+ },
+ "wardzinski-ferreira_001790": {
+  "n_people": 6,
+  "top2": 0.770293116569519
+ },
+ "wardzinski-ferreira_001899": {
+  "n_people": 5,
+  "top2": 0.7505022883415222
+ },
+ "wardzinski-ferreira_002008": {
+  "n_people": 5,
+  "top2": 0.6500483751296997
+ },
+ "wardzinski-ferreira_002117": {
+  "n_people": 4,
+  "top2": 0.36013489961624146
+ },
+ "wardzinski-ferreira_002400": {
+  "n_people": 6,
+  "top2": 0.7186412811279297
+ },
+ "wardzinski-ferreira_003031": {
+  "n_people": 7,
+  "top2": 0.765333354473114
+ },
+ "wardzinski-ferreira_003663": {
+  "n_people": 6,
+  "top2": 0.8927618265151978
+ }
+}

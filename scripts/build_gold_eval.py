@@ -136,7 +136,7 @@ def phase_cards() -> None:
     print(f"total {len(samples)} cartoes -> {OUT}")
 
 
-def phase_judge() -> None:
+def phase_judge(only_slug: str | None = None) -> None:
     from bjjvision.llm_supervisor import MODEL, LlmSupervisor
     sup = LlmSupervisor({"llm": {"enabled": True, "model": MODEL,
                                  "max_calls_per_minute": 12}})
@@ -146,6 +146,9 @@ def phase_judge() -> None:
     vpath = OUT / "verdicts.json"
     verdicts = json.loads(vpath.read_text()) if vpath.exists() else {}
     todo = [s for s in samples if f"{s['slug']}_{s['frame']:06d}" not in verdicts]
+    if only_slug:
+        # paulista23 is settled (1 gold in 106): judging its leftovers buys nothing
+        todo = [s for s in todo if s["slug"] == only_slug]
     print(f"{len(todo)} cartoes a julgar ({len(verdicts)} ja julgados)", flush=True)
     for k, s in enumerate(todo):
         key = f"{s['slug']}_{s['frame']:06d}"
@@ -263,8 +266,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("phase", choices=["cards", "judge", "assemble", "eval"])
     ap.add_argument("--ckpt", default="data/out/student_ckpt_v4/student.pt")
+    ap.add_argument("--slug", default=None, help="julgar so esta luta")
     a = ap.parse_args()
-    {"cards": phase_cards, "judge": phase_judge, "assemble": phase_assemble,
+    {"cards": phase_cards, "judge": lambda: phase_judge(a.slug), "assemble": phase_assemble,
      "eval": lambda: phase_eval(a.ckpt)}[a.phase]()
 
 
