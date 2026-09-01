@@ -21,3 +21,7 @@ runs/
 
 # handoff interno: notas de processo e endereços de instâncias alugadas
 PROMPT.md
+# Gold-eval: vereditos e amostragem sao decisoes de juiz -- versionados; imagens nao.
+!data/out/gold_eval/
+data/out/gold_eval/*
+!data/out/gold_eval/*.json

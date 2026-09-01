@@ -1,0 +1,2136 @@
+{
+ "paulista23-master2_000000": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "correct"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "teacher",
+  "confidence": 0.85,
+  "reasoning": "Professor cobre os dois atletas correta e exclusivamente; student mascara banner e perde um atleta.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000072": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Professor mascara espectador e perde atleta; student mascara banner/mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000132": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Ambos mascaram pessoas de fora; atletas centrais sem mascara.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000212": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.92,
+  "reasoning": "Professor pinta o tatame inteiro como A; student banner+mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000272": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.92,
+  "reasoning": "Mat-fill do professor persiste; student mesa e fragmentos.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000462": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Mat-fill + mesa; student cobre parcialmente um atleta e a mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000540": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Professor: bystander distante + mesa; atletas sem mascara nos dois.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000737": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "Professor: meia mascara num atleta + bystander; student: mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_000953": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Ambos na mesa; par de atletas sem mascara.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001090": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "Professor cobre um atleta mas mascara crowd/banner; student mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001154": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "Professor: objetos na direita; student: mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001200": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Buraco do professor; student mascara mesa e borda.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001324": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Buraco; student crowd+mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001448": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "Buraco; student banner+mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001572": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "Buraco; student sliver+mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001696": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "Buraco; student sliver+mesa.",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001820": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco; student mesa+banner",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_001944": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco; student mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002068": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco; student mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002192": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco; student mesa+crowd",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002316": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco; student crowd+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002432": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor mat-fill embora cubra o atleta; student fragmentos+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002492": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor mat-fill; student crowd+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002611": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor mascara bystander distante; student banner+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002677": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor: par fundido num so mask; student: mascara homem de branco andando + mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002737": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor: so um fiapo na mesa; student: placar+vermelhos",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002857": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor: vermelho em mobiliario/banners; student: banner+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_002991": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor: verde na pessoa da mesa; student: crowd+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003208": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor funde o par num mask; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003268": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor funde o par num mask; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003328": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor funde o par num mask; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003388": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "professor funde o par num mask e mascara fotografo; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003448": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "mat-fill vermelho; par sem separacao",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003508": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "fusao verde no par; student mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003568": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "fusao verde; student mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003641": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.88,
+  "reasoning": "buraco; student banner+mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003765": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco do professor; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_003889": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco do professor; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_004013": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco do professor; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_004137": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.9,
+  "reasoning": "buraco do professor; student crowd/mesa",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_004261": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "buraco do professor; zoom fechado; student acha os corpos mas funde os dois em verde",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_004385": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "buraco do professor; zoom; corpos achados, fusao",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_004509": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "buraco do professor; zoom; um atleta sem mascara",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_004633": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "buraco do professor; zoom; par fundido em verde",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_004757": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "buraco; student uniao perfeita do par, fundido",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_004978": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "professor uniao limpa mas fundido; student vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005037": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao nos dois + objetos vermelhos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005097": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao + strays vermelhos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005157": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao branco-vs-branco nos dois; uniao do student consistentemente limpa, professor com vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005217": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao branco-vs-branco nos dois; uniao do student consistentemente limpa, professor com vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005277": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao branco-vs-branco nos dois; uniao do student consistentemente limpa, professor com vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005397": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao branco-vs-branco nos dois; uniao do student consistentemente limpa, professor com vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005517": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao nos dois; professor com vermelho em fundo/tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005600": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao nos dois; professor com vermelho em fundo/tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005660": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao nos dois; professor com vermelho em fundo/tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005720": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao nos dois; professor com vermelho em fundo/tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005780": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; vermelho em pessoa de fundo nos dois candidatos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005900": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; vermelho em pessoa de fundo nos dois candidatos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_005960": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; vermelho em pessoa de fundo nos dois candidatos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006019": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; vermelho em pessoa de fundo nos dois candidatos",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006079": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; professor com pocas vermelhas no tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006139": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; professor com pocas vermelhas no tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006214": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; professor com pocas vermelhas no tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006305": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fusao; professor com pocas vermelhas no tatame",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006365": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "professor perde atleta de baixo + poca; student fusao",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006425": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "idem",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006536": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "professor fusao+staffer; student vermelho espalhado",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006634": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "professor verde em bystander; student idem",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006694": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: vermelho num staffer de fundo + par parcial; student: fiapos e vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006754": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: vermelho num staffer de fundo + par parcial; student: fiapos e vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006814": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: vermelho num staffer de fundo + par parcial; student: fiapos e vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006873": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: vermelho num staffer de fundo + par parcial; student: fiapos e vermelho no fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006933": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: staffer vermelho + par parcial; student: fiapos + banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_006993": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: staffer vermelho + par parcial; student: fiapos + banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007053": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: staffer vermelho + par parcial; student: fiapos + banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007150": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: staffer vermelho + par parcial; student: fiapos + banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007210": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: mat-fill vermelho massivo; student: logos/banners",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007270": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: mat-fill + fusao; student: logos/banners",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007330": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: fusao + banner; student: logos/banners",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007554": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.87,
+  "reasoning": "professor: verde num bystander em pe; atletas sem mascara; student: logos/banners",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007662": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; professor staffer/mat-fill; student uniao boa com pernas vermelhas de fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007735": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; professor staffer/mat-fill; student uniao boa com pernas vermelhas de fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007796": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; professor staffer/mat-fill; student uniao boa com pernas vermelhas de fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007865": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; professor staffer/mat-fill; student uniao boa com pernas vermelhas de fundo",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_007956": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; staffer vermelho no professor; student uniao boa",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008023": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; staffer vermelho no professor; student uniao boa",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008083": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; staffer vermelho no professor; student uniao boa",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008226": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "fusao nos dois; staffer vermelho no professor; student uniao boa",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008286": {
+  "teacher": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "professor fusao+crowd; student parcial+banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008482": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student uniao boa mas fundida",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008606": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student cobre so parte do par",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008730": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student parcial + banner",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008854": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco do professor; student uniao boa do par deitado, fundida",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_008978": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco do professor; student uniao boa do par deitado, fundida",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_009102": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": false,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "clean"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco do professor; student uniao boa do par deitado, fundida",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_009226": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": true,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong",
+   "union": "minor"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco do professor; student uniao boa do par deitado, fundida",
+  "judge": "claude-fable-session",
+  "scale": "medium"
+ },
+ "paulista23-master2_009350": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student banner",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_009474": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student um atleta + banner",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_009599": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": false,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "buraco; student bystander verde",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_009657": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": false,
+   "quality": "wrong",
+   "union": "no"
+  },
+  "chosen": "none",
+  "confidence": 0.86,
+  "reasoning": "professor: vermelho em pessoa de colete '10' + um atleta; student um atleta + banner",
+  "judge": "claude-fable-session",
+  "scale": "wide"
+ },
+ "paulista23-master2_006535": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "medio: par fundido nos dois candidatos; professor com vermelho em staffer/poca no tatame; student uniao limpa com pingos de fundo",
+  "judge": "claude-fable-session",
+  "student_union_promising": true
+ },
+ "paulista23-master2_007795": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "medio: par fundido nos dois candidatos; professor com vermelho em staffer/poca no tatame; student uniao limpa com pingos de fundo",
+  "judge": "claude-fable-session",
+  "student_union_promising": true
+ },
+ "paulista23-master2_009717": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fim de luta: atletas separados andando; verde em um so + vermelho em bystander/banner nos dois",
+  "judge": "claude-fable-session",
+  "student_union_promising": false
+ },
+ "paulista23-master2_009777": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fim de luta: atletas separados andando; verde em um so + vermelho em bystander/banner nos dois",
+  "judge": "claude-fable-session",
+  "student_union_promising": false
+ },
+ "paulista23-master2_009837": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fim de luta: atletas separados andando; verde em um so + vermelho em bystander/banner nos dois",
+  "judge": "claude-fable-session",
+  "student_union_promising": false
+ },
+ "paulista23-master2_009897": {
+  "teacher": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "student": {
+   "both_athletes_covered": false,
+   "non_athletes_masked": true,
+   "fused_or_swapped": true,
+   "quality": "wrong"
+  },
+  "chosen": "none",
+  "confidence": 0.85,
+  "reasoning": "fim de luta: atletas separados andando; verde em um so + vermelho em bystander/banner nos dois",
+  "judge": "claude-fable-session",
+  "student_union_promising": false
+ }
+}
