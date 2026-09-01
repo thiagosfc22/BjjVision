@@ -180,6 +180,12 @@ fights:
       com outras lutas no quadro.'
     reentra_quando: 'existir pre-processamento de zoom digital com ROI no par;
       o experimento crop-zoom mostra a mascara ressuscitando no mesmo v4.'
+    disco: 'purgado 2026-09-01 (~1.3 GB): professor, chunks, video normalizado,
+      triagem e cartoes de ouro. Mantido so data/raw/paulista23-master2.mp4, que
+      e o unico item que some da internet sem avisar; o resto se refaz a partir
+      dele. As features do professor eram o item caro e valiam pouco: foram
+      calculadas no quadro aberto inteiro, que e justamente o que o escopo
+      manda nao usar -- na volta, o professor roda no recorte.'
   triage:
     date: '2026-08-31'
     usable_pct: 0.0
